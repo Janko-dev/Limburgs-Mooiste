@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import CoachingScreen from '../screens/coachingScreen'
+import CoachingScreen from '../screens/coaching/coachingScreen'
 
 const Stack = createStackNavigator();
 
