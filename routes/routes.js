@@ -7,12 +7,17 @@ import CoachStack from './coachStackRoute';
 import TrainingStack from './trainingStackRoute';
 import PrestatieStack from './prestatiesStackRoute';
 import DashboardStack from './dashboardStackRoute';
+import LoginModal from '../screens/modals/loginModal';
 
 const Tab = createMaterialBottomTabNavigator();
 
 export default () => {
+
     return (
         <NavigationContainer>
+
+            <LoginModal />
+
             <Tab.Navigator shifting={false}>
                 <Tab.Screen name="Profiel" component={ProfielStack} />
                 <Tab.Screen name="Coaching" component={CoachStack} />
