@@ -26,6 +26,10 @@ export default {
 
     loginWithFacebook: (credential) => {
         return firebase.auth().signInWithCredential(credential);
+    },
+
+    getUser: () => {
+        return firebase.auth().currentUser;
     }
 
 }

@@ -10,19 +10,10 @@ import facebook from '../../api/facebook';
 
 export default props => {
 
-    const [user, setUser] = useState(null);
-    const [loginmodal, setLoginmodal] = useState(false);
-
-    useEffect(() => {
-        firebase.onAuthChange((user) => {
-            setUser(user)
-            if (!user){
-                setLoginmodal(!loginmodal)
-            }
-        })
-    }, [])
+    // const [user, setUser] = useState(null)
 
     const loginWithFacebook = async () => {
+
         try {
             await facebook.initFacebookApi('207297230626076', 'Limburgs Mooiste App')
             const { token, type } = await facebook.loginWithPermissions({
@@ -32,6 +23,7 @@ export default props => {
             if (type === 'success') {
                 const credential = firebase.getFacebookLoginCredential(token);
                 firebase.loginWithFacebook(credential);
+                props.login();
             }
 
         } catch (error) {
@@ -40,7 +32,7 @@ export default props => {
     }
 
     return (
-        <Modal animationType='slide' visible={loginmodal}>
+        <Modal animationType='slide' visible={props.isVisible}>
             <View style={styles.container}>
 
                 <View style={styles.bodyContainer}>
