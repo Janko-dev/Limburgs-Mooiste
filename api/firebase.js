@@ -28,8 +28,16 @@ export default {
         return firebase.auth().signInWithCredential(credential);
     },
 
-    getUser: () => {
+    getCurrentUser: () => {
         return firebase.auth().currentUser;
+    },
+
+    getUserFromDB: (uid) => {
+        return firebase.firestore().collection("users").doc(uid).get();
+    },
+
+    createNewUserRecord: (uid, skillLevel, trainingDays) => {
+        return firebase.firestore().collection("users").doc(uid).set({skillLevel, trainingDays})
     }
 
 }

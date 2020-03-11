@@ -10,8 +10,6 @@ import facebook from '../../api/facebook';
 
 export default props => {
 
-    // const [user, setUser] = useState(null)
-
     const loginWithFacebook = async () => {
 
         try {
