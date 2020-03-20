@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, View, Text, StyleSheet } from 'react-native';
-import { SocialIcon } from 'react-native-elements'
+import { SocialIcon, Input } from 'react-native-elements'
 
 import { globalStyles, Colors } from '../../constants'
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -35,8 +35,9 @@ export default props => {
 
                 <View style={styles.bodyContainer}>
                     <Text style={[globalStyles.fontStyle, styles.headerText]}>Welkom bij de Limburgs Mooiste Trainingsapp</Text>
-                    <Text style={[globalStyles.fontStyle, styles.bodyText]}>Trainingsapp voor mensen die meedoen aan de limburgs mooiste competitie wawawiewa</Text>
+                    <Text style={[globalStyles.fontStyle, styles.bodyText]}>Trainingsapp voor beginnende tot ervaren fietsers die  ambities hebben om mee te doen aan de Limburgs Mooiste competitie. </Text>
                 </View>
+
                 <SocialIcon
                     onPress={loginWithFacebook}
                     style={styles.facebookIcon}

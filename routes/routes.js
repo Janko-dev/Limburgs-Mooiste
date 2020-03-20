@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { Icon } from 'react-native-elements';
-import { StyleSheet} from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 
 import firebase from '../api/firebase';
 import { Colors } from '../constants';
@@ -33,7 +33,7 @@ export default () => {
         })
 
         return unsubscribe;
-    }, [])
+    }, [firebase])
 
     const loginHandler = () => {
         setLoginModal(false);
@@ -57,67 +57,67 @@ export default () => {
                     component={DashboardStack}
                     options={{
                         tabBarIcon: ({ color }) => (
-                            <Icon 
+                            <Icon
                                 type='ionicon'
                                 name='ios-stats'
                                 color={color}
-                                size={30} 
+                                size={30}
                             />
                         ),
                     }}
                 />
-                <Tab.Screen 
-                    name="Prestaties" 
+                <Tab.Screen
+                    name="Prestaties"
                     component={PrestatieStack}
                     options={{
                         tabBarIcon: ({ color }) => (
-                            <Icon 
+                            <Icon
                                 type='ionicon'
                                 name='ios-ribbon'
                                 color={color}
-                                size={30} 
+                                size={30}
                             />
                         ),
                     }}
                 />
-                <Tab.Screen 
-                    name="Training" 
-                    component={TrainingStack} 
+                <Tab.Screen
+                    name="Training"
+                    component={TrainingStack}
                     options={{
                         tabBarIcon: ({ color }) => (
-                            <Icon 
+                            <Icon
                                 type='ionicon'
                                 name='ios-bicycle'
                                 color={color}
-                                size={28} 
+                                size={28}
                             />
                         ),
                     }}
                 />
-                <Tab.Screen 
-                    name="Coaching" 
+                <Tab.Screen
+                    name="Coaching"
                     component={CoachStack}
                     options={{
                         tabBarIcon: ({ color }) => (
-                            <Icon 
+                            <Icon
                                 type='ionicon'
                                 name='ios-megaphone'
                                 color={color}
-                                size={30} 
+                                size={30}
                             />
                         ),
-                    }} 
+                    }}
                 />
-                <Tab.Screen 
-                    name="Profiel" 
-                    component={ProfielStack} 
+                <Tab.Screen
+                    name="Profiel"
+                    component={ProfielStack}
                     options={{
                         tabBarIcon: ({ color }) => (
-                            <Icon 
+                            <Icon
                                 type='ionicon'
                                 name='ios-person'
                                 color={color}
-                                size={30} 
+                                size={30}
                             />
                         ),
                     }}
@@ -130,5 +130,5 @@ export default () => {
 const styles = StyleSheet.create({
     tabBarStyle: {
         backgroundColor: Colors.secondary
-    }
+    },
 })

@@ -37,7 +37,11 @@ export default {
     },
 
     createNewUserRecord: (uid, skillLevel, trainingDays) => {
-        return firebase.firestore().collection("users").doc(uid).set({skillLevel, trainingDays})
+        return firebase.firestore().collection("users").doc(uid).set({skillLevel, trainingDays, exp: 0, maxExp: 10})
+    },
+
+    onXpGain: (uid, callback) => {
+        return firebase.firestore().collection("users").doc(uid).onSnapshot(callback);
     }
 
 }
