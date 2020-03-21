@@ -6,30 +6,30 @@ import { Icon } from 'react-native-elements';
 
 
 import CoachingScreen from '../screens/coaching/coachingScreen'
+import { StyleSheet } from 'react-native';
+import { Colors } from '../constants';
+import ProgressionBar from '../components/progressionBar';
 
 const Stack = createStackNavigator();
 
 export default () => {
     return (
-        <Stack.Navigator screenOptions={{
-            headerStyle: {
-              backgroundColor: "#fff",
-            },
-            headerTintColor: "#000",
-            headerTitleStyle: {
-              fontWeight: 'bold',
-              fontStyle: 'italic'
-            },
-          }}>
-            <Stack.Screen name="Coaching" component={CoachingScreen} options={{
 
-            }}/>
+        <Stack.Navigator
+            screenOptions={{
+                headerTintColor: Colors.primary,
+                headerStyle: styles.headerStyle,
+                headerRight: () => <ProgressionBar />
+            }}
+        >
+            <Stack.Screen name="Coaching" component={CoachingScreen} />
         </Stack.Navigator>
     )
 }
 
 const styles = StyleSheet.create({
-    tabBarStyle: {
+    headerStyle: {
+        height: 80,
         backgroundColor: Colors.secondary
     }
 })

@@ -28,6 +28,10 @@ export default {
         return firebase.auth().signInWithCredential(credential);
     },
 
+    loginWithCredentials: (email, password) => {
+        return firebase.auth().signInWithEmailAndPassword(email, password)
+    },
+
     getCurrentUser: () => {
         return firebase.auth().currentUser;
     },
@@ -37,11 +41,15 @@ export default {
     },
 
     createNewUserRecord: (uid, skillLevel, trainingDays) => {
-        return firebase.firestore().collection("users").doc(uid).set({skillLevel, trainingDays})
+        return firebase.firestore().collection("users").doc(uid).set({skillLevel, trainingDays, exp: 0, maxExp: 10})
     },
 
     getFAQ: () => {
         return firebase.firestore().collection("FAQ").get()
+    },
+
+    onXpGain: (uid, callback) => {
+        return firebase.firestore().collection("users").doc(uid).onSnapshot(callback);
     }
 
 }

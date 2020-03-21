@@ -2,13 +2,29 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import PrestatieScreen from '../screens/prestaties/prestatieScreen'
+import { StyleSheet } from 'react-native';
+import { Colors } from '../constants';
+import ProgressionBar from '../components/progressionBar';
 
 const Stack = createStackNavigator();
 
 export default () => {
     return (
-        <Stack.Navigator>
-            <Stack.Screen name="PrestatieScreen" component={PrestatieScreen}/>
+        <Stack.Navigator
+            screenOptions={{
+                headerTintColor: Colors.primary,
+                headerStyle: styles.headerStyle,
+                headerRight: () => <ProgressionBar />
+            }}
+        >
+            <Stack.Screen name="Prestatie" component={PrestatieScreen} />
         </Stack.Navigator>
     )
 }
+
+const styles = StyleSheet.create({
+    headerStyle: {
+        height: 80,
+        backgroundColor: Colors.secondary
+    }
+})
