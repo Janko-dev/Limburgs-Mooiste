@@ -38,6 +38,10 @@ export default {
 
     createNewUserRecord: (uid, skillLevel, trainingDays) => {
         return firebase.firestore().collection("users").doc(uid).set({skillLevel, trainingDays})
+    },
+
+    getFAQ: () => {
+        return firebase.firestore().collection("FAQ").get()
     }
 
 }
