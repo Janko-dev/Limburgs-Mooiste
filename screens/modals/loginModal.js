@@ -8,7 +8,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import firebase from '../../api/firebase';
 import facebook from '../../api/facebook';
 
-export default props => {
+export default ({ login, isVisible })=> {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -25,7 +25,7 @@ export default props => {
             if (type === 'success') {
                 const credential = firebase.getFacebookLoginCredential(token);
                 firebase.loginWithFacebook(credential);
-                props.login();
+                login();
             }
 
         } catch (error) {
@@ -81,7 +81,7 @@ export default props => {
     }
 
     return (
-        <Modal animationType='slide' visible={props.isVisible}>
+        <Modal animationType='slide' visible={isVisible}>
             <View style={styles.container}>
 
                 <Animated.View style={[transformStepOne, styles.animationContainer]}>

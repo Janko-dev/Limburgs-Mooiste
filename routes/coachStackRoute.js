@@ -1,5 +1,9 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
+import { Colors } from '../constants';
+import { StyleSheet, Button} from 'react-native';
+import { Icon } from 'react-native-elements';
+
 
 import CoachingScreen from '../screens/coaching/coachingScreen'
 import { StyleSheet } from 'react-native';
@@ -10,6 +14,7 @@ const Stack = createStackNavigator();
 
 export default () => {
     return (
+
         <Stack.Navigator
             screenOptions={{
                 headerTintColor: Colors.primary,

@@ -18,7 +18,7 @@ import LoginModal from '../screens/modals/loginModal';
 
 const Tab = createMaterialBottomTabNavigator();
 
-export default () => {
+const Navigator = () => {
 
     const [user, setUser] = useState(firebase.getCurrentUser())
     const [loginModal, setLoginModal] = useState(false)
@@ -53,7 +53,7 @@ export default () => {
             <LoginModal isVisible={loginModal} login={loginHandler}/>
             <WizardModal isVisible={wizardModal} onFinish={registerUserHandler} />
 
-            <Tab.Navigator shifting={true} activeColor={Colors.tertiary} barStyle={styles.tabBarStyle}>
+            <Tab.Navigator shifting={true} activeColor={Colors.primary} barStyle={styles.tabBarStyle}>
                 <Tab.Screen
                     name='Dashboard'
                     component={DashboardStack}
@@ -128,6 +128,8 @@ export default () => {
         </NavigationContainer>
     )
 }
+
+export default Navigator;
 
 const styles = StyleSheet.create({
     tabBarStyle: {
