@@ -28,6 +28,10 @@ export default {
         return firebase.auth().signInWithCredential(credential);
     },
 
+    loginWithCredentials: (email, password) => {
+        return firebase.auth().signInWithEmailAndPassword(email, password)
+    },
+
     getCurrentUser: () => {
         return firebase.auth().currentUser;
     },

@@ -37,7 +37,9 @@ export default () => {
 
     const loginHandler = () => {
         setLoginModal(false);
-        setWizardModal(true);
+        if (!user){
+            setWizardModal(true);
+        }
     }
 
     const registerUserHandler = (userData) => {
@@ -48,7 +50,7 @@ export default () => {
     return (
         <NavigationContainer>
 
-            <LoginModal isVisible={loginModal} login={loginHandler} />
+            <LoginModal isVisible={loginModal} login={loginHandler}/>
             <WizardModal isVisible={wizardModal} onFinish={registerUserHandler} />
 
             <Tab.Navigator shifting={true} activeColor={Colors.tertiary} barStyle={styles.tabBarStyle}>
