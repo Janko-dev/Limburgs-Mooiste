@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import { globalStyles, Colors } from '../../constants'; 
 
-const ProgressionModal = ({ visible, onClose }) => {
+const ProgressionModal = ({ visible, onClose, exp, maxExp, progress, level }) => {
 
     return (
         <Modal animationType='slide' visible={visible} >

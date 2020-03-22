@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { TouchableOpacity, Text, StyleSheet, Modal, View, Button } from 'react-native'
+import { TouchableOpacity, Text, StyleSheet, ProgressBarAndroid, ProgressViewIOS, Platform } from 'react-native'
 import * as Progress from 'react-native-progress';
 import { Colors, globalStyles } from '../constants';
 
@@ -45,17 +45,20 @@ const ProgressionBar = () => {
 
     return (
         <TouchableOpacity onPress={expModalHandler} style={styles.container}>
-            <ProgressionModal visible={visible} onClose={expModalHandler} />
+            <ProgressionModal visible={visible} onClose={expModalHandler} exp={exp} maxExp={maxExp} progress={progress} level={level}/>
             <Text style={[styles.progressText, globalStyles.fontStyle]}>Niveau {level}</Text>
-            <Progress.Bar width={null} progress={progress} color={Colors.tertiary} />
+
+            {Platform.OS === 'ios' ? 
+            <ProgressViewIOS progress={progress} style={styles.progressStyle} progressTintColor={Colors.tertiary} trackTintColor={Colors.primary}></ProgressViewIOS> : 
+            <ProgressBarAndroid progress={progress} color={Colors.tertiary}></ProgressBarAndroid>}
         </TouchableOpacity>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
-        width: '120%',
-        right: 10
+        width: '100%',
+        right: 15
     },
 
     progressText: {
@@ -63,6 +66,12 @@ const styles = StyleSheet.create({
         color: Colors.primary,
         marginBottom: 5
     },
+
+    progressStyle: {
+        transform: [
+            {scaleY: 2}
+        ]
+    }
 
     
 })

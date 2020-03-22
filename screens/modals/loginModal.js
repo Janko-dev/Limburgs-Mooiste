@@ -7,6 +7,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import firebase from '../../api/firebase';
 import facebook from '../../api/facebook';
+import SignUpForm from '../../components/signUpForm';
 
 export default ({ login, isVisible })=> {
 
@@ -37,7 +38,9 @@ export default ({ login, isVisible })=> {
         try {
             if (email != '' && password != '') {
                 firebase.loginWithCredentials(email, password).then(res => {
-                    console.log(res)
+                    if (res.user){
+                        login();
+                    }
                 });
             }
 
@@ -47,10 +50,18 @@ export default ({ login, isVisible })=> {
         }
     }
 
-    const signUpHandler = () => {
+    const createNewUserAuthentication = (email, password) => {
+        firebase.createNewUserAuth(email, password).then(user => {
+            if (user){
+                login();
+            }
+        })
+    }
+
+    const signUpHandler = (value) => {
         Animated.spring(moveInX, {
-            toValue: WINDOW_WIDTH,
-            delay: 500,
+            toValue: value,
+            delay: 200,
             bounciness: 10,
             useNativeDriver: true
         }).start();
@@ -114,14 +125,14 @@ export default ({ login, isVisible })=> {
                             placeholderTextColor={Colors.secondary}
                         />
 
-                        <Button title={'Login'} buttonStyle={{ backgroundColor: Colors.secondary }} onPress={loginWithCredentials} raised />
+                        <Button title={'Login'} buttonStyle={{ backgroundColor: Colors.secondary }} containerStyle={{marginVertical: 20}} onPress={loginWithCredentials} raised />
                     </KeyboardAvoidingView>
 
                     <View style={styles.buttonContainer}>
                         <SocialIcon
-                            onPress={signUpHandler}
+                            onPress={() => signUpHandler(WINDOW_WIDTH)}
                             style={styles.signUpButton}
-                            title='Sign up'
+                            title='Registreer'
                             raised={true}
                             Component={TouchableOpacity}
                             button
@@ -140,7 +151,10 @@ export default ({ login, isVisible })=> {
                 </Animated.View>
 
                 <Animated.View style={[transformStepTwo, styles.animationContainer]}>
-                    
+                    <SignUpForm 
+                        backToAuth={() => signUpHandler(0)}
+                        onSubmit={createNewUserAuthentication}
+                    />
                 </Animated.View>
             </View>
         </Modal>

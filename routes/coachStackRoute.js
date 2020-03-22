@@ -4,10 +4,7 @@ import { Colors } from '../constants';
 import { StyleSheet, Button} from 'react-native';
 import { Icon } from 'react-native-elements';
 
-
 import CoachingScreen from '../screens/coaching/coachingScreen'
-import { StyleSheet } from 'react-native';
-import { Colors } from '../constants';
 import ProgressionBar from '../components/progressionBar';
 
 const Stack = createStackNavigator();

@@ -1,34 +1,30 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, ScrollView, TextInput } from 'react-native';
+import { ButtonGroup } from 'react-native-elements';
 import ProfilePicture from 'react-native-profile-picture';
 import { globalStyles, Colors } from '../../constants';
-import vuurbasis from '../../api/firebase';
+import firebase from '../../api/firebase';
 
 const CoachingScreen = props => {
 
   const [FAQ, setFAQ] = useState([])
 
   useEffect(() => {
-    vuurbasis.getFAQ().then((t) => {
+    firebase.getFAQ().then(result => {
 
       setFAQ(() => {
-        return t.docs.map(doc => {
+        return result.docs.map(doc => {
           return doc.data();
         })
       })
 
-      // t.forEach((item) => {
-      //   FAQ.push(item.data())
-
-      // })
-      // setFAQ(FAQ)
-      // console.log(FAQ)
     })
   }, [])
 
   return (
-
     <View style={styles.mainContainer}>
+
+
       <View style={styles.coachContainer}>
         <View style={styles.profileContainer}>
           <ProfilePicture
@@ -45,29 +41,15 @@ const CoachingScreen = props => {
       </View>
 
       <View style={styles.contentContainer}>
+
         <ScrollView>
           {FAQ.map((item, index) => (
             <View key={index}>
               <Text>{item.vraag}</Text>
             </View>
           ))}
-          {FAQ.map((item, index) => (
-            <View key={index}>
-              <Text>{item.vraag}</Text>
-            </View>
-          ))}
-          {FAQ.map((item, index) => (
-            <View key={index}>
-              <Text>{item.vraag}</Text>
-            </View>
-          ))}
-          {FAQ.map((item, index) => (
-            <View key={index}>
-              <Text>{item.vraag}</Text>
-            </View>
-          ))}
-
         </ScrollView>
+        
       </View>
 
     </View>
