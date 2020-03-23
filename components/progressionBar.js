@@ -26,7 +26,7 @@ const ProgressionBar = () => {
 
     useEffect(() => {
         if (user) {
-            const unsubscribe = firebase.onXpGain(user.uid, doc => {
+            const unsubscribe = firebase.onUserDataChange(user.uid, doc => {
                 if (doc.data()) {
                     setExp(doc.data().exp);
                     setMaxExp(doc.data().maxExp);
