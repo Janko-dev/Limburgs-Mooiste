@@ -44,10 +44,9 @@ export default {
         return firebase.firestore().collection("users").doc(uid).set(
             {
                 skillLevel, 
-                trainingDays, 
                 exp: 0, 
                 maxExp: 10,
-                activeSchedule: {},
+                activeSchedule: null,
                 achievements: [],
                 previousTrainingSessions: []
             })
@@ -61,8 +60,12 @@ export default {
         return firebase.firestore().collection("FAQ").get()
     },
 
-    onXpGain: (uid, callback) => {
+    onUserDataChange: (uid, callback) => {
         return firebase.firestore().collection("users").doc(uid).onSnapshot(callback);
+    },
+
+    getSchedules: () => {
+        return firebase.firestore().collection("trainingsSchema").get();
     }
 
 }

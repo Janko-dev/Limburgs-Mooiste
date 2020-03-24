@@ -1,30 +1,46 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { Colors } from '../../constants';
 
 import firebase from '../../api/firebase';
+import CardBoxContainer from '../../components/cardBoxContainer';
 
-const TrainingScreen = props => {
+const TrainingScreen = ({ navigation }) => {
 
     const [user, setUser] = useState(firebase.getCurrentUser())
     const [userRecord, setUserRecord] = useState(null);
+    const [schedules, setSchedules] = useState(null);
 
     useEffect(() => {
-        firebase.getUserFromDB(user.uid).then(userDoc => {
-            setUserRecord(userDoc.data());
-        })
+        if (user){
+            firebase.getUserFromDB(user.uid).then(userDoc => {
+                setUserRecord(userDoc.data());
+            })
+        }
     })
 
-    const isActiveSchedulePresent = () => {
+    useEffect(() => {
+        firebase.getSchedules().then(result => {
+            setSchedules(() => {
+                return result.docs.map(doc => {
+                    return { ...doc.data(), id: doc.id };
+                })
+            })
+        })
+    }, [])
 
-        if (userRecord){
-            if (userRecord.activeSchedule){
-                return (
-                <TouchableOpacity style={styles.activeScheduleContainer}>
-                    <Text>test</Text>
+    const navigateActiveSchedule = () => {
+        // console.log(navigation)
+        navigation.navigate("Sessions", { activeSchedule: userRecord.activeSchedule });
+    }
+
+    const isActiveSchedulePresent = () => {
+        if (userRecord && userRecord.activeSchedule) {
+            return (
+                <TouchableOpacity onPress={navigateActiveSchedule} style={styles.activeScheduleContainer}>
+                    <Text>Actief Schema</Text>
                 </TouchableOpacity>
-                )
-            }
+            )
         }
     }
 
@@ -34,7 +50,21 @@ const TrainingScreen = props => {
             {isActiveSchedulePresent()}
 
             <View style={styles.schedulesContainer}>
-                <Text>Schema's</Text>
+                {/* {schedules ? schedules.map((item, index) => (
+                    <Text key={index}>{item.beschrijving}</Text>
+                )) : null} */}
+
+                <FlatList
+                    data={schedules ? schedules : null}
+                    keyExtractor={item => item.id}
+                    renderItem={({ item }) =>
+                        <CardBoxContainer
+                            onPress={() => { }}
+                            title={item.titel}
+                            description={item.beschrijving}
+                            length={item.lengte}
+                        />}
+                />
             </View>
         </View>
     )
@@ -51,15 +81,17 @@ const styles = StyleSheet.create({
 
     activeScheduleContainer: {
         flex: 1,
-        width: '90%',
-        marginVertical: '5%',
+        width: '95%',
+        marginTop: '3%',
         backgroundColor: Colors.danger
     },
 
     schedulesContainer: {
         flex: 4,
-        width: '90%',
-        backgroundColor: Colors.warning
+        width: '95%',
+        marginVertical: '3%',
+        backgroundColor: Colors.primary,
+        borderRadius: 10
     }
 });
 
