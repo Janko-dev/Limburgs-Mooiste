@@ -5,7 +5,7 @@ import { colors, Icon } from 'react-native-elements';
 
 const achievements = props => {
     const [open, setOpen] = useState(false);
-    
+
     const [category, setCategory] = new useState('Snelheid');
 
     const categoryMap = [
