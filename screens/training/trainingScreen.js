@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native
 import { Colors } from '../../constants';
 
 import firebase from '../../api/firebase';
-import CardBoxContainer from '../../components/cardBoxContainer';
+import Card from '../../components/card';
 
 const TrainingScreen = ({ navigation }) => {
 
@@ -13,9 +13,11 @@ const TrainingScreen = ({ navigation }) => {
 
     useEffect(() => {
         if (user){
-            firebase.getUserFromDB(user.uid).then(userDoc => {
+            const unsubscribe = firebase.onUserDataChange(user.uid, userDoc => {
                 setUserRecord(userDoc.data());
             })
+
+            return unsubscribe
         }
     })
 
@@ -30,36 +32,33 @@ const TrainingScreen = ({ navigation }) => {
     }, [])
 
     const navigateActiveSchedule = () => {
-        // console.log(navigation)
         navigation.navigate("Sessions", { activeSchedule: userRecord.activeSchedule });
     }
 
     const isActiveSchedulePresent = () => {
         if (userRecord && userRecord.activeSchedule) {
-            return (
-                <TouchableOpacity onPress={navigateActiveSchedule} style={styles.activeScheduleContainer}>
-                    <Text>Actief Schema</Text>
-                </TouchableOpacity>
-            )
+            return true;
+        } else {
+            return false;
         }
     }
 
     return (
         <View style={styles.container}>
 
-            {isActiveSchedulePresent()}
+            {isActiveSchedulePresent() ? 
+                <TouchableOpacity onPress={navigateActiveSchedule} style={styles.activeScheduleContainer}>
+                    <Text>Actief Schema</Text>
+                </TouchableOpacity> : null}
 
             <View style={styles.schedulesContainer}>
-                {/* {schedules ? schedules.map((item, index) => (
-                    <Text key={index}>{item.beschrijving}</Text>
-                )) : null} */}
 
                 <FlatList
                     data={schedules ? schedules : null}
                     keyExtractor={item => item.id}
                     renderItem={({ item }) =>
-                        <CardBoxContainer
-                            onPress={() => { }}
+                        <Card
+                            onPress={() => navigation.navigate('ScheduleDetails', {...item})}
                             title={item.titel}
                             description={item.beschrijving}
                             length={item.lengte}
@@ -90,8 +89,12 @@ const styles = StyleSheet.create({
         flex: 4,
         width: '95%',
         marginVertical: '3%',
-        backgroundColor: Colors.primary,
-        borderRadius: 10
+        backgroundColor: Colors.tertiary,
+        shadowColor: 'black',
+        shadowOpacity: 0.8,
+        shadowRadius: 10,
+        shadowOffset: {width: 2, height: 4},
+        borderRadius: 20
     }
 });
 

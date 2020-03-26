@@ -7,6 +7,7 @@ import ProgressionBar from '../components/progressionBar';
 
 import TrainingScreen from '../screens/training/trainingScreen'
 import SessionScreen from '../screens/training/sessionScreen';
+import ScheduleDetailScreen from '../screens/training/scheduleDetails'
 
 const Stack = createStackNavigator();
 
@@ -21,6 +22,7 @@ export default () => {
         >
             <Stack.Screen name="Training" component={TrainingScreen} />
             <Stack.Screen name="Sessions" component={SessionScreen} />
+            <Stack.Screen name="ScheduleDetails" component={ScheduleDetailScreen} />
         </Stack.Navigator>
     )
 }
