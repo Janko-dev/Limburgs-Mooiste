@@ -1,11 +1,19 @@
-import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import React from 'react';
+
+import Ranking from './ranking';
+import Achievements from './achievements';
 
 const PrestatieScreen = props => {
 
     return (
-        <View style={styles.container}> 
-            <Text>PrestatieScreen</Text>
+        <View style={styles.container}>
+            <View style={styles.sectionTop}>
+                <Ranking />
+            </View>
+            <View style={styles.sectionBottom}>
+                <Achievements />
+            </View>
         </View>
     )
 }
@@ -13,11 +21,17 @@ const PrestatieScreen = props => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        flexDirection: 'column',
         backgroundColor: '#fff',
-        alignItems: 'center',
         justifyContent: 'center',
+        flex: 1,
     },
+    sectionTop: {
+        flex: 1,
+    },
+    sectionBottom: {
+        flex: 1.5,
+    }
 });
 
 export default PrestatieScreen
