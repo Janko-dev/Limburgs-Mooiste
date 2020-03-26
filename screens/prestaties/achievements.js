@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { globalStyles, Colors } from '../../constants';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { colors, Icon } from 'react-native-elements';
 
 const achievements = props => {
+    const [open, setOpen] = useState(false);
+    
     const [category, setCategory] = new useState('Snelheid');
 
     const categoryMap = [
@@ -39,7 +41,7 @@ const achievements = props => {
             categorie: 'Shares',
             Naam: 'Deler',
             Beschrijving: 'Deel meer dan 3 verschillende resultaten met uw vrienden!',
-        }
+        },
     ]
 
 
@@ -52,7 +54,7 @@ const achievements = props => {
                             if (category == item.Naam) {
                                 return (
                                     <TouchableOpacity key={item.id}
-                                        style={styles.sectionHeadButton}
+                                        style={styles.sectionHeadButtonSelect}
                                         onPress={() => { setCategory(item.Naam) }}>
                                         <Text style={globalStyles.fontStyle}>{item.Naam}</Text>
                                     </TouchableOpacity>
@@ -70,13 +72,20 @@ const achievements = props => {
                     )
                 }
             </View>
-            <View style={styles.sectionContent}>
+            <ScrollView style={styles.sectionContent}>
                 {
                     badgesMap.map(
                         item => {
                             if (category == item.categorie) {
                                 return (
-                                    <TouchableOpacity key={item.id} style={styles.badge}>
+                                    <TouchableOpacity key={item.id} style={styles.badge}
+                                        onPress={() => {
+                                            return (
+                                                <View>
+                                                    <Text> {item.Beschrijving} </Text>
+                                                </View>
+                                            )
+                                        }}>
                                         <Text> {item.Naam} </Text>
                                         <Icon name='chevron-down'
                                             type='evilicon'
@@ -84,12 +93,11 @@ const achievements = props => {
                                         />
                                     </TouchableOpacity>
                                 )
-                                // <Text> {item.Beschrijving} </Text>
                             }
                         }
                     )
                 }
-            </View>
+            </ScrollView>
         </View>
     )
 }
@@ -105,27 +113,30 @@ const styles = StyleSheet.create({
     sectionHead: {
         flexDirection: "row",
         backgroundColor: Colors.tertiary,
-        flex: 1,
-        shadowColor: '#000',
-        shadowOffset: { width: 2, height: 2 },
-        shadowOpacity: 0.4,
-        shadowRadius: 2,
+        flex: 0.20,
     },
     sectionContent: {
-        flex: 5,
         backgroundColor: colors.tertiary,
+        flex: 1,
     },
 
     sectionHeadButton: {
         justifyContent: 'center',
         alignItems: 'center',
-        borderBottomWidth: 4,
-        borderBottomColor: Colors.primary,
+        borderTopLeftRadius: 5,
+        borderTopRightRadius: 5,
+        marginTop: 8,
+        margin: 3,
+        flex: 1,
+    },
+    sectionHeadButtonSelect: {
+        justifyContent: 'center',
+        alignItems: 'center',
         borderTopLeftRadius: 5,
         borderTopRightRadius: 5,
         backgroundColor: '#fff',
-        marginTop: 15,
-        margin: 3,
+        marginTop: 8,
+        marginHorizontal: 5,
         flex: 1,
     },
 
