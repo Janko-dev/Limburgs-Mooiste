@@ -28,6 +28,20 @@ const achievements = props => {
             Naam: 'Snelheids Duivel',
             Beschrijving: 'Voltooi een trainingsschema 10% sneller dan de streeftijd!',
             voltooid: false
+        },
+        {
+            id: 2,
+            categorie: 'Afstand',
+            Naam: 'Snelheids Duivel',
+            Beschrijving: 'Voltooi een trainingsschema 10% sneller dan de streeftijd!',
+            voltooid: false
+        },
+        {
+            id: 3,
+            categorie: 'Shares',
+            Naam: 'Snelheids Duivel',
+            Beschrijving: 'Voltooi een trainingsschema 10% sneller dan de streeftijd!',
+            voltooid: false
         }
     ]
 
@@ -64,11 +78,20 @@ const achievements = props => {
                     badgesMap.map(
                         item => {
                             if (category == item.categorie) {
-                                return (
-                                    <View key={item.id}>
-                                        <Text></Text>
-                                    </View>
-                                )
+                                if (item.voltooid) {
+                                    return (
+                                        <View key={item.id} style={[styles.badge, {backgroundColor: Colors.success}]}>
+                                            <Text> item </Text>
+                                        </View>
+                                    )
+                                } else {
+                                    return (
+                                        <View key={item.id} style={styles.badge}>
+                                            <Text> {item.Naam} </Text>
+                                            <Text> {item.Beschrijving} </Text>
+                                        </View>
+                                    )
+                                }
                             }
                         }
                     )
@@ -112,6 +135,14 @@ const styles = StyleSheet.create({
         margin: 3,
         flex: 1,
     },
+
+    badge: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderWidth: 1,
+        margin: 10,
+        padding: 10,
+    }
 });
 
 export default achievements
