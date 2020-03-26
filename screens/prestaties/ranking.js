@@ -9,7 +9,7 @@ const ranking = props => {
     return (
         <View style={styles.container}>
             <View style={[styles.sectionTop, styles.shadow]}>
-                <Text style={globalStyles.fontStyle}> Dag Leaderboard </Text>
+                <Text style={[globalStyles.fontStyle, { color: '#fff' }]}> Dag Leaderboard </Text>
             </View>
             <View style={styles.sectionBottom}>
                 <View style={styles.stage}>
@@ -20,12 +20,13 @@ const ranking = props => {
                         <View style={styles.profile}>
                             <ProfilePicture
                                 isPicture={true}
-                                requirePicture={require('../../assets/coachexample.jpg')}
+                                requirePicture={require('../../assets/profilepic_blanco.png')}
                                 shape='circle'
                                 width={40}
                                 height={40}
                                 backgroundColor={Colors.primary}
                             />
+                            <Text style={globalStyles.fontStyle}> John </Text>
                         </View>
                     </View>
                     <View style={styles.stageRow}>
@@ -35,12 +36,13 @@ const ranking = props => {
                         <View style={styles.profile}>
                             <ProfilePicture
                                 isPicture={true}
-                                requirePicture={require('../../assets/coachexample.jpg')}
+                                requirePicture={require('../../assets/profilepic_blanco.png')}
                                 shape='circle'
                                 width={40}
                                 height={40}
                                 backgroundColor={Colors.primary}
                             />
+                            <Text style={globalStyles.fontStyle}> Frans </Text>
                         </View>
                     </View>
                     <View style={styles.stageRow}>
@@ -50,17 +52,18 @@ const ranking = props => {
                         <View style={styles.profile}>
                             <ProfilePicture
                                 isPicture={true}
-                                requirePicture={require('../../assets/coachexample.jpg')}
+                                requirePicture={require('../../assets/profilepic_blanco.png')}
                                 shape='circle'
                                 width={40}
                                 height={40}
                                 backgroundColor={Colors.primary}
                             />
+                            <Text style={globalStyles.fontStyle}> Eric </Text>
                         </View>
                     </View>
                 </View>
                 <View style={[styles.displayRank, styles.shadow]}>
-                    <Text style={globalStyles.fontStyle}> Rank: 1ste </Text>
+                    <Text style={[globalStyles.fontStyle, { color: '#fff' }]}> Uw huidige rank bedraagt: 8ste </Text>
                 </View>
             </View>
         </View>
@@ -114,7 +117,7 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 10,
         justifyContent: 'center',
         alignItems: 'center',
-        height: '50%',
+        height: '43%',
     },
     stageSecond: {
         backgroundColor: Colors.tertiary,
@@ -122,7 +125,7 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 10,
         justifyContent: 'center',
         alignItems: 'center',
-        height: '36.7%',
+        height: '30%',
     },
     stageThird: {
         backgroundColor: Colors.tertiary,
@@ -130,7 +133,7 @@ const styles = StyleSheet.create({
         borderTopLeftRadius: 10,
         justifyContent: 'center',
         alignItems: 'center',
-        height: '30%',
+        height: '20%',
     },
     profile: {
         alignItems: 'center',

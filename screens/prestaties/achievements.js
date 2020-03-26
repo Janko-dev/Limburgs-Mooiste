@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { globalStyles, Colors } from '../../constants';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { colors } from 'react-native-elements';
 
 const achievements = props => {
-    const categorie = [
+    const [category, setCategory] = new useState();
+
+    const categoryMap = [
         {
             id: 1,
             Naam: 'Snelheid',
@@ -19,9 +21,13 @@ const achievements = props => {
         }
     ]
 
-    const badges = [
+    const badgesMap = [
         {
-
+            id: 1,
+            categorie: 'Snelheid',
+            Naam: 'Snelheids Duivel',
+            Beschrijving: 'Voltooi een trainingsschema 10% sneller dan de streeftijd!',
+            voltooid: false
         }
     ]
 
@@ -30,18 +36,41 @@ const achievements = props => {
         <View style={styles.container}>
             <View style={styles.sectionHead}>
                 {
-                    categorie.map(
+                    categoryMap.map(
                         item => {
-                            return (
-                                <TouchableOpacity key={item.id} style={styles.sectionHeadButton}>
-                                    <Text>{item.Naam}</Text>
-                                </TouchableOpacity>
-                            )
+                            if () {
+                                return (
+                                    <TouchableOpacity key={item.id}
+                                        style={styles.sectionHeadButton}
+                                        onPress={() => { setCategory(item.Naam) }}>
+                                        <Text>{item.Naam}</Text>
+                                    </TouchableOpacity>
+                                )
+                            } else {
+                                return (
+                                    <TouchableOpacity key={item.id}
+                                        style={styles.sectionHeadButton}
+                                        onPress={() => { setCategory(item.Naam) }}>
+                                        <Text>{item.Naam}</Text>
+                                    </TouchableOpacity>
+                                )
+                            }
                         }
                     )
                 }
             </View>
             <View style={styles.sectionContent}>
+                {
+                    badgesMap.map(
+                        item => {
+                            return (
+                                <View key={item.id}>
+                                    <Text></Text>
+                                </View>
+                            )
+                        }
+                    )
+                }
             </View>
         </View>
     )
