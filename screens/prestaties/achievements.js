@@ -20,7 +20,11 @@ const achievements = props => {
         {
             id: 3,
             Naam: 'Shares',
-        }
+        },
+        // {
+        //     id: 4,
+        //     Naam: 'Sessies',
+        // }
     ]
 
     const badgesMap = [
@@ -41,6 +45,36 @@ const achievements = props => {
             categorie: 'Shares',
             Naam: 'Deler',
             Beschrijving: 'Deel meer dan 3 verschillende resultaten met uw vrienden!',
+        },
+        {
+            id: 4,
+            categorie: 'Shares',
+            Naam: 'Deler II',
+            Beschrijving: 'Deel meer dan 5 verschillende resultaten met uw vrienden!',
+        },
+        {
+            id: 5,
+            categorie: 'Shares',
+            Naam: 'Deler III',
+            Beschrijving: 'Deel meer dan 8 verschillende resultaten met uw vrienden!',
+        },
+        {
+            id: 6,
+            categorie: 'Shares',
+            Naam: 'Deler IV',
+            Beschrijving: 'Deel meer dan 15 verschillende resultaten met uw vrienden!',
+        },
+        {
+            id: 7,
+            categorie: 'Shares',
+            Naam: 'Mr WorldWide',
+            Beschrijving: 'Deel meer dan 20 verschillende resultaten met uw vrienden!',
+        },
+        {
+            id: 8,
+            categorie: 'Shares',
+            Naam: 'Mr WorldWide II',
+            Beschrijving: 'Deel meer dan 50 verschillende resultaten met uw vrienden!',
         },
     ]
 
