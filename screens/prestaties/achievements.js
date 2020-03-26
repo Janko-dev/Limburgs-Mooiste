@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { colors } from 'react-native-elements';
 
 const achievements = props => {
-    const [category, setCategory] = new useState();
+    const [category, setCategory] = new useState('Snelheid');
 
     const categoryMap = [
         {
@@ -38,10 +38,10 @@ const achievements = props => {
                 {
                     categoryMap.map(
                         item => {
-                            if () {
+                            if (category == item.Naam) {
                                 return (
                                     <TouchableOpacity key={item.id}
-                                        style={styles.sectionHeadButton}
+                                        style={[styles.sectionHeadButton, { backgroundColor: Colors.primary }]}
                                         onPress={() => { setCategory(item.Naam) }}>
                                         <Text>{item.Naam}</Text>
                                     </TouchableOpacity>
@@ -63,11 +63,13 @@ const achievements = props => {
                 {
                     badgesMap.map(
                         item => {
-                            return (
-                                <View key={item.id}>
-                                    <Text></Text>
-                                </View>
-                            )
+                            if (category == item.categorie) {
+                                return (
+                                    <View key={item.id}>
+                                        <Text></Text>
+                                    </View>
+                                )
+                            }
                         }
                     )
                 }
