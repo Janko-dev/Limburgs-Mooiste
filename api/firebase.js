@@ -61,8 +61,7 @@ export default {
         return firebase.firestore().collection("FAQ").get()
     },
 
-    onXpGain: (uid, callback) => {
+    onUserDataChange: (uid, callback) => {
         return firebase.firestore().collection("users").doc(uid).onSnapshot(callback);
     }
-
 }
