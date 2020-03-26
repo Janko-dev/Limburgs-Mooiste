@@ -77,7 +77,7 @@ const achievements = props => {
                             if (category == item.categorie) {
                                 return (
                                     <TouchableOpacity key={item.id} style={styles.badge}>
-                                        <Text style={globalStyles.fontStyle}> {item.Naam} </Text>
+                                        <Text> {item.Naam} </Text>
                                         <Icon name='chevron-down'
                                             type='evilicon'
                                             color='#517fa4'
