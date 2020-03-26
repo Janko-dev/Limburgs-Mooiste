@@ -12,7 +12,7 @@ export default () => {
     return (
         <Stack.Navigator
             screenOptions={{
-                headerTintColor: Colors.primary,
+                headerTintColor: 'black',
                 headerStyle: styles.headerStyle,
                 headerRight: () => <ProgressionBar />
             }}
@@ -25,6 +25,6 @@ export default () => {
 const styles = StyleSheet.create({
     headerStyle: {
         height: 80,
-        backgroundColor: Colors.secondary
+        backgroundColor: 'white'
     }
 })

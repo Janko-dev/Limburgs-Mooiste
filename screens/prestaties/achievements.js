@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { globalStyles, Colors } from '../../constants';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { colors } from 'react-native-elements';
+import { colors, Icon } from 'react-native-elements';
 
 const achievements = props => {
     const [category, setCategory] = new useState('Snelheid');
@@ -27,21 +27,18 @@ const achievements = props => {
             categorie: 'Snelheid',
             Naam: 'Snelheids Duivel',
             Beschrijving: 'Voltooi een trainingsschema 10% sneller dan de streeftijd!',
-            voltooid: false
         },
         {
             id: 2,
             categorie: 'Afstand',
-            Naam: 'Snelheids Duivel',
-            Beschrijving: 'Voltooi een trainingsschema 10% sneller dan de streeftijd!',
-            voltooid: false
+            Naam: 'Afstands maniak',
+            Beschrijving: 'Fiets de afstand van het limburgs Mooiste evenement!',
         },
         {
             id: 3,
             categorie: 'Shares',
-            Naam: 'Snelheids Duivel',
-            Beschrijving: 'Voltooi een trainingsschema 10% sneller dan de streeftijd!',
-            voltooid: false
+            Naam: 'Deler',
+            Beschrijving: 'Deel meer dan 3 verschillende resultaten met uw vrienden!',
         }
     ]
 
@@ -55,9 +52,9 @@ const achievements = props => {
                             if (category == item.Naam) {
                                 return (
                                     <TouchableOpacity key={item.id}
-                                        style={[styles.sectionHeadButton, { backgroundColor: Colors.primary }]}
+                                        style={styles.sectionHeadButton}
                                         onPress={() => { setCategory(item.Naam) }}>
-                                        <Text>{item.Naam}</Text>
+                                        <Text style={globalStyles.fontStyle}>{item.Naam}</Text>
                                     </TouchableOpacity>
                                 )
                             } else {
@@ -78,20 +75,16 @@ const achievements = props => {
                     badgesMap.map(
                         item => {
                             if (category == item.categorie) {
-                                if (item.voltooid) {
-                                    return (
-                                        <View key={item.id} style={[styles.badge, {backgroundColor: Colors.success}]}>
-                                            <Text> item </Text>
-                                        </View>
-                                    )
-                                } else {
-                                    return (
-                                        <View key={item.id} style={styles.badge}>
-                                            <Text> {item.Naam} </Text>
-                                            <Text> {item.Beschrijving} </Text>
-                                        </View>
-                                    )
-                                }
+                                return (
+                                    <TouchableOpacity key={item.id} style={styles.badge}>
+                                        <Text style={globalStyles.fontStyle}> {item.Naam} </Text>
+                                        <Icon name='chevron-down'
+                                            type='evilicon'
+                                            color='#517fa4'
+                                        />
+                                    </TouchableOpacity>
+                                )
+                                // <Text> {item.Beschrijving} </Text>
                             }
                         }
                     )
@@ -127,7 +120,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         borderBottomWidth: 4,
-        borderBottomColor: Colors.secondary,
+        borderBottomColor: Colors.primary,
         borderTopLeftRadius: 5,
         borderTopRightRadius: 5,
         backgroundColor: '#fff',
@@ -137,9 +130,11 @@ const styles = StyleSheet.create({
     },
 
     badge: {
-        justifyContent: 'center',
+        borderBottomColor: Colors.primary,
+        borderBottomWidth: 2,
         alignItems: 'center',
-        borderWidth: 1,
+        justifyContent: 'space-between',
+        flexDirection: 'row',
         margin: 10,
         padding: 10,
     }
