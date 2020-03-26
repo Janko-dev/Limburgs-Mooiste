@@ -43,7 +43,7 @@ const Navigator = () => {
     }
 
     const registerUserHandler = (userData) => {
-        firebase.createNewUserRecord(user.uid, userData.skillOption, userData.trainingDaysOption)
+        firebase.createNewUserRecord(user.uid, userData.skillOption)
         setWizardModal(false);
     }
 

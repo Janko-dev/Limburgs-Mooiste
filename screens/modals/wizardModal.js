@@ -9,42 +9,18 @@ import WizardButton from '../../components/button';
 export default ({ isVisible, onFinish }) => {
 
     const [moveInX] = useState(new Animated.Value(-WINDOW_WIDTH))
-    const [skillOption, setSkillOption] = useState(null);
-    const [trainingDaysOption, setTrainingDaysOption] = useState([]);
+    const [skillOption, setSkillOption] = useState('beginner');
+    const [antwoord1, setAntwoord1] = useState('');
+    const [antwoord2, setAntwoord2] = useState('');
+    const [antwoord3, setAntwoord3] = useState([]);
 
     useEffect(() => {
-        toStepOne();
+        toStep(0);
     }, [])
 
-    const skillOptionHandler = option => {
-        setSkillOption(option);
-    }
-
-    const trainingDaysOptionHandler = options => {
-        setTrainingDaysOption(options);
-    }
-
-    const toStepOne = () => {
+    const toStep = (step) => {
         Animated.spring(moveInX, {
-            toValue: 0,
-            delay: 500,
-            bounciness: 10,
-            useNativeDriver: true
-        }).start();
-    }
-
-    const toStepTwo = () => {
-        Animated.spring(moveInX, {
-            toValue: WINDOW_WIDTH,
-            delay: 500,
-            bounciness: 10,
-            useNativeDriver: true
-        }).start();
-    }
-
-    const toStepThree = () => {
-        Animated.spring(moveInX, {
-            toValue: WINDOW_WIDTH * 2,
+            toValue: WINDOW_WIDTH * step,
             delay: 500,
             bounciness: 10,
             useNativeDriver: true
@@ -52,7 +28,7 @@ export default ({ isVisible, onFinish }) => {
     }
 
     const finishWizard = () => {
-        onFinish({skillOption, trainingDaysOption})
+        onFinish({ skillOption })
     }
 
     const transformStepOne = {
@@ -79,43 +55,61 @@ export default ({ isVisible, onFinish }) => {
         ]
     }
 
-    const skillOptions = ['Beginner', 'Gevorderd', 'Expert'];
-    const daysOfWeek = ['Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag', 'Zondag'];
+    const transformStepFour = {
+        transform: [
+            {
+                translateX: Animated.subtract(moveInX, new Animated.Value(WINDOW_WIDTH * 3))
+            }
+        ]
+    }
 
     return (
         <Modal animationType='slide' visible={isVisible}>
             <View style={styles.container}>
                 <Animated.View style={[transformStepOne, styles.animViewContainer]}>
-                    <Text style={[globalStyles.fontStyle, styles.headerText]}>Selecteer je fietsniveau: </Text>
+                    <Text style={[globalStyles.fontStyle, styles.headerText]}>Vraag 1: dit is dummyvraag 1?</Text>
                     <OptionPicker
-                        options={skillOptions}
-                        onSelect={skillOptionHandler}
+                        options={['antwoord 1', 'antwoord 2', 'antwoord 3']}
+                        onSelect={(option) => setAntwoord1(option)}
                     />
-                    <WizardButton title='Verder' isActive={skillOption != null} nextStep={toStepTwo} />
+                    <WizardButton title='Verder' isActive={antwoord1 != null} nextStep={() => toStep(1)} />
                 </Animated.View>
 
                 <Animated.View style={[transformStepTwo, styles.animViewContainer]}>
-                    <Text style={[globalStyles.fontStyle, styles.headerText]}>Selecteer je gewenste trainingsmomenten: </Text>
-                    <MultiOptionPicker
-                        options={daysOfWeek}
-                        onSelect={trainingDaysOptionHandler}
-                        style={{ height: 50 }}
+                    <Text style={[globalStyles.fontStyle, styles.headerText]}>Vraag 2: dit is dummyvraag 2? </Text>
+                    <OptionPicker
+                        options={['antwoord 1', 'antwoord 2']}
+                        onSelect={(option) => setAntwoord2(option)}
                     />
+
                     <View style={styles.buttonGroup}>
-                        <WizardButton title='Terug' isActive={true} nextStep={toStepOne} />
-                        <WizardButton title='Verder' isActive={trainingDaysOption.length != 0} nextStep={toStepThree} />
+                        <WizardButton title='Terug' isActive={true} nextStep={() => toStep(0)} />
+                        <WizardButton title='Verder' isActive={antwoord2 != null} nextStep={() => toStep(2)} />
                     </View>
                 </Animated.View>
 
                 <Animated.View style={[transformStepThree, styles.animViewContainer]}>
-                    <Text style={[globalStyles.fontStyle, styles.headerText]}>Klaar!! </Text>
-                    <Text style={[globalStyles.fontStyle, styles.bodyText]}>Controleer uw voorkeuren: </Text>
-                    <Text style={[globalStyles.fontStyle, styles.bodyText]}>Niveau: <Text style={{color: Colors.secondary}}>{skillOption}</Text></Text>
-                    <Text style={[globalStyles.fontStyle, styles.bodyText]}>Beschikbare trainingsdagen: </Text>
-                    {trainingDaysOption.map((day, index) => (<Text style={[globalStyles.fontStyle, styles.bodyText, {color: Colors.secondary}]} key={index}> {day} </Text>))}
+                    <Text style={[globalStyles.fontStyle, styles.headerText]}>Vraag 3: dit is een multiselect component </Text>
+                    <MultiOptionPicker
+                        options={['antwoord 1', 'antwoord 2', 'antwoord 3', 'antwoord 4']}
+                        onSelect={(options) => setAntwoord3(options)}
+                        style={{ height: 50 }}
+                    />
 
                     <View style={styles.buttonGroup}>
-                        <WizardButton title='Terug' isActive={true} nextStep={toStepTwo} />
+                        <WizardButton title='Terug' isActive={true} nextStep={() => toStep(1)} />
+                        <WizardButton title='Verder' isActive={antwoord3 != null} nextStep={() => toStep(3)} />
+                    </View>
+                </Animated.View>
+
+
+
+                <Animated.View style={[transformStepFour, styles.animViewContainer]}>
+                    <Text style={[globalStyles.fontStyle, styles.headerText]}>Klaar!! </Text>
+                    <Text style={[globalStyles.fontStyle, styles.bodyText]}>Niveau: {skillOption} </Text>
+
+                    <View style={styles.buttonGroup}>
+                        <WizardButton title='Terug' isActive={true} nextStep={() => toStep(2)} />
                         <WizardButton title='Opslaan' isActive={true} nextStep={finishWizard} />
                     </View>
                 </Animated.View>
@@ -134,7 +128,8 @@ const styles = StyleSheet.create({
     },
 
     animViewContainer: {
-        position: 'absolute'
+        position: 'absolute',
+        width: '80%'
     },
 
     headerText: {
