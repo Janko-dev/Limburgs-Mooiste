@@ -133,6 +133,6 @@ export default Navigator;
 
 const styles = StyleSheet.create({
     tabBarStyle: {
-        backgroundColor: Colors.secondary
+        backgroundColor: 'white'
     },
 })

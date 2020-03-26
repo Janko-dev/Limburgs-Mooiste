@@ -67,5 +67,4 @@ export default {
     getSchedules: () => {
         return firebase.firestore().collection("trainingsSchema").get();
     }
-
 }
