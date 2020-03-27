@@ -40,11 +40,11 @@ export default {
         return firebase.firestore().collection("users").doc(uid).get();
     },
 
-    createNewUserRecord: (uid, skillLevel, trainingDays) => {
+    createNewUserRecord: (uid, skillLevel) => {
         return firebase.firestore().collection("users").doc(uid).set(
             {
-                skillLevel, 
-                exp: 0, 
+                skillLevel,
+                exp: 0,
                 maxExp: 10,
                 activeSchedule: null,
                 achievements: [],
@@ -66,5 +66,36 @@ export default {
 
     getSchedules: () => {
         return firebase.firestore().collection("trainingsSchema").get();
+    },
+
+    getSchedule: (id) => {
+        return firebase.firestore().collection("trainingsSchema").doc(id).get();
+    },
+
+    setActiveSchedule: (uid, scheduleId) => {
+        return firebase.firestore().collection("users").doc(uid).update({
+            activeSchedule: {
+                currentSession: 1,
+                currentWeek: 1,
+                id: scheduleId,
+                startDate: new firebase.firestore.Timestamp.fromDate(new Date())
+            }
+        })
+    },
+
+    incrementCurrentScheduleWeek: (uid, activeSchedule) => {
+        return firebase.firestore().collection("users").doc(uid).update({
+            activeSchedule: {
+                ...activeSchedule,
+                currentWeek: activeSchedule.currentWeek + 1,
+                currentSession: 1
+            }
+        })
+    },
+
+    deleteActiveSchedule: (uid) => {
+        return firebase.firestore().collection("users").doc(uid).update({
+            activeSchedule: null
+        })
     }
 }

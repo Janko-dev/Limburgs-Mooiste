@@ -22,7 +22,7 @@ export default () => {
         >
             <Stack.Screen name="Training" component={TrainingScreen} />
             <Stack.Screen name="Sessions" component={SessionScreen} />
-            <Stack.Screen name="ScheduleDetails" component={ScheduleDetailScreen} />
+            <Stack.Screen name="Details" component={ScheduleDetailScreen} />
         </Stack.Navigator>
     )
 }
