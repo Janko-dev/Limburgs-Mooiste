@@ -36,7 +36,6 @@ export default () => {
             }}
         >
             <Stack.Screen name="Coaching" component={CoachingScreen} />
-            <Stack.Screen name="WhatsApp" component={WhatsApp} />
         </Stack.Navigator>
     )
 }
