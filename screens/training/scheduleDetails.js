@@ -4,8 +4,6 @@ import { globalStyles, Colors } from '../../constants'
 import firebase from '../../api/firebase';
 import LoadingModal from '../modals/loadingModal';
 
-import { Dialogflow_V2 } from "react-native-dialogflow";
-
 const ScheduleDetailsScreen = ({ route, navigation }) => {
 
     const [animValue] = useState(new Animated.Value(0))
@@ -48,6 +46,7 @@ const ScheduleDetailsScreen = ({ route, navigation }) => {
 
             <View style={styles.bodyContainer}>
                 <ScrollView contentContainerStyle={styles.scrollView}
+                    showsVerticalScrollIndicator={false}
                     onScroll={Animated.event(
                         [
                             {
