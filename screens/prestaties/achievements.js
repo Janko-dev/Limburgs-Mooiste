@@ -1,10 +1,23 @@
 import React, { useState } from 'react';
 import { globalStyles, Colors } from '../../constants';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+
 import { colors, Icon } from 'react-native-elements';
+import Animated, { useTransition, Easing } from 'react-native-reanimated';
 
 const achievements = props => {
     const [open, setOpen] = useState(false);
+
+    // const transition = useTransition(
+    //     open,
+    //     open ? 0 : 1,
+    //     open ? 1 : 0,
+    //     400,
+    //     Easing.inOut(Easing.ease)
+    // );
+
+    // const height = bInterpolate(transition, 0, badgesMap.items.length * 54);
+    // const bototmRadius = bInterpolate(transition, 8, 0);
 
     const [category, setCategory] = new useState('Snelheid');
 
@@ -112,20 +125,17 @@ const achievements = props => {
                         item => {
                             if (category == item.categorie) {
                                 return (
-                                    <TouchableOpacity key={item.id} style={styles.badge}
-                                        onPress={() => {
-                                            return (
-                                                <View>
-                                                    <Text> {item.Beschrijving} </Text>
-                                                </View>
-                                            )
-                                        }}>
-                                        <Text> {item.Naam} </Text>
-                                        <Icon name='chevron-down'
-                                            type='evilicon'
-                                            color='#517fa4'
-                                        />
-                                    </TouchableOpacity>
+                                    <Animated.View>
+
+                                        <TouchableOpacity key={item.id} style={styles.badge}
+                                            onPress={() => setOpen(!open)} >
+                                            <Text> {item.Naam} </Text>
+                                            <Icon name='chevron-down'
+                                                type='evilicon'
+                                                color='#517fa4'
+                                            />
+                                        </TouchableOpacity>
+                                    </Animated.View>
                                 )
                             }
                         }
