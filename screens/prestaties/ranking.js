@@ -1,10 +1,88 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { globalStyles, Colors } from '../../constants';
 import { View, Text, StyleSheet } from 'react-native';
+
+import firebase from '../../api/firebase';
 
 import ProfilePicture from 'react-native-profile-picture';
 
 const ranking = props => {
+    const [ranks, setRanks] = useState([]);
+    const [users, setUsers] = useState([]);
+    const [user, setUser] = useState([{
+        uid: '',
+        exp: 0,
+    }]);
+
+    useEffect(() => {
+        let currentUser = firebase.getCurrentUser();
+
+        firebase.getUsers().then(result => {
+            setUsers([]);
+            setRanks([]);
+
+            return result.docs.map(doc => {
+                let _user = doc.data();
+                _user.id = doc.id;
+
+                let _rank = {
+                    id: doc.id,
+                    exp: _user.exp
+                }
+
+                setUsers(prevUsers => [...prevUsers, _user]);
+                setRanks(prevRanks => [...prevRanks, _rank]);
+
+
+                if (currentUser.uid == _user.id) {
+                    let cUser = {
+                        uid: currentUser.uid,
+                        exp: _user.exp
+                    }
+                    setUser(cUser);
+                }
+
+                return doc.data();
+            })
+        })
+    }, [])
+
+    const stageFunc = (rank, i) => {
+        if (rank != undefined) {
+            let _height;
+
+            if (i == 0) {
+                _height = "30%";
+            }
+
+            if (i == 1) {
+                _height = "43%";
+            }
+
+            if (i == 2) {
+                _height = "23%";
+            }
+
+            return (
+                <View style={styles.stageRow}>
+                    <View style={[styles.stagePillar, { height: _height }]}>
+                        <Text style={globalStyles.fontStyle}> 2 </Text>
+                    </View>
+                    <View style={styles.profile}>
+                        <ProfilePicture
+                            isPicture={true}
+                            requirePicture={require('../../assets/profilepic_blanco.png')}
+                            shape='circle'
+                            width={40}
+                            height={40}
+                            backgroundColor={Colors.primary}
+                        />
+                        <Text style={globalStyles.fontStyle}> JDoe, {rank.exp} </Text>
+                    </View>
+                </View>
+            )
+        } else return null;
+    }
 
     return (
         <View style={styles.container}>
@@ -13,57 +91,26 @@ const ranking = props => {
             </View>
             <View style={styles.sectionBottom}>
                 <View style={styles.stage}>
-                    <View style={styles.stageRow}>
-                        <View style={styles.stageSecond}>
-                            <Text style={globalStyles.fontStyle}> 2 </Text>
-                        </View>
-                        <View style={styles.profile}>
-                            <ProfilePicture
-                                isPicture={true}
-                                requirePicture={require('../../assets/profilepic_blanco.png')}
-                                shape='circle'
-                                width={40}
-                                height={40}
-                                backgroundColor={Colors.primary}
-                            />
-                            <Text style={globalStyles.fontStyle}> John </Text>
-                        </View>
-                    </View>
-                    <View style={styles.stageRow}>
-                        <View style={styles.stageFirst}>
-                            <Text style={globalStyles.fontStyle}> 1 </Text>
-                        </View>
-                        <View style={styles.profile}>
-                            <ProfilePicture
-                                isPicture={true}
-                                requirePicture={require('../../assets/profilepic_blanco.png')}
-                                shape='circle'
-                                width={40}
-                                height={40}
-                                backgroundColor={Colors.primary}
-                            />
-                            <Text style={globalStyles.fontStyle}> Frans </Text>
-                        </View>
-                    </View>
-                    <View style={styles.stageRow}>
-                        <View style={styles.stageThird}>
-                            <Text style={globalStyles.fontStyle}> 3 </Text>
-                        </View>
-                        <View style={styles.profile}>
-                            <ProfilePicture
-                                isPicture={true}
-                                requirePicture={require('../../assets/profilepic_blanco.png')}
-                                shape='circle'
-                                width={40}
-                                height={40}
-                                backgroundColor={Colors.primary}
-                            />
-                            <Text style={globalStyles.fontStyle}> Eric </Text>
-                        </View>
-                    </View>
+                    {
+                        ranks.sort((a, b) => b.exp - a.exp).map((item, i) => {
+                            if (i == 0) {
+                                let _rank = ranks[i + 1]
+                                return stageFunc(_rank, i);
+                            }
+                            if (i == 1) {
+                                let _rank = ranks[i - 1]
+                                return stageFunc(_rank, i);
+                            }
+                            if (i == 2) {
+                                let _rank = ranks[i]
+                                return stageFunc(_rank, i);
+                            }
+                        })
+                    }
                 </View>
                 <View style={[styles.displayRank, styles.shadow]}>
-                    <Text style={[globalStyles.fontStyle, { color: '#fff' }]}> Uw huidige rank bedraagt: 8ste </Text>
+                    <Text style={[globalStyles.fontStyle, { color: '#fff' }]}> Uw huidige experience is:  </Text>
+                    {/* <Text style={[globalStyles.fontStyle, { color: '#fff' }]}> U bent nog, { user.exp } verwijdert van de volgende positie! </Text> */}
                 </View>
             </View>
         </View>
@@ -111,29 +158,13 @@ const styles = StyleSheet.create({
         flex: 1,
     },
 
-    stageFirst: {
+    stagePillar: {
         backgroundColor: Colors.tertiary,
         borderTopRightRadius: 10,
         borderTopLeftRadius: 10,
         justifyContent: 'center',
         alignItems: 'center',
-        height: '43%',
-    },
-    stageSecond: {
-        backgroundColor: Colors.tertiary,
-        borderTopRightRadius: 10,
-        borderTopLeftRadius: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '30%',
-    },
-    stageThird: {
-        backgroundColor: Colors.tertiary,
-        borderTopRightRadius: 10,
-        borderTopLeftRadius: 10,
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '20%',
+
     },
     profile: {
         alignItems: 'center',

@@ -14,17 +14,6 @@ const achievements = props => {
     const [badgesMap, setBadgesMap] = useState([]);
     const [categoryMap, setCategoryMap] = useState([]);
 
-    // const transition = useTransition(
-    //     open,
-    //     open ? 0 : 1,
-    //     open ? 1 : 0,
-    //     400,
-    //     Easing.inOut(Easing.ease)
-    // );
-
-    // const height = bInterpolate(transition, 0, badgesMap.items.length * 54);
-    // const bototmRadius = bInterpolate(transition, 8, 0);
-
     useEffect(() => {
         firebase.getAchievements().then(result => {
 

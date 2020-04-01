@@ -40,6 +40,10 @@ export default {
         return firebase.firestore().collection("users").doc(uid).get();
     },
 
+    getUsers: () => {
+        return firebase.firestore().collection("users").get();
+    },
+
     createNewUserRecord: (uid, skillLevel, trainingDays) => {
         return firebase.firestore().collection("users").doc(uid).set(
             {
