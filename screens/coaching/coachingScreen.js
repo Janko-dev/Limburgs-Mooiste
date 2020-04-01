@@ -103,13 +103,12 @@ const styles = StyleSheet.create({
 
   headerText: {
     fontWeight: '700',
-    fontFamily: globalStyles.fontStyle.fontFamily,
+    fontFamily: globalStyles.headerText.fontFamily,
     marginTop: 10
   },
 
   subHeaderText: {
     fontWeight: '300',
-    // fontFamily: globalStyles.fontStyle.fontFamily,
 
   },
 

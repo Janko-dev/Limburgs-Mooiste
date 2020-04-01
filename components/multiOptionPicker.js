@@ -21,11 +21,11 @@ export default ({ options, onSelect, style }) => {
         });
 
         setSelectedOptions(updatedOptions);
-        onSelect(updatedOptions.filter(item => {
-            if (item.selected) {
-                return item.value
-            }
-        }).map(item => item.value));
+        // onSelect(updatedOptions.filter(item => {
+        //     if (item.selected) {
+        //         return item.value
+        //     }
+        // }).map(item => item.value));
     }
 
     return (
@@ -48,27 +48,24 @@ const Option = ({ option, onPress, active, style }) => {
     const [fadeAnim] = useState(new Animated.Value(0))
 
     const pressHandler = () => {
-        onPress();
         Animated.timing(fadeAnim, {
             toValue: active ? 0 : 1,
-            duration: 200
+            duration: 200,
+            useNativeDriver: true
         }).start()
+        onPress();
     }
 
     const transform = {
         transform: [
             {
                 scaleX: fadeAnim,
-                // rotateX: fadeAnim.interpolate({
-                //     inputRange: [0, 1],
-                //     outputRange: ['0deg', '360deg']
-                // })
             }
         ]
     }
 
     return (
-        <TouchableOpacity activeOpacity={1} onPress={pressHandler} style={[styles.option, active ? styles.activeOption : null, style]}>
+        <TouchableOpacity  onPress={pressHandler} style={[styles.option, active ? styles.activeOption : null, style]}>
 
             <Animated.View style={[{opacity: fadeAnim}, transform]}>
                 <Icon
@@ -78,7 +75,7 @@ const Option = ({ option, onPress, active, style }) => {
                     iconStyle={styles.optionIcon}
                 />
             </Animated.View>
-            <Text style={[globalStyles.fontStyle, styles.optionText]}>{option}</Text>
+            <Text style={[globalStyles.headerText, styles.optionText]}>{option}</Text>
         </TouchableOpacity>
     )
 }
@@ -87,7 +84,7 @@ const styles = StyleSheet.create({
     option: {
         height: 80,
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'space-evenly',
         flexDirection: 'row',
         paddingHorizontal: 20,
     },
@@ -106,12 +103,13 @@ const styles = StyleSheet.create({
 
     optionText: {
         color: Colors.tertiary,
-        fontSize: 24,
     },
 
     container: {
         backgroundColor: Colors.primary,
         borderRadius: 20,
+        flex: 1,
+        width: '100%'
     }
 })
 
