@@ -9,14 +9,9 @@ import ProfilePicture from 'react-native-profile-picture';
 const ranking = props => {
     const [ranks, setRanks] = useState([]);
     const [users, setUsers] = useState([]);
-    const [user, setUser] = useState([{
-        uid: '',
-        exp: 0,
-    }]);
+    const [user, setUser] = useState();
 
     useEffect(() => {
-        let currentUser = firebase.getCurrentUser();
-
         firebase.getUsers().then(result => {
             setUsers([]);
             setRanks([]);
@@ -32,15 +27,6 @@ const ranking = props => {
 
                 setUsers(prevUsers => [...prevUsers, _user]);
                 setRanks(prevRanks => [...prevRanks, _rank]);
-
-
-                if (currentUser.uid == _user.id) {
-                    let cUser = {
-                        uid: currentUser.uid,
-                        exp: _user.exp
-                    }
-                    setUser(cUser);
-                }
 
                 return doc.data();
             })
@@ -64,7 +50,7 @@ const ranking = props => {
             }
 
             return (
-                <View style={styles.stageRow}>
+                <View style={styles.stageRow} key={i}>
                     <View style={[styles.stagePillar, { height: _height }]}>
                         <Text style={globalStyles.fontStyle}> 2 </Text>
                     </View>
@@ -110,7 +96,6 @@ const ranking = props => {
                 </View>
                 <View style={[styles.displayRank, styles.shadow]}>
                     <Text style={[globalStyles.fontStyle, { color: '#fff' }]}> Uw huidige experience is:  </Text>
-                    {/* <Text style={[globalStyles.fontStyle, { color: '#fff' }]}> U bent nog, { user.exp } verwijdert van de volgende positie! </Text> */}
                 </View>
             </View>
         </View>
