@@ -66,5 +66,9 @@ export default {
 
     getSchedules: () => {
         return firebase.firestore().collection("trainingsSchema").get();
-    }
+    },
+
+    getAchievements: () => {
+        return firebase.firestore().collection("achievements").get();
+    },
 }

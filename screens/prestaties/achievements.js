@@ -1,12 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { globalStyles, Colors } from '../../constants';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 
+import firebase from '../../api/firebase';
+
 import { colors, Icon } from 'react-native-elements';
 import Animated, { useTransition, Easing } from 'react-native-reanimated';
+import { Badge } from 'react-native-paper';
 
 const achievements = props => {
     const [open, setOpen] = useState(false);
+    const [category, setCategory] = useState('Snelheid');
+    const [badgesMap, setBadgesMap] = useState([]);
+    const [categoryMap, setCategoryMap] = useState([]);
 
     // const transition = useTransition(
     //     open,
@@ -19,77 +25,26 @@ const achievements = props => {
     // const height = bInterpolate(transition, 0, badgesMap.items.length * 54);
     // const bototmRadius = bInterpolate(transition, 8, 0);
 
-    const [category, setCategory] = new useState('Snelheid');
+    useEffect(() => {
+        firebase.getAchievements().then(result => {
 
-    const categoryMap = [
-        {
-            id: 1,
-            Naam: 'Snelheid',
-        },
-        {
-            id: 2,
-            Naam: 'Afstand',
-        },
-        {
-            id: 3,
-            Naam: 'Shares',
-        },
-        // {
-        //     id: 4,
-        //     Naam: 'Sessies',
-        // }
-    ]
+            setBadgesMap([]);
+            setCategoryMap([]);
 
-    const badgesMap = [
-        {
-            id: 1,
-            categorie: 'Snelheid',
-            Naam: 'Snelheids Duivel',
-            Beschrijving: 'Voltooi een trainingsschema 10% sneller dan de streeftijd!',
-        },
-        {
-            id: 2,
-            categorie: 'Afstand',
-            Naam: 'Afstands maniak',
-            Beschrijving: 'Fiets de afstand van het limburgs Mooiste evenement!',
-        },
-        {
-            id: 3,
-            categorie: 'Shares',
-            Naam: 'Deler',
-            Beschrijving: 'Deel meer dan 3 verschillende resultaten met uw vrienden!',
-        },
-        {
-            id: 4,
-            categorie: 'Shares',
-            Naam: 'Deler II',
-            Beschrijving: 'Deel meer dan 5 verschillende resultaten met uw vrienden!',
-        },
-        {
-            id: 5,
-            categorie: 'Shares',
-            Naam: 'Deler III',
-            Beschrijving: 'Deel meer dan 8 verschillende resultaten met uw vrienden!',
-        },
-        {
-            id: 6,
-            categorie: 'Shares',
-            Naam: 'Deler IV',
-            Beschrijving: 'Deel meer dan 15 verschillende resultaten met uw vrienden!',
-        },
-        {
-            id: 7,
-            categorie: 'Shares',
-            Naam: 'Mr WorldWide',
-            Beschrijving: 'Deel meer dan 20 verschillende resultaten met uw vrienden!',
-        },
-        {
-            id: 8,
-            categorie: 'Shares',
-            Naam: 'Mr WorldWide II',
-            Beschrijving: 'Deel meer dan 50 verschillende resultaten met uw vrienden!',
-        },
-    ]
+            return result.docs.map(doc => {
+                let badge = doc.data();
+                badge.id = doc.id;
+
+                let _category = {};
+                _category.id = badge.id;
+                _category.naam = badge.type;
+
+                setBadgesMap(prevBadges => [...prevBadges, badge]);
+                setCategoryMap(prevCategory => [...prevCategory, _category]);
+                return doc.data();
+            })
+        })
+    }, [])
 
 
     return (
@@ -98,20 +53,20 @@ const achievements = props => {
                 {
                     categoryMap.map(
                         item => {
-                            if (category == item.Naam) {
+                            if (category == item.naam) {
                                 return (
                                     <TouchableOpacity key={item.id}
                                         style={styles.sectionHeadButtonSelect}
-                                        onPress={() => { setCategory(item.Naam) }}>
-                                        <Text style={globalStyles.fontStyle}>{item.Naam}</Text>
+                                        onPress={() => { setCategory(item.naam) }}>
+                                        <Text style={globalStyles.fontStyle}>{item.naam}</Text>
                                     </TouchableOpacity>
                                 )
                             } else {
                                 return (
                                     <TouchableOpacity key={item.id}
                                         style={styles.sectionHeadButton}
-                                        onPress={() => { setCategory(item.Naam) }}>
-                                        <Text>{item.Naam}</Text>
+                                        onPress={() => { setCategory(item.naam) }}>
+                                        <Text>{item.naam}</Text>
                                     </TouchableOpacity>
                                 )
                             }
@@ -123,19 +78,18 @@ const achievements = props => {
                 {
                     badgesMap.map(
                         item => {
-                            if (category == item.categorie) {
+                            if (category == item.type) {
                                 return (
-                                    <Animated.View>
-
+                                    <View key={item.id}>
                                         <TouchableOpacity key={item.id} style={styles.badge}
                                             onPress={() => setOpen(!open)} >
-                                            <Text> {item.Naam} </Text>
+                                            <Text> {item.naam} </Text>
                                             <Icon name='chevron-down'
                                                 type='evilicon'
                                                 color='#517fa4'
                                             />
                                         </TouchableOpacity>
-                                    </Animated.View>
+                                    </View>
                                 )
                             }
                         }
