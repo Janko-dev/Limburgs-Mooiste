@@ -44,6 +44,10 @@ export default {
         return firebase.firestore().collection("users").doc(uid).get();
     },
 
+    getUsers: () => {
+        return firebase.firestore().collection("users").get();
+    },
+
     createNewUserRecord: (uid, skillLevel) => {
         return firebase.firestore().collection("users").doc(uid).set(
             {
@@ -78,6 +82,10 @@ export default {
 
     getSchedules: () => {
         return firebase.firestore().collection("trainingsSchema").get();
+    },
+
+    getAchievements: () => {
+        return firebase.firestore().collection("achievements").get();
     },
 
     getSchedule: (id) => {
