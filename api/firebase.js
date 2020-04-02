@@ -46,6 +46,7 @@ export default {
                 skillLevel,
                 exp: 0,
                 maxExp: 10,
+                previousMaxExp: 0,
                 activeSchedule: null,
                 achievements: [],
                 previousTrainingSessions: []
@@ -104,11 +105,20 @@ export default {
         return firebase.database().ref(routeId).once("value");
     },
 
-    // getAllRoutes: (sessies) => {
-    //     return firebase.database().ref().once("value");
-    // }
-
     getAllRoutes: (callback) => {
         return firebase.database().ref().once("value", callback);
+    },
+
+    setMaxExp: (maxExp, previousMaxExp, uid) => {
+        return firebase.firestore().collection("users").doc(uid).update({
+            maxExp,
+            previousMaxExp
+        })
+    },
+
+    setExp: (exp, uid) => {
+        return firebase.firestore().collection("users").doc(uid).update({
+            exp
+        })
     }
 }
