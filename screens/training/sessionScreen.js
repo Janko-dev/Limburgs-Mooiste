@@ -12,14 +12,18 @@ const SessionScreen = ({ navigation, route }) => {
 
     const [user, setUser] = useState(firebase.getCurrentUser());
     const [userRecord, setUserRecord] = useState(null);
+
     const [schedule, setSchedule] = useState(route.params);
     const [deadline, setDeadline] = useState(null);
     const [remainingTime, setRemainingTime] = useState(null);
+
     const [descriptionModal, setDescriptionModal] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [isGeoModalVisible, setIsGeoModalVisible] = useState(false);
+
     const [markers, setMarkers] = useState(null);
     const [polygon, setPolygon] = useState(null);
+    const [geoData, setGeoData] = useState(null)
 
     useEffect(() => {
         if (user) {
@@ -32,6 +36,21 @@ const SessionScreen = ({ navigation, route }) => {
     })
 
     useEffect(() => {
+        firebase.getAllRoutes(data => {
+            let routes = data.toJSON();
+            let sessionIDs = route.params.sessies.map(item => item.routeID)
+            Object.keys(routes).forEach(key => {
+                if (!sessionIDs.includes(key)) {
+                    delete routes[key];
+                }
+            })
+            setGeoData(routes);
+            setIsLoading(false);
+        })
+
+    }, [])
+
+    useEffect(() => {
         if (userRecord) {
             let dl = userRecord.activeSchedule.startDate.toDate()
             dl.setDate(userRecord.activeSchedule.startDate.toDate().getDate() + userRecord.activeSchedule.currentWeek * 7)
@@ -42,29 +61,26 @@ const SessionScreen = ({ navigation, route }) => {
     }, [userRecord]);
 
     const openRoutehandler = (routeID) => {
-        setIsLoading(true)
-        firebase.getRoute(routeID).then(result => {
-            // console.log(result.toJSON())
-            setMarkers(() => Utils.getMarkersFromRoute(result.toJSON()))
-            setPolygon(() => Utils.getPolygonFromRoute(result.toJSON()))
-            setIsLoading(false)
-            setIsGeoModalVisible(true)
-        })
+        setMarkers(() => Utils.getMarkersFromRoute(geoData[routeID]))
+        setPolygon(() => Utils.getPolygonFromRoute(geoData[routeID]))
+        setIsGeoModalVisible(true)
     }
+    // console.log(isGeoModalVisible)
 
     return (
         <View style={[globalStyles.container]}>
+            <GeoTrainingModal visible={isGeoModalVisible} onClose={() => setIsGeoModalVisible(false)} polygon={polygon} markers={markers} />
             <Modal isVisible={descriptionModal} useNativeDriver={true}
                 swipeDirection={['down']}
                 onSwipeComplete={() => setDescriptionModal(false)}
                 onBackdropPress={() => setDescriptionModal(false)}
             >
-                <View style={{backgroundColor: Colors.tertiary, borderRadius: 20, padding: 5}}>
+                <View style={{ backgroundColor: Colors.tertiary, borderRadius: 20, padding: 5 }}>
                     <Text>{schedule.beschrijving}</Text>
                 </View>
             </Modal>
             <LoadingModal isLoading={isLoading} />
-            <GeoTrainingModal visible={isGeoModalVisible} onClose={() => setIsGeoModalVisible(false)} polygon={polygon} markers={markers} />
+
             <View style={styles.headerContainer}>
                 <Text style={[globalStyles.headerText, { color: Colors.secondary }]}>{schedule?.titel}</Text>
                 <Text style={[globalStyles.bodyText, { color: 'gray' }]}>Op <Text style={{ color: Colors.primary }}>{deadline?.toLocaleDateString('nl-NL')}</Text> is deze trainingsweek afgelopen</Text>
@@ -84,6 +100,7 @@ const SessionScreen = ({ navigation, route }) => {
                         <View key={index} style={styles.session}>
                             <View style={styles.infoContainer}>
                                 <Text style={[globalStyles.headerText, { color: Colors.tertiary }]}>Sessie {index + 1}</Text>
+                                <Text style={[globalStyles.headerText, { color: 'gray' }]}>{userRecord?.activeSchedule.trainingsDays.find(day => day.id === item.routeID).option}</Text>
                             </View>
                             <View style={styles.achievementContainer}>
                                 <View style={[styles.incentiveContainer, { backgroundColor: 'orange' }]}>
