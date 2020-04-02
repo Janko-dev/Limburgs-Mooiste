@@ -73,7 +73,7 @@ const TrainingScreen = ({ navigation }) => {
 
             {userRecord?.activeSchedule ?
                 <TouchableOpacity onPress={navigateActiveSchedule} style={styles.activeScheduleContainer}>
-                    <Text style={[globalStyles.bodyText, styles.activeScheduleHeaderText]}>Actief Schema</Text>
+                    <Text style={[globalStyles.headerText, styles.activeScheduleHeaderText]}>Actief Schema</Text>
                     <Text style={[globalStyles.bodyText, styles.activeScheduleBodyText]}>
                         {activeSchedule?.titel}
                     </Text>
@@ -125,12 +125,10 @@ const styles = StyleSheet.create({
     },
 
     activeScheduleHeaderText: {
-        fontSize: 20,
         color: Colors.secondary
     },
 
     activeScheduleBodyText: {
-        fontSize: 12,
         color: Colors.tertiary
     },
 

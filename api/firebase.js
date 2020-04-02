@@ -54,6 +54,7 @@ export default {
                 skillLevel,
                 exp: 0,
                 maxExp: 10,
+                previousMaxExp: 0,
                 activeSchedule: null,
                 achievements: [],
                 previousTrainingSessions: []
@@ -92,13 +93,14 @@ export default {
         return firebase.firestore().collection("trainingsSchema").doc(id).get();
     },
 
-    setActiveSchedule: (uid, scheduleId) => {
+    setActiveSchedule: (uid, scheduleId, trainingsDays) => {
         return firebase.firestore().collection("users").doc(uid).update({
             activeSchedule: {
                 currentSession: 1,
                 currentWeek: 1,
                 id: scheduleId,
-                startDate: new firebase.firestore.Timestamp.fromDate(new Date())
+                startDate: new firebase.firestore.Timestamp.fromDate(new Date()),
+                trainingsDays
             }
         })
     },
@@ -116,6 +118,27 @@ export default {
     deleteActiveSchedule: (uid) => {
         return firebase.firestore().collection("users").doc(uid).update({
             activeSchedule: null
+        })
+    },
+
+    getRoute: (routeId) => {
+        return firebase.database().ref(routeId).once("value");
+    },
+
+    getAllRoutes: (callback) => {
+        return firebase.database().ref().once("value", callback);
+    },
+
+    setMaxExp: (maxExp, previousMaxExp, uid) => {
+        return firebase.firestore().collection("users").doc(uid).update({
+            maxExp,
+            previousMaxExp
+        })
+    },
+
+    setExp: (exp, uid) => {
+        return firebase.firestore().collection("users").doc(uid).update({
+            exp
         })
     }
 }
