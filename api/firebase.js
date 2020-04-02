@@ -36,8 +36,16 @@ export default {
         return firebase.auth().currentUser;
     },
 
+    logoutUser: () => {
+        return firebase.auth().signOut();
+    },
+
     getUserFromDB: (uid) => {
         return firebase.firestore().collection("users").doc(uid).get();
+    },
+
+    getUsers: () => {
+        return firebase.firestore().collection("users").get();
     },
 
     createNewUserRecord: (uid, skillLevel) => {
@@ -60,12 +68,24 @@ export default {
         return firebase.firestore().collection("FAQ").get()
     },
 
+    getArticles: () => {
+        return firebase.firestore().collection("articles").get()
+    },
+
+    getCoaches: () => {
+        return firebase.firestore().collection("coach").get()
+    },
+
     onUserDataChange: (uid, callback) => {
         return firebase.firestore().collection("users").doc(uid).onSnapshot(callback);
     },
 
     getSchedules: () => {
         return firebase.firestore().collection("trainingsSchema").get();
+    },
+
+    getAchievements: () => {
+        return firebase.firestore().collection("achievements").get();
     },
 
     getSchedule: (id) => {

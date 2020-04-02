@@ -1,8 +1,8 @@
 import { Linking, } from 'react-native';
 
-export default sendOnWhatsApp = () => {
-
-  let url = 'whatsapp://send?text=&phone=+31651889720';
+export default sendOnWhatsApp = (number) => {
+  console.log(number)
+  let url = 'whatsapp://send?text=&phone=+' + number;
   Linking.openURL(url).then((data) => {
     console.log('WhatsApp Opened');
   }).catch(() => {
