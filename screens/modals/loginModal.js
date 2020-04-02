@@ -98,12 +98,13 @@ export default ({ login, isVisible })=> {
                 <Animated.View style={[transformStepOne, styles.animationContainer]}>
 
                     <View style={styles.bodyContainer}>
-                        <Text style={[globalStyles.fontStyle, styles.headerText]}>Welkom bij de Limburgs Mooiste Trainingsapp</Text>
-                        <Text style={[globalStyles.fontStyle, styles.bodyText]}>Trainingsapp voor beginnende tot ervaren fietsers die  ambities hebben om mee te doen aan de Limburgs Mooiste competitie. </Text>
+
+                        <Text style={[globalStyles.headerText, styles.headerText]}>Welkom bij de Limburgs Mooiste Trainingsapp</Text>
+                        <Text style={[globalStyles.bodyText, styles.bodyText]}>Trainingsapp voor beginnende tot ervaren fietsers die  ambities hebben om mee te doen aan de Limburgs Mooiste competitie. </Text>
                     </View>
 
                     <KeyboardAvoidingView behavior='padding' style={styles.formContainer}>
-                        <Text style={[globalStyles.fontStyle, styles.headerText, { marginBottom: 15 }]}>Voer inloggegevens in</Text>
+                        <Text style={[globalStyles.headerText, styles.headerText, { marginBottom: 15 }]}>Voer inloggegevens in</Text>
                         <Input
                             placeholder='Email@adress.com'
                             keyboardType='email-address'
@@ -177,7 +178,6 @@ const styles = StyleSheet.create({
     },
 
     headerText: {
-        fontSize: 25,
         color: Colors.secondary,
         textAlign: 'center'
     },

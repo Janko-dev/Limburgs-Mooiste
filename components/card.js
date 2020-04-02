@@ -8,10 +8,10 @@ const CardBoxContainer = ({ onPress, title, description, length }) => {
 
     return (
         <TouchableOpacity onPress={onPress} style={styles.container}>
-            <Text style={[globalStyles.fontStyle, styles.headText]}> {title} </Text>
-            <Text style={[globalStyles.fontStyle, styles.bodyText]}> Aantal weken: {length} </Text>
+            <Text style={[globalStyles.headerText, styles.headText]}> {title} </Text>
+            <Text style={[globalStyles.bodyText, styles.bodyText]}> Aantal weken: {length} </Text>
             <View style={styles.bodyContainer}>
-                <Text style={[globalStyles.fontStyle, styles.bodyText]}>{description} </Text>
+                <Text style={[globalStyles.bodyText, styles.bodyText]}>{description} </Text>
             </View>
         </TouchableOpacity>
     )
@@ -38,13 +38,11 @@ const styles = StyleSheet.create({
 
     headText: {
         color: Colors.primary,
-        fontSize: 20,
         flex: 1
     },
 
     bodyText: {
         color: Colors.tertiary,
-        fontSize: 12
     }
 
 })

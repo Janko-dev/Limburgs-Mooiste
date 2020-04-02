@@ -4,7 +4,7 @@ import { StyleSheet, View, Text } from 'react-native';
 import { globalStyles, Colors } from '../constants'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
-export default ({ options, onSelect, style }) => {
+export default ({ options, onSelect, containerStyle, optionStyle, textStyle, title }) => {
 
     const [activeOption, setActiveOption] = useState(null);
 
@@ -14,11 +14,13 @@ export default ({ options, onSelect, style }) => {
     }
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, containerStyle]}>
+            <Text style={[globalStyles.headerText, styles.optionText, textStyle]}>{title}</Text>
             {options.map((option, index) => (
                 <Option
                     active={option === activeOption}
-                    style={style}
+                    containerStyle={optionStyle}
+                    textStyle={textStyle}
                     option={option}
                     key={index}
                     onPress={() => activeOptionHandler(option)}
@@ -28,17 +30,17 @@ export default ({ options, onSelect, style }) => {
     )
 }
 
-const Option = ({ option, onPress, active, style }) => {
+const Option = ({ option, onPress, active, containerStyle, textStyle }) => {
     return (
-        <TouchableOpacity onPress={onPress} style={[styles.option, active ? styles.activeOption : null, style]}>
-            <Text style={[globalStyles.fontStyle, styles.optionText]}>{option}</Text>
+        <TouchableOpacity onPress={onPress} style={[styles.option, active ? styles.activeOption : null, containerStyle]}>
+            <Text style={[globalStyles.headerText, styles.optionText, textStyle]}>{option}</Text>
         </TouchableOpacity>
     )
 }
 
 const styles = StyleSheet.create({
     option: {
-        height: 80,
+        // height: 80,
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -51,12 +53,12 @@ const styles = StyleSheet.create({
 
     optionText: {
         color: Colors.tertiary,
-        fontSize: 24,
     },
 
     container: {
         backgroundColor: Colors.primary,
         borderRadius: 20,
+        alignItems: 'center'
     }
 })
 

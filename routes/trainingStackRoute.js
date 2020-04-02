@@ -15,14 +15,14 @@ export default () => {
     return (
         <Stack.Navigator
             screenOptions={{
-                headerTintColor: Colors.primary,
+                headerTintColor: 'black',
                 headerStyle: styles.headerStyle,
                 headerRight: () => <ProgressionBar />
             }}
         >
             <Stack.Screen name="Training" component={TrainingScreen} />
             <Stack.Screen name="Sessions" component={SessionScreen} />
-            <Stack.Screen name="ScheduleDetails" component={ScheduleDetailScreen} />
+            <Stack.Screen name="Details" component={ScheduleDetailScreen} />
         </Stack.Navigator>
     )
 }
@@ -30,6 +30,6 @@ export default () => {
 const styles = StyleSheet.create({
     headerStyle: {
         height: 80,
-        backgroundColor: Colors.secondary
+        backgroundColor: 'white'
     }
 })

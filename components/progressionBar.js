@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { TouchableOpacity, Text, StyleSheet, ProgressBarAndroid, ProgressViewIOS, Platform } from 'react-native'
-import * as Progress from 'react-native-progress';
 import { Colors, globalStyles } from '../constants';
 
 import firebase from '../api/firebase';
@@ -28,10 +27,22 @@ const ProgressionBar = () => {
         if (user) {
             const unsubscribe = firebase.onUserDataChange(user.uid, doc => {
                 if (doc.data()) {
+                    let x = 1;
+                    while (doc.data().exp >= doc.data().maxExp){
+                        let previousMaxExp = 10 * 1.4 * (x - 1) + 10
+                        let newMaxExp = 10 * 1.4 * x + 10;
+                        if (newMaxExp > doc.data().exp) {
+                            firebase.setMaxExp(newMaxExp, previousMaxExp, user.uid);
+                            break;
+                        }
+                        x++;
+                    }
+
+                    let level = ((doc.data().maxExp - 10) / 14) + 1;
                     setExp(doc.data().exp);
                     setMaxExp(doc.data().maxExp);
-                    setProgress(() => doc.data().exp / doc.data().maxExp)
-                    setLevel(() => Math.log(doc.data().maxExp / 10) / Math.log(1.2) + 1);
+                    setProgress(() => (doc.data().exp - doc.data().previousMaxExp) / (doc.data().maxExp - doc.data().previousMaxExp))
+                    setLevel(level);
                 }
             })
 
@@ -46,10 +57,9 @@ const ProgressionBar = () => {
     return (
         <TouchableOpacity onPress={expModalHandler} style={styles.container}>
             <ProgressionModal visible={visible} onClose={expModalHandler} exp={exp} maxExp={maxExp} progress={progress} level={level}/>
-            <Text style={[styles.progressText, globalStyles.fontStyle]}>Niveau {level}</Text>
-
+            <Text style={[globalStyles.headerText, styles.progressText]}>Niveau {level}</Text>
             {Platform.OS === 'ios' ? 
-            <ProgressViewIOS progress={progress} style={styles.progressStyle} progressTintColor={Colors.tertiary} trackTintColor={Colors.primary}></ProgressViewIOS> : 
+            <ProgressViewIOS progress={progress} style={styles.progressStyle} progressTintColor={Colors.primary} trackTintColor={Colors.tertiary}></ProgressViewIOS> : 
             <ProgressBarAndroid progress={progress} color={Colors.tertiary}></ProgressBarAndroid>}
         </TouchableOpacity>
     )

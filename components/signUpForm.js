@@ -57,8 +57,8 @@ const SignUpForm = ({ backToAuth, onSubmit }) => {
 
     return (
         <View style={styles.formContainer}>
-            <Text style={[globalStyles.fontStyle, styles.headerText]}>Registratie</Text>
-            <Text style={[globalStyles.fontStyle, styles.bodyText]}>Voer een gewenst Email adres en wachtwoord in om te registreren</Text>
+            <Text style={[globalStyles.headerText, styles.headerText]}>Registratie</Text>
+            <Text style={[globalStyles.bodyText, styles.bodyText]}>Voer een gewenst Email adres en wachtwoord in om te registreren</Text>
             <Input
                 placeholder='Email@adress.com'
                 keyboardType='email-address'
