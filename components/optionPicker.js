@@ -31,7 +31,7 @@ export default ({ options, onSelect, style }) => {
 const Option = ({ option, onPress, active, style }) => {
     return (
         <TouchableOpacity onPress={onPress} style={[styles.option, active ? styles.activeOption : null, style]}>
-            <Text style={[globalStyles.fontStyle, styles.optionText]}>{option}</Text>
+            <Text style={[globalStyles.bodyText, styles.optionText]}>{option}</Text>
         </TouchableOpacity>
     )
 }

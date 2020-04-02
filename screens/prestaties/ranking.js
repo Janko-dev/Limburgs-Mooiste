@@ -9,13 +9,13 @@ const ranking = props => {
     return (
         <View style={styles.container}>
             <View style={[styles.sectionTop, styles.shadow]}>
-                <Text style={[globalStyles.fontStyle, { color: '#fff' }]}> Dag Leaderboard </Text>
+                <Text style={[globalStyles.bodyText, { color: '#fff' }]}> Dag Leaderboard </Text>
             </View>
             <View style={styles.sectionBottom}>
                 <View style={styles.stage}>
                     <View style={styles.stageRow}>
                         <View style={styles.stageSecond}>
-                            <Text style={globalStyles.fontStyle}> 2 </Text>
+                            <Text style={globalStyles.bodyText}> 2 </Text>
                         </View>
                         <View style={styles.profile}>
                             <ProfilePicture
@@ -26,12 +26,12 @@ const ranking = props => {
                                 height={40}
                                 backgroundColor={Colors.primary}
                             />
-                            <Text style={globalStyles.fontStyle}> John </Text>
+                            <Text style={globalStyles.bodyText}> John </Text>
                         </View>
                     </View>
                     <View style={styles.stageRow}>
                         <View style={styles.stageFirst}>
-                            <Text style={globalStyles.fontStyle}> 1 </Text>
+                            <Text style={globalStyles.bodyText}> 1 </Text>
                         </View>
                         <View style={styles.profile}>
                             <ProfilePicture
@@ -42,12 +42,12 @@ const ranking = props => {
                                 height={40}
                                 backgroundColor={Colors.primary}
                             />
-                            <Text style={globalStyles.fontStyle}> Frans </Text>
+                            <Text style={globalStyles.bodyText}> Frans </Text>
                         </View>
                     </View>
                     <View style={styles.stageRow}>
                         <View style={styles.stageThird}>
-                            <Text style={globalStyles.fontStyle}> 3 </Text>
+                            <Text style={globalStyles.bodyText}> 3 </Text>
                         </View>
                         <View style={styles.profile}>
                             <ProfilePicture
@@ -58,12 +58,12 @@ const ranking = props => {
                                 height={40}
                                 backgroundColor={Colors.primary}
                             />
-                            <Text style={globalStyles.fontStyle}> Eric </Text>
+                            <Text style={globalStyles.bodyText}> Eric </Text>
                         </View>
                     </View>
                 </View>
                 <View style={[styles.displayRank, styles.shadow]}>
-                    <Text style={[globalStyles.fontStyle, { color: '#fff' }]}> Uw huidige rank bedraagt: 8ste </Text>
+                    <Text style={[globalStyles.bodyText, { color: '#fff' }]}> Uw huidige rank bedraagt: 8ste </Text>
                 </View>
             </View>
         </View>

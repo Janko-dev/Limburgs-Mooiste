@@ -90,7 +90,7 @@ const achievements = props => {
                                     <TouchableOpacity key={item.id}
                                         style={styles.sectionHeadButtonSelect}
                                         onPress={() => { setCategory(item.Naam) }}>
-                                        <Text style={globalStyles.fontStyle}>{item.Naam}</Text>
+                                        <Text style={globalStyles.bodyText}>{item.Naam}</Text>
                                     </TouchableOpacity>
                                 )
                             } else {

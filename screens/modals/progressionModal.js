@@ -8,7 +8,7 @@ const ProgressionModal = ({ visible, onClose, exp, maxExp, progress, level }) =>
         <Modal animationType='slide' visible={visible} >
             <View style={styles.modal}>
                 <TouchableOpacity onPress={onClose} style={styles.button}>
-                    <Text style={[globalStyles.fontStyle, styles.buttonText]} >Sluiten</Text>
+                    <Text style={[globalStyles.bodyText, styles.buttonText]} >Sluiten</Text>
                 </TouchableOpacity>
 
                 

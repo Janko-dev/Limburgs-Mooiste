@@ -67,7 +67,7 @@ export default ({ isVisible, onFinish }) => {
         <Modal animationType='slide' visible={isVisible}>
             <View style={styles.container}>
                 <Animated.View style={[transformStepOne, styles.animViewContainer]}>
-                    <Text style={[globalStyles.fontStyle, styles.headerText]}>Vraag 1: dit is dummyvraag 1?</Text>
+                    <Text style={[globalStyles.bodyText, styles.headerText]}>Vraag 1: dit is dummyvraag 1?</Text>
                     <OptionPicker
                         options={['antwoord 1', 'antwoord 2', 'antwoord 3']}
                         onSelect={(option) => setAntwoord1(option)}
@@ -76,7 +76,7 @@ export default ({ isVisible, onFinish }) => {
                 </Animated.View>
 
                 <Animated.View style={[transformStepTwo, styles.animViewContainer]}>
-                    <Text style={[globalStyles.fontStyle, styles.headerText]}>Vraag 2: dit is dummyvraag 2? </Text>
+                    <Text style={[globalStyles.bodyText, styles.headerText]}>Vraag 2: dit is dummyvraag 2? </Text>
                     <OptionPicker
                         options={['antwoord 1', 'antwoord 2']}
                         onSelect={(option) => setAntwoord2(option)}
@@ -89,7 +89,7 @@ export default ({ isVisible, onFinish }) => {
                 </Animated.View>
 
                 <Animated.View style={[transformStepThree, styles.animViewContainer]}>
-                    <Text style={[globalStyles.fontStyle, styles.headerText]}>Vraag 3: dit is een multiselect component </Text>
+                    <Text style={[globalStyles.bodyText, styles.headerText]}>Vraag 3: dit is een multiselect component </Text>
                     <MultiOptionPicker
                         options={['antwoord 1', 'antwoord 2', 'antwoord 3', 'antwoord 4']}
                         onSelect={(options) => setAntwoord3(options)}
@@ -105,8 +105,8 @@ export default ({ isVisible, onFinish }) => {
 
 
                 <Animated.View style={[transformStepFour, styles.animViewContainer]}>
-                    <Text style={[globalStyles.fontStyle, styles.headerText]}>Klaar!! </Text>
-                    <Text style={[globalStyles.fontStyle, styles.bodyText]}>Niveau: {skillOption} </Text>
+                    <Text style={[globalStyles.bodyText, styles.headerText]}>Klaar!! </Text>
+                    <Text style={[globalStyles.bodyText, styles.bodyText]}>Niveau: {skillOption} </Text>
 
                     <View style={styles.buttonGroup}>
                         <WizardButton title='Terug' isActive={true} nextStep={() => toStep(2)} />
