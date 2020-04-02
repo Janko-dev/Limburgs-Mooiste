@@ -18,7 +18,7 @@ export const globalStyles = StyleSheet.create({
 
     fontStyle: {
         fontFamily: 'Arial Rounded MT Bold'
-    }
+    },
 })
 
 export const growth = {
