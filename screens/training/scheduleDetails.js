@@ -55,8 +55,8 @@ const ScheduleDetailsScreen = ({ route, navigation }) => {
                         ]
                     )} scrollEventThrottle={16}>
 
-                    <Text style={[globalStyles.fontStyle, styles.headerText, { marginVertical: 10 }]}>{route.params.titel}</Text>
-                    <Text style={[globalStyles.fontStyle, styles.bodyText]}>{route.params.beschrijving}</Text>
+                    <Text style={[globalStyles.bodyText, styles.headerText, { marginVertical: 10 }]}>{route.params.titel}</Text>
+                    <Text style={[globalStyles.bodyText, styles.bodyText]}>{route.params.beschrijving}</Text>
 
                     <View style={styles.sessionContainer}>
                         {route.params.sessies.map((item, index) => (
@@ -79,12 +79,12 @@ const ScheduleDetailsScreen = ({ route, navigation }) => {
                     extrapolate: 'clamp',
                 })
             }]}>
-                <Text style={[globalStyles.fontStyle, styles.headerText]}>{route.params.titel}</Text>
+                <Text style={[globalStyles.bodyText, styles.headerText]}>{route.params.titel}</Text>
             </Animated.View>
 
             <View style={styles.buttonContainer}>
                 <TouchableOpacity style={styles.button} onPress={startButtonHandler}>
-                    <Text style={[globalStyles.fontStyle, styles.headerText]}>Starten</Text>
+                    <Text style={[globalStyles.bodyText, styles.headerText]}>Starten</Text>
                 </TouchableOpacity>
             </View>
 

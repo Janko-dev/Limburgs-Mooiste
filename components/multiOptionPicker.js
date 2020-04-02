@@ -78,7 +78,7 @@ const Option = ({ option, onPress, active, style }) => {
                     iconStyle={styles.optionIcon}
                 />
             </Animated.View>
-            <Text style={[globalStyles.fontStyle, styles.optionText]}>{option}</Text>
+            <Text style={[globalStyles.bodyText, styles.optionText]}>{option}</Text>
         </TouchableOpacity>
     )
 }

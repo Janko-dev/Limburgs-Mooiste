@@ -14,7 +14,7 @@ export default ({ title, isActive, nextStep }) => {
     return (
         <TouchableOpacity activeOpacity={isActive ? 0.2 : 1} style={{ ...styles.buttonContainer, backgroundColor: isActive ? Colors.secondary : 'grey'  }} 
             onPress={buttonHandler}>
-            <Text style={[globalStyles.fontStyle, styles.buttonText]}>{title}</Text>
+            <Text style={[globalStyles.bodyText, styles.buttonText]}>{title}</Text>
         </TouchableOpacity>
     )
 }

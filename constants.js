@@ -15,9 +15,15 @@ export const globalStyles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-
-    fontStyle: {
-        fontFamily: 'Arial Rounded MT Bold'
+ 
+    headerText: {
+        fontFamily: 'Arial Rounded MT Bold',
+        fontSize: 20
+    },
+ 
+    bodyText: {
+        fontFamily: 'Arial Rounded MT Bold',
+        fontSize: 12
     },
 })
 

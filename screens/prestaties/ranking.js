@@ -80,7 +80,7 @@ const ranking = props => {
     return (
         <View style={styles.container}>
             <View style={[styles.sectionTop, styles.shadow]}>
-                <Text style={[globalStyles.fontStyle, { color: '#fff' }]}> Dag Leaderboard </Text>
+                <Text style={[globalStyles.bodyText, { color: '#fff' }]}> Dag Leaderboard </Text>
             </View>
             <View style={styles.sectionBottom}>
                 <View style={styles.stage}>
