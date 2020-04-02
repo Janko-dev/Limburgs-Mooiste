@@ -98,6 +98,7 @@ export default ({ login, isVisible })=> {
                 <Animated.View style={[transformStepOne, styles.animationContainer]}>
 
                     <View style={styles.bodyContainer}>
+
                         <Text style={[globalStyles.headerText, styles.headerText]}>Welkom bij de Limburgs Mooiste Trainingsapp</Text>
                         <Text style={[globalStyles.bodyText, styles.bodyText]}>Trainingsapp voor beginnende tot ervaren fietsers die  ambities hebben om mee te doen aan de Limburgs Mooiste competitie. </Text>
                     </View>

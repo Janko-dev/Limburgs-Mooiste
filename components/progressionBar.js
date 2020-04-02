@@ -58,7 +58,6 @@ const ProgressionBar = () => {
         <TouchableOpacity onPress={expModalHandler} style={styles.container}>
             <ProgressionModal visible={visible} onClose={expModalHandler} exp={exp} maxExp={maxExp} progress={progress} level={level}/>
             <Text style={[globalStyles.headerText, styles.progressText]}>Niveau {level}</Text>
-
             {Platform.OS === 'ios' ? 
             <ProgressViewIOS progress={progress} style={styles.progressStyle} progressTintColor={Colors.primary} trackTintColor={Colors.tertiary}></ProgressViewIOS> : 
             <ProgressBarAndroid progress={progress} color={Colors.tertiary}></ProgressBarAndroid>}
