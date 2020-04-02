@@ -11,10 +11,16 @@ import { Badge } from 'react-native-paper';
 const achievements = props => {
     const [open, setOpen] = useState(false);
     const [category, setCategory] = useState('Snelheid');
+
     const [badgesMap, setBadgesMap] = useState([]);
     const [categoryMap, setCategoryMap] = useState([]);
 
+    // const [userUID, setUserUID] = useState(firebase.getCurrentUser().uid);
+    const [user, setUser] = useState(firebase.getUserFromDB(firebase.getCurrentUser().uid).then(request => { return request.data() }));
+
     useEffect(() => {
+        console.log(user);
+
         firebase.getAchievements().then(result => {
 
             setBadgesMap([]);
@@ -66,20 +72,36 @@ const achievements = props => {
             <ScrollView style={styles.sectionContent}>
                 {
                     badgesMap.map(
-                        item => {
-                            if (category == item.type) {
-                                return (
-                                    <View key={item.id}>
-                                        <TouchableOpacity key={item.id} style={styles.badge}
-                                            onPress={() => setOpen(!open)} >
-                                            <Text> {item.naam} </Text>
-                                            <Icon name='chevron-down'
-                                                type='evilicon'
-                                                color='#517fa4'
-                                            />
-                                        </TouchableOpacity>
-                                    </View>
-                                )
+                        _badge => {
+                            if (category == _badge.type) {
+                                if (true) {
+                                    return (
+                                        <View key={_badge.id}>
+                                            <TouchableOpacity key={_badge.id} style={styles.badge}
+                                                onPress={() => setOpen(!open)} >
+                                                <Text style={{ fontStyle: 'italic' }}> {_badge.naam}, woof woof </Text>
+                                                <Icon name='chevron-down'
+                                                    type='evilicon'
+                                                    color='#517fa4'
+                                                />
+                                            </TouchableOpacity>
+                                        </View>
+                                    )
+                                }
+                                else {
+                                    return (
+                                        <View key={_badge.id}>
+                                            <TouchableOpacity key={_badge.id} style={styles.badge}
+                                                onPress={() => setOpen(!open)} >
+                                                <Text> {_badge.naam} </Text>
+                                                <Icon name='chevron-down'
+                                                    type='evilicon'
+                                                    color='#517fa4'
+                                                />
+                                            </TouchableOpacity>
+                                        </View>
+                                    )
+                                }
                             }
                         }
                     )
