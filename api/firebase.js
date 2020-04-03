@@ -54,7 +54,7 @@ export default {
                 skillLevel,
                 exp: 0,
                 maxExp: 10,
-                previousMaxExp: 0,
+                level: 1,
                 activeSchedule: null,
                 achievements: [],
                 previousTrainingSessions: []
@@ -129,10 +129,18 @@ export default {
         return firebase.database().ref().once("value", callback);
     },
 
-    setMaxExp: (maxExp, previousMaxExp, uid) => {
+    // setMaxExp: (maxExp, previousMaxExp, uid) => {
+    //     return firebase.firestore().collection("users").doc(uid).update({
+    //         maxExp,
+    //         previousMaxExp
+    //     })
+    // },
+
+    setProgression: (exp, maxExp, level, uid) => {
         return firebase.firestore().collection("users").doc(uid).update({
+            exp,
             maxExp,
-            previousMaxExp
+            level 
         })
     },
 

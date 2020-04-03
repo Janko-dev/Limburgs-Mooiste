@@ -27,22 +27,38 @@ const ProgressionBar = () => {
         if (user) {
             const unsubscribe = firebase.onUserDataChange(user.uid, doc => {
                 if (doc.data()) {
-                    let x = 1;
-                    while (doc.data().exp >= doc.data().maxExp){
-                        let previousMaxExp = 10 * 1.4 * (x - 1) + 10
-                        let newMaxExp = 10 * 1.4 * x + 10;
-                        if (newMaxExp > doc.data().exp) {
-                            firebase.setMaxExp(newMaxExp, previousMaxExp, user.uid);
-                            break;
-                        }
-                        x++;
-                    }
+                    // let x = 1;
+                    // while (doc.data().exp >= doc.data().maxExp){
+                    //     let previousMaxExp = 10 * 1.4 * (x - 1) + 10
+                    //     let newMaxExp = 10 * 1.4 * x + 10;
+                    //     if (newMaxExp > doc.data().exp) {
+                    //         firebase.setMaxExp(newMaxExp, previousMaxExp, user.uid);
+                    //         break;
+                    //     }
+                    //     x++;
+                    // }
 
-                    let level = ((doc.data().maxExp - 10) / 14) + 1;
+                    // let level = ((doc.data().maxExp - 10) / 14) + 1;
+
+                    let exp = doc.data().exp;
+                    let maxExp = doc.data().maxExp;
+                    let level = doc.data().level;
+                    let i = 1;
+                    while (exp > maxExp){
+                        exp -= maxExp;
+                        maxExp += 0.2 * maxExp * i;
+                        i++;
+                        level++;
+                    }
+                    // console.log("exp: " + exp)
+                    // console.log("maxExp: " + maxExp)
+                    // console.log("level: " + level)
+                    firebase.setProgression(exp, maxExp, level, user.uid);
+
                     setExp(doc.data().exp);
                     setMaxExp(doc.data().maxExp);
-                    setProgress(() => (doc.data().exp - doc.data().previousMaxExp) / (doc.data().maxExp - doc.data().previousMaxExp))
-                    setLevel(level);
+                    setProgress(() => doc.data().exp / doc.data().maxExp)
+                    setLevel(doc.data().level);
                 }
             })
 
@@ -56,11 +72,12 @@ const ProgressionBar = () => {
 
     return (
         <TouchableOpacity onPress={expModalHandler} style={styles.container}>
-            <ProgressionModal visible={visible} onClose={expModalHandler} exp={exp} maxExp={maxExp} progress={progress} level={level}/>
+            <ProgressionModal visible={visible} onClose={expModalHandler} exp={exp} maxExp={maxExp} progress={progress} level={level} />
             <Text style={[globalStyles.headerText, styles.progressText]}>Niveau {level}</Text>
-            {Platform.OS === 'ios' ? 
-            <ProgressViewIOS progress={progress} style={styles.progressStyle} progressTintColor={Colors.primary} trackTintColor={Colors.tertiary}></ProgressViewIOS> : 
-            <ProgressBarAndroid progress={progress} color={Colors.tertiary}></ProgressBarAndroid>}
+
+            {Platform.OS === 'ios' ?
+                <ProgressViewIOS progress={progress} style={styles.progressStyle} progressTintColor={Colors.primary} trackTintColor={Colors.tertiary}></ProgressViewIOS> :
+                <ProgressBarAndroid progress={progress} color={Colors.tertiary}></ProgressBarAndroid>}
         </TouchableOpacity>
     )
 }
@@ -79,11 +96,11 @@ const styles = StyleSheet.create({
 
     progressStyle: {
         transform: [
-            {scaleY: 2}
+            { scaleY: 2 }
         ]
     }
 
-    
+
 })
 
 export default ProgressionBar

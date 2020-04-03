@@ -100,6 +100,7 @@ const DashboardScreen = () => {
                 ItemSeparatorComponent={renderSeparator}
                 refreshing={refreshState}
                 onRefresh={handleRefresh}
+                keyExtractor={item => item.id.toString()}
                 renderItem={(data) => 
                     <View style={styles.feedContainer}>
                         <TouchableOpacity onPress={() => console.log('test')}>

@@ -21,7 +21,7 @@ const Tab = createMaterialBottomTabNavigator();
 const Navigator = () => {
 
     const [user, setUser] = useState(firebase.getCurrentUser())
-    const [loginModal, setLoginModal] = useState(false)
+    const [loginModal, setLoginModal] = useState(user ? false : true)
     const [wizardModal, setWizardModal] = useState(false)
 
     useEffect(() => {
@@ -35,9 +35,9 @@ const Navigator = () => {
         return unsubscribe;
     }, [firebase])
 
-    const loginHandler = () => {
+    const loginHandler = (isNewUser) => {
         setLoginModal(false);
-        if (!user){
+        if (isNewUser){
             setWizardModal(true);
         }
     }

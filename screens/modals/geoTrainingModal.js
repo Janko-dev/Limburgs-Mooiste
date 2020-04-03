@@ -8,13 +8,13 @@ import Animated from 'react-native-reanimated';
 const GeoTrainingModal = ({ visible, onClose, markers, polygon, isPreview }) => {
 
     const [map, setMap] = useState(null);
-    const [animatedValue] = useState(new Animated.Value(0));
+    // const [animatedValue] = useState(new Animated.Value(0));
 
     const startHandler = () => {
-        Animated.timing(animatedValue, {
-            toValue: 100,
-            duration: 500,
-        }).start()
+        // Animated.timing(animatedValue, {
+        //     toValue: 100,
+        //     duration: 500,
+        // }).start()
     }
 
     return (
@@ -41,9 +41,9 @@ const GeoTrainingModal = ({ visible, onClose, markers, polygon, isPreview }) => 
                 </TouchableOpacity>
 
             </View>
-            <View style={{bottom: -100, height: 100, transform: [{translateY: animatedValue}]}}>
+            {/* <View style={{bottom: -100, height: 100, transform: [{translateY: animatedValue}]}}>
                 <Text>test</Text>
-            </View>
+            </View> */}
 
         </Modal>
     )
