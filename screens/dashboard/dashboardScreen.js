@@ -105,6 +105,7 @@ const DashboardScreen = () => {
         <View style={styles.mainContainer}>
             <FlatList
                 data={feedList}
+                keyExtractor={(data) => data.id.toString()}
                 ListHeaderComponent={renderHeader}
                 ItemSeparatorComponent={renderSeparator}
                 refreshing={refreshState}
