@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
 
   headerText: {
     fontWeight: '700',
-    fontFamily: globalStyles.headerText.fontFamily,
+    fontFamily: 'Arial Rounded MT Bold',
     marginTop: 10
   },
 
