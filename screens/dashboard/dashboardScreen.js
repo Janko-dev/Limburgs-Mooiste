@@ -43,21 +43,21 @@ const DashboardScreen = () => {
     const feedList = [
         {
             id: 1,
-            info: '',
+            info: 'debug message 1',
         },
         {
             id: 2,
-            info: '',
+            info: 'debug message 1',
         }
         ,
         {
             id: 3,
-            info: '',
+            info: 'debug message 1',
         }
         ,
         {
             id: 4,
-            info: '',
+            info: 'debug message 1',
         }
     ]
 

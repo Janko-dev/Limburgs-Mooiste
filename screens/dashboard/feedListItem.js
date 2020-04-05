@@ -8,36 +8,20 @@ import MapView, { Polygon } from 'react-native-maps';
 
 const feedListItem = props => {
 
-    const [imageUrl, setImageUrl] = useState('');
-    const [email, setEmail] = useState('');
-    const [users, setUsers] = useState([]);
-
-    useEffect(() => {
-        firebase.getUsers().then(result => {
-
-            setImageUrl(firebase.getCurrentUser().photoURL);
-            setEmail(firebase.getCurrentUser().email);
-
-            setUsers(() => {
-                return result.docs.map(doc => {
-
-                    return  doc.data();
-                })
-            })
-    
-        })
-      }, []);
-
     return (
         <View style={styles.feedContainer}>
                 <View style={styles.feedItems}>
                     <View style={styles.profiel}>
                         <View>
-                            <Avatar source={{uri: imageUrl}} size="small" rounded ></Avatar>
+                            {firebase.getCurrentUser()?.photoURL ? 
+                            <Avatar source={{uri: firebase.getCurrentUser()?.photoURL}} size="small" rounded ></Avatar> : 
+                            <Avatar title='RD' size="small" rounded ></Avatar> }
                         </View>
                         <View style={{marginLeft: 10, flexDirection: 'column'}}>
                             <View>
-                                <Text style={globalStyles.bodyText}>{email}</Text>
+                            {firebase.getCurrentUser()?.email ?
+                                <Text style={globalStyles.bodyText}>{firebase.getCurrentUser()?.email}</Text> :
+                                <Text>Name not rendered!</Text>}
                             </View>
                             <View style={{flexDirection: 'row'}}>
                                 <Icon
