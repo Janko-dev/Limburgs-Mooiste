@@ -1,12 +1,26 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, Alert } from 'react-native';
+import React, {useState} from 'react';
+import { View, Text, StyleSheet, ScrollView, Image, Alert, RefreshControl } from 'react-native';
 import { globalStyles, Colors } from '../../constants';
 import {Avatar} from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import SettingsComponent from '../../components/settingsComponent';
 import firebase from '../../api/firebase';
 
+function wait(timeout) {
+    return new Promise(resolve => {
+      setTimeout(resolve, timeout);
+    });
+  }
+
 const ProfielScreen = props => {
+
+    const [refreshing, setRefreshing] = useState(false);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+    
+        wait(2000).then(() => setRefreshing(false));
+      }, [refreshing]);
 
     const signOutWarningHandler = (callback) => {
         Alert.alert(
@@ -28,12 +42,16 @@ const ProfielScreen = props => {
       }
 
     return (
-        <ScrollView style={styles.container}>
+        <ScrollView style={styles.container}         
+        refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }>
             {/* <View style={styles.container}>  */}
                 <View style={{height: 100, backgroundColor: 'white', borderColor: 'lightgray', borderWidth: 0.25 }}>
                     <View style={{ flexDirection: 'row', height: '100%'}} >
                         <View style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
-                            <Avatar source={{uri: firebase.getCurrentUser().photoURL}} size="large" rounded ></Avatar>
+                            {firebase.getCurrentUser().photoURL ? <Avatar source={{uri: firebase.getCurrentUser().photoURL}} size="large" rounded ></Avatar> : <Avatar title='RD' size="large" rounded ></Avatar> }
+                            
                         </View>
                         <View style={{ justifyContent: 'center', flex: 2}}>
                             <Text style={styles.headerText}>Naam</Text>
@@ -75,7 +93,7 @@ const styles = StyleSheet.create({
 
     headerText: {
          fontWeight: '700',
-         fontFamily: globalStyles.fontStyle.fontFamily,
+         fontFamily: "Arial Rounded MT Bold",
          marginTop: 10
      },
       

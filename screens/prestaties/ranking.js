@@ -59,7 +59,7 @@ const ranking = props => {
             return (
                 <View style={styles.stageRow} key={i}>
                     <View style={[styles.stagePillar, { height: _height }]}>
-                        <Text style={globalStyles.fontStyle}> {position} </Text>
+                        <Text style={globalStyles.headerText}> {position} </Text>
                     </View>
                     <View style={styles.profile}>
                         <ProfilePicture
@@ -70,7 +70,7 @@ const ranking = props => {
                             height={40}
                             backgroundColor={Colors.primary}
                         />
-                        <Text style={globalStyles.fontStyle}> JDoe </Text>
+                        <Text style={globalStyles.headerText}> JDoe </Text>
                     </View>
                 </View>
             )
@@ -107,7 +107,7 @@ const ranking = props => {
                     }
                 </View>
                 <View style={[styles.displayRank, styles.shadow]}>
-                    <Text style={[globalStyles.fontStyle, { color: '#fff' }]}> Uw huidige experience is: {exp} </Text>
+                    <Text style={[globalStyles.headerText, { color: '#fff' }]}> Uw huidige experience is: {exp} </Text>
                 </View>
             </View>
         </View>
