@@ -7,37 +7,54 @@ const motivation = props => {
 
     return (
         <View style={styles.motivationContainer}>
-            <View style={styles.firstChildMotivationContainer}>
-                <View style={styles.secondChildMotivationContainer}>
+            <View style={styles.childMotivationContainer}>
+                <View style={{justifyContent: 'center', flex: 1}}>
                     <Icon
                         type='ionicon'
                         name='md-gift'
                         color={Colors.secondary}
                         size={30}
                     />
-                    <Text style={globalStyles.bodyText} >Rewards</Text>
                 </View>
-                <View style={styles.secondChildMotivationContainer}>
-                    <Icon
-                        type='ionicon'
-                        name='ios-stats'
-                        color={Colors.secondary}
-                        size={30}
-                    />
-                    <Text style={globalStyles.bodyText}>Ranking</Text>
+                <View style={{justifyContent: 'center', flex: 1}}>
+                    <Text style={globalStyles.bodyText} >Next Gift</Text>
                 </View>
             </View>
+            <View style={{flex:4, alignItems: 'center', justifyContent: 'center'}}><Text style={globalStyles.bodyText}>Your next gift</Text></View>
+            <View style={styles.seperatorContainer}>
+                <View style={styles.seperator}></View>
+            </View>
+            <View style={styles.childMotivationContainer}>
+                <Icon
+                    type='ionicon'
+                    name='ios-stats'
+                    color={Colors.secondary}
+                    size={30}
+                />
+                <Text style={[globalStyles.bodyText, {flex: 1}]}>Ranking</Text>
+            </View>
+            <View style={{flex:4, alignItems: 'center', justifyContent: 'center'}}><Text style={globalStyles.bodyText}>Current Rank</Text></View>
         </View>)
 }
 
     const styles = StyleSheet.create({
+        seperator: {
+            width: 1.5,
+            backgroundColor: "#CED0CE",
+        },
+        seperatorContainer: {
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'center'
+        },
         motivationContainer: {
+            flexDirection: "row",
+            justifyContent: 'center',
             padding: 20,
             margin: '1%',
-            flex: 2,
             backgroundColor: 'white',
-            marginLeft: '4%',
-            marginRight: "4%",
+            marginLeft: '2%',
+            marginRight: "2%",
             marginTop: '2%',
             marginBottom: '0%',
             shadowColor: 'black',
@@ -46,14 +63,8 @@ const motivation = props => {
             shadowOpacity: 0.26,
             borderRadius: 10
         },
-        firstChildMotivationContainer: {
-            flexDirection: "row",
-            flex: 1
-        },
-        secondChildMotivationContainer: {
-            flex: 1,
-            height: '100%',
-            justifyContent: 'center',
+        childMotivationContainer: {
+            flex: 3,
             alignItems: 'center',
         }
     });

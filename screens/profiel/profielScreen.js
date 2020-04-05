@@ -93,7 +93,7 @@ const styles = StyleSheet.create({
 
     headerText: {
          fontWeight: '700',
-         fontFamily: "Arial Rounded MT Bold",
+         fontFamily: 'Arial Rounded MT Bold',
          marginTop: 10
      },
       
