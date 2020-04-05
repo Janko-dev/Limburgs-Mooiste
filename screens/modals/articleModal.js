@@ -1,9 +1,45 @@
-import React from 'react';
-import { Modal, StyleSheet, View, TouchableOpacity, Text, Image, ScrollView } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import { Modal, StyleSheet, View, TouchableOpacity, Text, Share, Image, ScrollView } from 'react-native';
 import { globalStyles, Colors, SCREEN_HEIGHT, SCREEN_WIDTH } from '../../constants'; 
 import { SocialIcon, Input, Button } from 'react-native-elements'
+import firebase from '../../api/firebase';
 
 const ArticleModal = ({ article, visible, onClose}) => {
+
+    const [userRecord, setUserRecord] = useState(null)
+
+    useEffect(() => {
+      if (firebase.getCurrentUser()){
+          const unsubscribe = firebase.onUserDataChange(firebase.getCurrentUser().uid, userDoc => {
+              setUserRecord(userDoc.data());
+          })
+
+          return unsubscribe;
+      }
+
+    }, [userRecord])
+
+    const onShare = async (message, url) => {
+        try {
+          const result = await Share.share({
+            message:
+              message,
+            url:
+                url,
+          });
+          if (result.action === Share.sharedAction) {
+            // if (result.activityType.includes("Facebook")) {
+                firebase.setExp(userRecord.exp + 2, firebase.getCurrentUser().uid)
+            // } else {
+            //   // shared
+            // }
+          } else if (result.action === Share.dismissedAction) {
+            // dismissed
+          }
+        } catch (error) {
+          alert(error.message);
+        }
+      };
 
     return (
         <Modal animationType='slide' visible={visible}  >
@@ -30,6 +66,7 @@ const ArticleModal = ({ article, visible, onClose}) => {
                             Component={TouchableOpacity}
                             style={{height: 40, width: 40}}
                             type='facebook'
+                            onPress={() => {onShare(article.title, article.link)}}
                         />
                     </View>
                 </View>

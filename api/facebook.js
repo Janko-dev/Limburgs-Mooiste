@@ -9,5 +9,5 @@ export default {
     
     loginWithPermissions: (permissions) => {
         return Facebook.logInWithReadPermissionsAsync(permissions);
-    }
+    },
 }
