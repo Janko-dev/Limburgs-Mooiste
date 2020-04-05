@@ -1,4 +1,4 @@
-import { StyleSheet, Dimensions } from 'react-native'
+import { StyleSheet, Dimensions, Platform } from 'react-native'
 
 export const Colors = {
     primary: '#449cc1',
@@ -17,12 +17,12 @@ export const globalStyles = StyleSheet.create({
     },
 
     headerText: {
-        fontFamily: 'Arial Rounded MT Bold',
+        fontFamily: Platform.OS === 'ios' ? 'Arial Rounded MT Bold' : 'Roboto',
         fontSize: 20
     },
 
     bodyText: {
-        fontFamily: 'Arial Rounded MT Bold',
+        fontFamily: Platform.OS === 'ios' ? 'Arial Rounded MT Bold' : 'Roboto',
         fontSize: 12
     },
 })

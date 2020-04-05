@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, ScrollView, TextInput, TouchableOpacity, Image, Linking, Alert } from 'react-native';
 import { ButtonGroup } from 'react-native-elements';
-import { globalStyles, Colors } from '../../constants';
+import { globalStyles, Colors, SCREEN_HEIGHT } from '../../constants';
 
 import firebase from '../../api/firebase';
 import CoachCard from '../coaching/coach';
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     width: '100%',
     backgroundColor: "white",
     alignItems: 'center',
-    marginTop: 40,
+    marginTop: '5%',
   },
 });
 

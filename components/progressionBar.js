@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { TouchableOpacity, Text, StyleSheet, ProgressBarAndroid, ProgressViewIOS, Platform, Animated, View } from 'react-native'
+import { TouchableOpacity, Text, StyleSheet, ProgressBarAndroid, ProgressViewIOS, Platform, Animated, View, Easing } from 'react-native'
 import { Colors, globalStyles } from '../constants';
+import { Icon } from 'react-native-elements';
 
 import ProgressBarAnimated from 'react-native-progress-bar-animated';
 
 import firebase from '../api/firebase';
 import ProgressionModal from '../screens/modals/progressionModal';
+import AchievementModal from '../screens/modals/achievementModal';
 
 const ProgressionBar = () => {
 
@@ -16,7 +18,9 @@ const ProgressionBar = () => {
     const [progress, setProgress] = useState(0);
     const [expDiff, setExpDiff] = useState(0);
     const [animatedValue] = useState(new Animated.Value(0));
-    const [visible, setVisible] = useState(false);
+    const [levelUpAnimatedValue] = useState(new Animated.Value(0));
+    const [visibleProgression, setVisibleProgression] = useState(false);
+    const [visibleLevelUp, setVisibleLevelUp] = useState(false);
 
     useEffect(() => {
         const unsubscribe = firebase.onAuthChange(user => {
@@ -31,19 +35,6 @@ const ProgressionBar = () => {
         if (user) {
             const unsubscribe = firebase.onUserDataChange(user.uid, doc => {
                 if (doc.data()) {
-                    // let x = 1;
-                    // while (doc.data().exp >= doc.data().maxExp){
-                    //     let previousMaxExp = 10 * 1.4 * (x - 1) + 10
-                    //     let newMaxExp = 10 * 1.4 * x + 10;
-                    //     if (newMaxExp > doc.data().exp) {
-                    //         firebase.setMaxExp(newMaxExp, previousMaxExp, user.uid);
-                    //         break;
-                    //     }
-                    //     x++;
-                    // }
-
-                    // let level = ((doc.data().maxExp - 10) / 14) + 1;
-
                     let _exp = doc.data().exp;
                     let maxExp = doc.data().maxExp;
                     let level = doc.data().level;
@@ -54,10 +45,11 @@ const ProgressionBar = () => {
                         i++;
                         level++;
                     }
-                    // console.log("exp: " + exp)
-                    // console.log("maxExp: " + maxExp)
-                    // console.log("level: " + level)
                     firebase.setProgression(_exp, maxExp, level, user.uid);
+
+                    if (level > doc.data().level) {
+                        setVisibleLevelUp(true);
+                    }
 
                     let diff = doc.data().exp - exp;
                     if (diff > 0 && exp != null) {
@@ -71,7 +63,7 @@ const ProgressionBar = () => {
                             }),
                             Animated.timing(animatedValue, {
                                 toValue: 0,
-                                delay: 1000,
+                                delay: 1500,
                                 duration: 500,
                                 useNativeDriver: true
                             }),
@@ -90,12 +82,37 @@ const ProgressionBar = () => {
     })
 
     const expModalHandler = () => {
-        setVisible(!visible);
+        setVisibleProgression(!visibleProgression);
+    }
+
+    const animationHandler = () => {
+        Animated.timing(levelUpAnimatedValue, {
+            toValue: 1,
+            duration: 1000,
+            useNativeDriver: true,
+            easing: Easing.elastic(4)
+        }).start()
     }
 
     return (
         <TouchableOpacity onPress={expModalHandler} style={styles.container}>
-            <ProgressionModal visible={visible} onClose={expModalHandler} exp={exp} maxExp={maxExp} progress={progress} level={level} />
+            <ProgressionModal visible={visibleProgression} onClose={expModalHandler} exp={exp} maxExp={maxExp} progress={progress} level={level} />
+            <AchievementModal isVisible={visibleLevelUp} onClose={() => setVisibleLevelUp(false)} onModalShow={animationHandler}>
+                <Animated.View style={{
+                    transform:
+                        [
+                            {
+                                scale: levelUpAnimatedValue.interpolate({
+                                    inputRange: [0, 1],
+                                    outputRange: [0.4, 1.5]
+                                })
+                            }
+                        ]
+                }}>
+                    <Text style={[globalStyles.headerText, {fontSize: 30}]}>Level {level}</Text>
+                </Animated.View>
+
+            </AchievementModal>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 {/* <Text> */}
                 <Animated.Text style={[styles.animatedText, {
