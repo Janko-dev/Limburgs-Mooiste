@@ -21,11 +21,11 @@ export default ({ options, onSelect, style }) => {
         });
 
         setSelectedOptions(updatedOptions);
-        // onSelect(updatedOptions.filter(item => {
-        //     if (item.selected) {
-        //         return item.value
-        //     }
-        // }).map(item => item.value));
+        onSelect(updatedOptions.filter(item => {
+            if (item.selected) {
+                return item.value
+            }
+        }).map(item => item.value));
     }
 
     return (

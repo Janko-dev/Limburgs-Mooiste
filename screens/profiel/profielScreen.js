@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, Alert, RefreshControl } from 'react-native';
 import { globalStyles, Colors } from '../../constants';
-import {Avatar} from 'react-native-elements';
+import { Avatar } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import SettingsComponent from '../../components/settingsComponent';
 import firebase from '../../api/firebase';
@@ -24,22 +24,24 @@ const ProfielScreen = props => {
 
     const signOutWarningHandler = (callback) => {
         Alert.alert(
-          'Afmelden',
-          'Weet je zeker dat je je account wilt afmelden?',
-          [
-            {
-                text: 'Ja',
-                onPress: callback,
-                style: 'cancel'
-              },  
-            {
-                text: 'Nee',
-                onPress: null,
-             },
+            'Afmelden',
+            'Weet je zeker dat je je account wilt afmelden?',
+            [
+                {
+                    text: 'Ja',
+                    onPress: callback,
+                    style: 'cancel'
+                },
+                {
+                    text: 'Nee',
+                    onPress: null,
+                },
 
-          ]
+            ]
         )
-      }
+    }
+
+    console.log(firebase.getCurrentUser())
 
     return (
         <ScrollView style={styles.container}         
@@ -63,20 +65,21 @@ const ProfielScreen = props => {
                         </View>
                     </View>
                 </View>
-                <View style={{height: 150, backgroundColor: 'white', borderColor: 'lightgray', borderWidth: 0.25, marginTop: 40 }}>
-                    <SettingsComponent onNext={() => ({})} image={require('../../assets/privacy.png')} text={'Privacy'} height={50} ></SettingsComponent>
-                    <SettingsComponent onNext={() => ({})} image={require('../../assets/settings.png')} text={'Instellingen'} height={50} ></SettingsComponent>
-                    <SettingsComponent onNext={() => ({})} image={require('../../assets/info.png')} text={'Limburgs Mooiste'} height={50} ></SettingsComponent>
+            </View>
+            <View style={{ height: 150, backgroundColor: 'white', borderColor: 'lightgray', borderWidth: 0.25, marginTop: 40 }}>
+                <SettingsComponent onNext={() => ({})} image={require('../../assets/privacy.png')} text={'Privacy'} height={50} ></SettingsComponent>
+                <SettingsComponent onNext={() => ({})} image={require('../../assets/settings.png')} text={'Instellingen'} height={50} ></SettingsComponent>
+                <SettingsComponent onNext={() => ({})} image={require('../../assets/info.png')} text={'Limburgs Mooiste'} height={50} ></SettingsComponent>
 
-                </View>
-                <View style={{height: 50, backgroundColor: 'white', borderColor: 'lightgray', borderWidth: 0.25, marginTop: 40 }}>
-                    <TouchableOpacity style={{height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center'}} onPress={ () => (signOutWarningHandler(firebase.logoutUser)) }>
-                        <Text style={{color: Colors.warning, fontWeight: '500'}}>Afmelden</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={{flex: 3}}>
+            </View>
+            <View style={{ height: 50, backgroundColor: 'white', borderColor: 'lightgray', borderWidth: 0.25, marginTop: 40 }}>
+                <TouchableOpacity style={{ height: '100%', width: '100%', justifyContent: 'center', alignItems: 'center' }} onPress={() => (signOutWarningHandler(firebase.logoutUser))}>
+                    <Text style={{ color: Colors.warning, fontWeight: '500' }}>Afmelden</Text>
+                </TouchableOpacity>
+            </View>
+            <View style={{ flex: 3 }}>
 
-                </View>
+            </View>
             {/* </View> */}
         </ScrollView>
     )
@@ -101,17 +104,17 @@ const styles = StyleSheet.create({
         fontWeight: '300',  
      },
 
-     infoText: {
+    infoText: {
         // color: Colors.tertiary, 
-        fontWeight: '300', 
+        fontWeight: '300',
         fontSize: 12,
-     },
+    },
 
-     titleText: {
-        color: Colors.primary, 
-        fontWeight: '600', 
+    titleText: {
+        color: Colors.primary,
+        fontWeight: '600',
         fontSize: 12,
-     },
+    },
 });
 
 export default ProfielScreen

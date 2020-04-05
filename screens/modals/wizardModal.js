@@ -10,8 +10,8 @@ export default ({ isVisible, onFinish }) => {
 
     const [moveInX] = useState(new Animated.Value(-WINDOW_WIDTH))
     const [skillOption, setSkillOption] = useState('beginner');
-    const [antwoord1, setAntwoord1] = useState('');
-    const [antwoord2, setAntwoord2] = useState('');
+    const [antwoord1, setAntwoord1] = useState(null);
+    const [antwoord2, setAntwoord2] = useState(null);
     const [antwoord3, setAntwoord3] = useState([]);
 
     useEffect(() => {
@@ -69,6 +69,7 @@ export default ({ isVisible, onFinish }) => {
                 <Animated.View style={[transformStepOne, styles.animViewContainer]}>
                     <Text style={[globalStyles.headerText, styles.headerText]}>Vraag 1: dit is dummyvraag 1?</Text>
                     <OptionPicker
+                        optionStyle={{ height: 80, width: 200 }}
                         options={['antwoord 1', 'antwoord 2', 'antwoord 3']}
                         onSelect={(option) => setAntwoord1(option)}
                     />
@@ -78,6 +79,7 @@ export default ({ isVisible, onFinish }) => {
                 <Animated.View style={[transformStepTwo, styles.animViewContainer]}>
                     <Text style={[globalStyles.headerText, styles.headerText]}>Vraag 2: dit is dummyvraag 2? </Text>
                     <OptionPicker
+                        optionStyle={{ height: 80, width: 200 }}
                         options={['antwoord 1', 'antwoord 2']}
                         onSelect={(option) => setAntwoord2(option)}
                     />
@@ -98,7 +100,7 @@ export default ({ isVisible, onFinish }) => {
 
                     <View style={styles.buttonGroup}>
                         <WizardButton title='Terug' isActive={true} nextStep={() => toStep(1)} />
-                        <WizardButton title='Verder' isActive={antwoord3 != null} nextStep={() => toStep(3)} />
+                        <WizardButton title='Verder' isActive={antwoord3.length > 0} nextStep={() => toStep(3)} />
                     </View>
                 </Animated.View>
 

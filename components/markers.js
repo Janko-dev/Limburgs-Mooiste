@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Marker } from 'react-native-maps';
 
-const Markers = ({ markers }) => {
+const Markers = ({ markers, onPress }) => {
     return markers.map((marker, index) => (
         <Marker
             key={index}
@@ -11,6 +11,7 @@ const Markers = ({ markers }) => {
                 longitude: marker.geometry.coordinates['0']
             }}
             identifier={index.toString()}
+            onPress={() => onPress(marker)}
         >
         </Marker>
     ))

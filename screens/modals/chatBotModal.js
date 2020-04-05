@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, StyleSheet, View, TouchableOpacity, Text } from 'react-native';
-import { globalStyles, Colors } from '../../constants'; 
+import { globalStyles, Colors } from '../../constants';
 import ChatBot from 'react-native-chatbot-expo';
 import firebase from '../../api/firebase';
 import ProgressionBar from '../../components/progressionBar';
 
 
-const ChatBotModal = ({ visible, onClose}) => {
+const ChatBotModal = ({ visible, onClose }) => {
 
       const [userRecord, setUserRecord] = useState(null)
 
@@ -23,15 +23,15 @@ const ChatBotModal = ({ visible, onClose}) => {
 
       const steps = [
         {
-          id: '0',
-          message: 'Welkom bij Limburgs Mooiste!',
-          trigger: '1',
+            id: '0',
+            message: 'Welkom bij Limburgs Mooiste!',
+            trigger: '1',
         },
         {
             id: '1',
             message: 'Waar kan ik u mee van dienst zijn?',
             trigger: '2',
-          },
+        },
 
         {
             id: '2',
@@ -155,16 +155,16 @@ const ChatBotModal = ({ visible, onClose}) => {
         {
             id: '99',
             options: [
-                { value: 'Ja', label: 'Ja', trigger: '100'},
-                { value: 'Nee', label: 'Nee', trigger: '101'},
+                { value: 'Ja', label: 'Ja', trigger: '100' },
+                { value: 'Nee', label: 'Nee', trigger: '101' },
             ]
         },
 
-         {
+        {
             id: '101',
             message: 'Jammer!',
             trigger: '1'
-          },
+        },
 
         {
           id: '100',
@@ -177,7 +177,7 @@ const ChatBotModal = ({ visible, onClose}) => {
         }
         },
 
-      ];
+    ];
 
     return (
         <Modal animationType='slide' visible={visible}  >
