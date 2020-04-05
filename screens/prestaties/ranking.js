@@ -10,7 +10,7 @@ const ranking = props => {
     const [ranks, setRanks] = useState([]);
     const [users, setUsers] = useState([]);
     const [userUID, setUserUID] = useState(firebase.getCurrentUser().uid);
-    const [exp, setExp] = useState(0);
+    const [level, setLevel] = useState(0);
 
     useEffect(() => {
         firebase.getUsers().then(result => {
@@ -24,14 +24,15 @@ const ranking = props => {
 
                 let _rank = {
                     id: doc.id,
-                    exp: _user.exp
+                    level: _user.level
                 }
 
                 setUsers(prevUsers => [...prevUsers, _user]);
                 setRanks(prevRanks => [...prevRanks, _rank]);
 
                 if (userUID == doc.id) {
-                    setExp(_user.exp);
+                    console.log(_user);
+                    // setExp(_user.exp);
                 }
 
                 return doc.data();
@@ -59,7 +60,7 @@ const ranking = props => {
             return (
                 <View style={styles.stageRow} key={i}>
                     <View style={[styles.stagePillar, { height: _height }]}>
-                        <Text style={globalStyles.fontStyle}> {position} </Text>
+                        <Text style={globalStyles.bodyText}> {position} </Text>
                     </View>
                     <View style={styles.profile}>
                         <ProfilePicture
@@ -70,7 +71,7 @@ const ranking = props => {
                             height={40}
                             backgroundColor={Colors.primary}
                         />
-                        <Text style={globalStyles.fontStyle}> JDoe </Text>
+                        <Text style={globalStyles.bodyText}> JDoe </Text>
                     </View>
                 </View>
             )
@@ -85,7 +86,7 @@ const ranking = props => {
             <View style={styles.sectionBottom}>
                 <View style={styles.stage}>
                     {
-                        ranks.sort((a, b) => b.exp - a.exp).map((item, i) => {
+                        ranks.sort((a, b) => b.level - a.level).map((item, i) => {
                             let _rank;
                             let _i;
                             if (i == 0) {
@@ -107,7 +108,7 @@ const ranking = props => {
                     }
                 </View>
                 <View style={[styles.displayRank, styles.shadow]}>
-                    <Text style={[globalStyles.fontStyle, { color: '#fff' }]}> Uw huidige experience is: {exp} </Text>
+                    <Text style={[globalStyles.bodyText, { color: '#fff' }]}> U bent Level: {level} </Text>
                 </View>
             </View>
         </View>

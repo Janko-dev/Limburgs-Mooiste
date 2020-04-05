@@ -25,8 +25,8 @@ export default ({ login, isVisible })=> {
 
             if (type === 'success') {
                 const credential = firebase.getFacebookLoginCredential(token);
-                firebase.loginWithFacebook(credential);
-                login();
+                const isNewUser = (await firebase.loginWithFacebook(credential)).additionalUserInfo.isNewUser;
+                login(isNewUser);
             }
 
         } catch (error) {
@@ -38,6 +38,7 @@ export default ({ login, isVisible })=> {
         try {
             if (email != '' && password != '') {
                 firebase.loginWithCredentials(email, password).then(res => {
+                    console.log(res)
                     if (res.user){
                         login();
                     }
@@ -53,7 +54,7 @@ export default ({ login, isVisible })=> {
     const createNewUserAuthentication = (email, password) => {
         firebase.createNewUserAuth(email, password).then(user => {
             if (user){
-                login();
+                login(true);
             }
         })
     }

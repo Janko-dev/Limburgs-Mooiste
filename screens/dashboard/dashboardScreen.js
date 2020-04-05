@@ -1,57 +1,63 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { globalStyles, Colors } from '../../constants';
 import NextTraining from './nextTraining';
 import Motivation from './motivation';
+import FeedListItem from './feedListItem';
+
+import firebase from '../../api/firebase';
 
 const DashboardScreen = () => {
 
     const [refreshState, setRefreshState] = useState(false);
 
+    const [users, setUsers] = useState([]);
+    const [prevTrainSessions, setPrevTrainSessions] = useState([]);
+
+    useEffect(() => {
+        firebase.getUsers().then(result => {
+
+            setPrevTrainSessions([]);
+
+            setUsers(() => {
+                return result.docs.map(doc => {
+
+                    let _user = doc.data();
+                    // console.log(doc.id);
+                    // console.log(_user.level);
+
+                    let _prevSession = {
+                        id: doc.id,
+                        session: 'TODO: implement trainings sessions'
+                    }
+
+                    setPrevTrainSessions(prevSessions => [...prevSessions, _prevSession])
+
+                    return  doc.data();
+                })
+            })
+    
+        })
+      }, []);
+
     const feedList = [
         {
             id: 1,
-            info: 'Feed 1',
+            info: 'debug message 1',
         },
         {
             id: 2,
-            info: 'Feed 2 ',
-        },
+            info: 'debug message 1',
+        }
+        ,
         {
             id: 3,
-            info: 'Feed 3',
-        },
+            info: 'debug message 1',
+        }
+        ,
         {
             id: 4,
-            info: 'Feed 4',
-        },
-        {
-            id: 5,
-            info: 'Feed 5',
-        },
-        {
-            id: 6,
-            info: 'Feed 6',
-        },
-        {
-            id: 7,
-            info: 'Feed 7',
-        },
-        {
-            id: 8,
-            info: 'Feed 8',
-        },
-        {
-            id: 9,
-            info: 'Feed 9',
-        },
-        {
-            id: 10,
-            info: 'Feed 10',
-        },
-        {
-            id: 11,
-            info: 'Feed 11',
+            info: 'debug message 1',
         }
     ]
 
@@ -62,15 +68,18 @@ const DashboardScreen = () => {
     const renderHeader = () => {
         return (
             <View style={styles.headerContainer}>
+                <View style={[{backgroundColor: Colors.secondary},styles.headerNextTraining]}>
+                    <Text style={[{color: Colors.tertiary}, globalStyles.headerText ]}>Volgende Training</Text>
+                </View>
                 <NextTraining/>
                 <Motivation/>
-                <View style={[{height:1,backgroundColor:'#e9e8e9'},styles.feedHeader]}>
+                <View style={styles.feedHeader}>
                     <Text style={styles.buttonText}>Your Feed</Text>
                 </View>
                 <View style={{
                 height: 1,
-                marginLeft: '4%',
-                marginRight: "4%",
+                marginLeft: '2%',
+                marginRight: "2%",
                 backgroundColor: "#CED0CE",
                 justifyContent: 'center'
               }}
@@ -83,8 +92,8 @@ const DashboardScreen = () => {
         return (
             <View style={{
                 height: 1,
-                marginLeft: '4%',
-                marginRight: "4%",
+                marginLeft: '2%',
+                marginRight: "2%",
                 backgroundColor: "#CED0CE",
                 justifyContent: 'center'
               }}
@@ -96,19 +105,13 @@ const DashboardScreen = () => {
         <View style={styles.mainContainer}>
             <FlatList
                 data={feedList}
+                keyExtractor={(data) => data.id.toString()}
                 ListHeaderComponent={renderHeader}
                 ItemSeparatorComponent={renderSeparator}
                 refreshing={refreshState}
                 onRefresh={handleRefresh}
-                renderItem={(data) => 
-                    <View style={styles.feedContainer}>
-                        <TouchableOpacity onPress={() => console.log('test')}>
-                            <View style={styles.feedItems}>
-                                <Text style={{fontWeight: '100', color: Colors.secondary, fontWeight: '500'}} >{data.item.info}</Text>
-                            </View>
-                        </TouchableOpacity>
-                    </View>
-                }
+                keyExtractor={(data) => data.id.toString()}
+                renderItem={(data) => <FeedListItem title={data.item.info}/>}
             />
         </View>
         
@@ -117,19 +120,32 @@ const DashboardScreen = () => {
 
 
 const styles = StyleSheet.create({
+    headerNextTraining: {
+        padding: '1%',
+        marginLeft: '2%',
+        marginRight: "2%",
+        marginTop: '2%',
+        shadowColor: 'black',
+        shadowOffset: {width: 0, height: 2},
+        shadowRadius: 6,
+        shadowOpacity: 0.26,
+        borderTopStartRadius: 10,
+        borderTopEndRadius: 10,
+        alignItems: 'center'
+    },
     feedHeader: {
         alignItems: 'center',
         marginTop: 10,
         borderTopStartRadius: 10,
         borderTopEndRadius: 10,
         padding: 10,
-        backgroundColor: 'white',
-        marginLeft: '4%',
-        marginRight: "4%",
-        // shadowColor: 'black',
-        // shadowOffset: {width: 0, height: 2},
-        // shadowRadius: 6,
-        // shadowOpacity: 0.26,
+        backgroundColor: Colors.secondary,
+        marginLeft: '2%',
+        marginRight: "2%",
+        shadowColor: 'black',
+        shadowOffset: {width: 0, height: 2},
+        shadowRadius: 6,
+        shadowOpacity: 0.26
     },
     mainContainer: {
         flex: 1
@@ -137,34 +153,10 @@ const styles = StyleSheet.create({
     headerContainer: {
         flex: 5
     },
-    feedContainer: {
-        padding: 30,
-        flex: 10,
-        backgroundColor: 'white',
-        marginLeft: '4%',
-        marginRight: "4%",
-        // shadowColor: 'black',
-        // shadowOffset: {width: 0, height: 2},
-        // shadowRadius: 6,
-        // shadowOpacity: 0.26
-    },
-    feedItems: {
-        backgroundColor: Colors.tertiary,
-        margin: '3%',
-        shadowColor: 'black',
-        shadowOffset: {width: 0, height: 2},
-        shadowRadius: 2,
-        shadowOpacity: 0.26,
-        padding: "1%",
-        // shadowColor: 'black',
-        // shadowOffset: {width: 0, height: 2},
-        // shadowRadius: 6,
-        // shadowOpacity: 0.26
-    },
     buttonText: {
-        color: Colors.primary,
+        color: Colors.tertiary,
         fontSize: 18,
-        fontWeight: 'bold',
+        fontWeight: 'bold'
     }
 });
 
