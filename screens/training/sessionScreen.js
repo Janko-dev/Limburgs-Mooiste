@@ -69,7 +69,7 @@ const SessionScreen = ({ navigation, route }) => {
 
     return (
         <View style={[globalStyles.container]}>
-            <GeoTrainingModal visible={isGeoModalVisible} onClose={() => setIsGeoModalVisible(false)} polygon={polygon} markers={markers} />
+            <GeoTrainingModal visible={isGeoModalVisible} onClose={() => setIsGeoModalVisible(false)} isPreview={true} polygon={polygon} markers={markers} />
             <Modal isVisible={descriptionModal} useNativeDriver={true}
                 swipeDirection={['down']}
                 onSwipeComplete={() => setDescriptionModal(false)}
@@ -97,7 +97,7 @@ const SessionScreen = ({ navigation, route }) => {
             <View style={styles.bodyContainer}>
                 <ScrollView contentContainerStyle={styles.scrollViewContent} showsVerticalScrollIndicator={false}>
                     {schedule.sessies.map((item, index) => (
-                        <View key={index} style={styles.session}>
+                        <View key={index} style={[styles.session, userRecord?.activeSchedule.currentSession < index + 1? {opacity: 0.5, backgroundColor: 'black'} : null]}>
                             <View style={styles.infoContainer}>
                                 <Text style={[globalStyles.headerText, { color: Colors.tertiary }]}>Sessie {index + 1}</Text>
                                 <Text style={[globalStyles.headerText, { color: 'gray' }]}>{userRecord?.activeSchedule.trainingsDays.find(day => day.id === item.routeID).option}</Text>
@@ -116,7 +116,7 @@ const SessionScreen = ({ navigation, route }) => {
                                     <Text style={{ color: Colors.tertiary }}>+{item.kwaliteitsCriteria.bronze.beloning} EXP</Text>
                                 </View>
                             </View>
-                            <TouchableOpacity style={styles.buttonContainer} onPress={() => openRoutehandler(item.routeID)}>
+                            <TouchableOpacity style={styles.buttonContainer} disabled={userRecord?.activeSchedule.currentSession < index + 1} onPress={() => openRoutehandler(item.routeID)}>
                                 <Text style={[globalStyles.headerText, { color: Colors.secondary }]}>Open Route</Text>
                                 <Icon
                                     type='ionicon'

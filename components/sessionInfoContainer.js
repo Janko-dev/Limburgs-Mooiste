@@ -50,7 +50,7 @@ const SessionInfoContainer = ({ style, session, route, onSelectTrainingsDay }) =
 
     return (
         <Animated.View style={[styles.session, style, animationStyles]}>
-            <GeoTrainingModal visible={isGeoModalVisible} onClose={() => setIsGeoModalVisible(false)} polygon={polygon} markers={markers} />
+            <GeoTrainingModal visible={isGeoModalVisible} isPreview={true} onClose={() => setIsGeoModalVisible(false)} polygon={polygon} markers={markers} />
 
             <Modal isVisible={isTrainingModal}
                 useNativeDriver={true}
