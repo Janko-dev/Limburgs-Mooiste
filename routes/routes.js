@@ -32,7 +32,6 @@ const Navigator = () => {
                 setLoginModal(true)
             }
         })
-
         return unsubscribe;
     })
 
@@ -44,7 +43,7 @@ const Navigator = () => {
     }
 
     const registerUserHandler = (userData) => {
-        firebase.createNewUserRecord(user.uid, userData.skillOption)
+        firebase.createNewUserRecord(user.uid, userData.skillOption, user.displayName ? user.displayName : user.email)
         setWizardModal(false);
     }
 

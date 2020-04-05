@@ -11,35 +11,6 @@ const DashboardScreen = () => {
 
     const [refreshState, setRefreshState] = useState(false);
 
-    const [users, setUsers] = useState([]);
-    const [prevTrainSessions, setPrevTrainSessions] = useState([]);
-
-    useEffect(() => {
-        firebase.getUsers().then(result => {
-
-            setPrevTrainSessions([]);
-
-            setUsers(() => {
-                return result.docs.map(doc => {
-
-                    let _user = doc.data();
-                    // console.log(doc.id);
-                    // console.log(_user.level);
-
-                    let _prevSession = {
-                        id: doc.id,
-                        session: 'TODO: implement trainings sessions'
-                    }
-
-                    setPrevTrainSessions(prevSessions => [...prevSessions, _prevSession])
-
-                    return  doc.data();
-                })
-            })
-    
-        })
-      }, []);
-
     const feedList = [
         {
             id: 1,
