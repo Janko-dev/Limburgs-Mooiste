@@ -50,7 +50,7 @@ const achievements = props => {
                                     <TouchableOpacity key={item.id}
                                         style={styles.sectionHeadButtonSelect}
                                         onPress={() => { setCategory(item.Naam) }}>
-                                        <Text style={globalStyles.bodyText}>{item.Naam}</Text>
+                                        <Text style={[globalStyles.bodyText, {fontSize:13}]}>{item.naam}</Text>
                                     </TouchableOpacity>
                                 )
                             } else {
@@ -58,7 +58,7 @@ const achievements = props => {
                                     <TouchableOpacity key={item.id}
                                         style={styles.sectionHeadButton}
                                         onPress={() => { setCategory(item.naam) }}>
-                                        <Text>{item.naam}</Text>
+                                        <Text style={[globalStyles.bodyText, {fontSize:13}]}>{item.naam}</Text>
                                     </TouchableOpacity>
                                 )
                             }
@@ -78,7 +78,7 @@ const achievements = props => {
                                             <Text> {_badge.naam} ✔ </Text>
                                             <Icon name='chevron-down'
                                                 type='evilicon'
-                                                color='#517fa4'/>
+                                                color='#517fa4' />
                                         </TouchableOpacity>
                                     </View>
                                 )
@@ -90,7 +90,7 @@ const achievements = props => {
                                             <Text> {_badge.naam} </Text>
                                             <Icon name='chevron-down'
                                                 type='evilicon'
-                                                color='#517fa4'/>
+                                                color='#517fa4' />
                                         </TouchableOpacity>
                                     </View>
                                 )

@@ -1,6 +1,5 @@
 import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView, ScrollView, TextInput, TouchableOpacity, Image, Linking, Alert } from 'react-native';
-import ProfilePicture from 'react-native-profile-picture';
 import { globalStyles, Colors } from '../../constants';
 import SendWhatsApp from '../../api/whatsapp';
 import {Avatar} from 'react-native-elements';

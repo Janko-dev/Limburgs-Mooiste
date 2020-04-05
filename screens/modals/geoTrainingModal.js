@@ -66,8 +66,8 @@ const GeoTrainingModal = ({ visible, onClose, markers, polygon, isPreview }) => 
                     <Text style={[globalStyles.headerText, { color: Colors.secondary }]}>start</Text>
                 </TouchableOpacity>
 
-                {/* <Animated.View style={[styles.animatedContainer, {
 
+                {/* <Animated.View style={[styles.animatedContainer, {
                     transform: [{
                         translateY: animatedValue.interpolate({
                             inputRange: [0, 1],
