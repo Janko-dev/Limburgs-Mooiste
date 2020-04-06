@@ -53,7 +53,7 @@ const ProgressionBar = () => {
 
                     let diff = doc.data().exp - exp;
                     if (diff > 0 && exp != null) {
-                        console.log(diff)
+                        // console.log(diff)
                         setExpDiff(Math.floor(diff));
                         Animated.sequence([
                             Animated.timing(animatedValue, {

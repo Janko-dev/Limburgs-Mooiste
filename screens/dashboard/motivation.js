@@ -20,7 +20,7 @@ const motivation = props => {
                     <Text style={globalStyles.bodyText} >Next Gift</Text>
                 </View>
             </View>
-            <View style={{flex:4, alignItems: 'center', justifyContent: 'center'}}><Text style={globalStyles.bodyText}>Your next gift</Text></View>
+            <View style={{flex:4, alignItems: 'center', justifyContent: 'center'}}><Text style={globalStyles.bodyText}>Next: -</Text></View>
             <View style={styles.seperatorContainer}>
                 <View style={styles.seperator}></View>
             </View>
@@ -33,7 +33,7 @@ const motivation = props => {
                 />
                 <Text style={[globalStyles.bodyText, {flex: 1}]}>Ranking</Text>
             </View>
-            <View style={{flex:4, alignItems: 'center', justifyContent: 'center'}}><Text style={globalStyles.bodyText}>Current Rank</Text></View>
+            <View style={{flex:4, alignItems: 'center', justifyContent: 'center'}}><Text style={globalStyles.bodyText}>Position: -</Text></View>
         </View>)
 }
 
