@@ -6,12 +6,6 @@ import Achievements from './achievements';
 import LoadingModal from '../modals/loadingModal';
 
 const PrestatieScreen = props => {
-    // const [isLoading, setIsLoading] = useState(true)
-    // useEffect(() => {
-    //     setIsLoading(false)
-    // }, [])
-
-
     return (
         <View style={styles.container}>
 
