@@ -48,9 +48,14 @@ export default {
         return firebase.firestore().collection("users").get();
     },
 
-    createNewUserRecord: (uid, skillLevel) => {
+    onUsersChange: (callback) => {
+        return firebase.firestore().collection("users").onSnapshot(callback);
+    },
+
+    createNewUserRecord: (uid, skillLevel, username) => {
         return firebase.firestore().collection("users").doc(uid).set(
             {
+                username,
                 skillLevel,
                 exp: 0,
                 maxExp: 10,
@@ -148,5 +153,5 @@ export default {
         return firebase.firestore().collection("users").doc(uid).update({
             exp
         })
-    }
+    },
 }

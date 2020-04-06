@@ -9,73 +9,51 @@ import ProfilePicture from 'react-native-profile-picture';
 const ranking = props => {
     const [ranks, setRanks] = useState([]);
     const [users, setUsers] = useState([]);
-    const [userUID, setUserUID] = useState(firebase.getCurrentUser().uid);
-    const [level, setLevel] = useState(0);
+    const [userRecord, setUserRecord] = useState(null)
+    const [user, setUser] = useState(firebase.getCurrentUser());
 
     useEffect(() => {
-        firebase.getUsers().then(result => {
-
-            setUsers([]);
-            setRanks([]);
-
-            return result.docs.map(doc => {
-                let _user = doc.data();
-                _user.id = doc.id;
-
-                let _rank = {
-                    id: doc.id,
-                    level: _user.level
-                }
-
-                setUsers(prevUsers => [...prevUsers, _user]);
-                setRanks(prevRanks => [...prevRanks, _rank]);
-
-                if (userUID == doc.id) {
-                    console.log(_user);
-                    // setExp(_user.exp);
-                }
-
-                return doc.data();
+        const unsubscribe = firebase.onUsersChange(result => {
+            setUsers(() => {
+                return result.docs.map(item => {
+                    return { ...item.data(), uid: item.id }
+                }).sort((a, b) => b.level - a.level)
             })
+            setUserRecord(users.find(item => user.uid === item.uid))
         })
+        return unsubscribe;
     }, [])
 
-    const stageFunc = (rank, i, position) => {
-        if (rank != undefined) {
-            position += 1;
-            let _height;
+    const stageFunc = (i) => {
+        let _height = 20;
+        let combinedHeight = 0;
 
-            if (i == 0) {
-                _height = "30%";
+        for (let index = 0; index < 3; index++) {
+            if (users[index]?.level) {
+                combinedHeight += users[index].level;
             }
+        }
 
-            if (i == 1) {
-                _height = "43%";
-            }
-
-            if (i == 2) {
-                _height = "23%";
-            }
-
-            return (
-                <View style={styles.stageRow} key={i}>
-                    <View style={[styles.stagePillar, { height: _height }]}>
-                        <Text style={globalStyles.bodyText}> {position} </Text>
-                    </View>
-                    <View style={styles.profile}>
-                        <ProfilePicture
-                            isPicture={true}
-                            requirePicture={require('../../assets/profilepic_blanco.png')}
-                            shape='circle'
-                            width={40}
-                            height={40}
-                            backgroundColor={Colors.primary}
-                        />
-                        <Text style={globalStyles.bodyText}> JDoe </Text>
-                    </View>
+        _height = _height + (combinedHeight / (i+1)) * 2;
+        
+        return (
+            <View style={styles.stageRow} key={i}>
+                <View style={[styles.stagePillar, { height: _height }]}>
+                    <Text style={globalStyles.bodyText}> {i + 1} </Text>
                 </View>
-            )
-        } else return null;
+                <View style={styles.profile}>
+                    <ProfilePicture
+                        isPicture={true}
+                        requirePicture={require('../../assets/profilepic_blanco.png')}
+                        shape='circle'
+                        width={40}
+                        height={40}
+                        backgroundColor={Colors.primary}
+                    />
+                    <Text style={globalStyles.bodyText}> {users[i]?.username} </Text>
+                </View>
+            </View>
+        )
     }
 
     return (
@@ -85,30 +63,12 @@ const ranking = props => {
             </View>
             <View style={styles.sectionBottom}>
                 <View style={styles.stage}>
-                    {
-                        ranks.sort((a, b) => b.level - a.level).map((item, i) => {
-                            let _rank;
-                            let _i;
-                            if (i == 0) {
-                                _rank = ranks[i + 1]
-                                _i = i + 1;
-                                return stageFunc(_rank, i, _i);
-                            }
-                            if (i == 1) {
-                                _rank = ranks[i - 1]
-                                _i = i - 1;
-                                return stageFunc(_rank, i, _i);
-                            }
-                            if (i == 2) {
-                                _rank = ranks[i]
-                                _i = i;
-                                return stageFunc(_rank, i, _i);
-                            }
-                        })
-                    }
+                    {users[1] ? stageFunc(1) : null}
+                    {users[0] ? stageFunc(0) : null}
+                    {users[2] ? stageFunc(2) : null}
                 </View>
                 <View style={[styles.displayRank, styles.shadow]}>
-                    <Text style={[globalStyles.bodyText, { color: '#fff' }]}> U bent Level: {level} </Text>
+                    <Text style={[globalStyles.bodyText, { color: '#fff' }]}> U bent Level: {userRecord?.level} </Text>
                 </View>
             </View>
         </View>
