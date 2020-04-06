@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { Avatar, Icon } from 'react-native-elements';
 import firebase from '../../api/firebase';
 import { Colors, globalStyles } from '../../constants';
 import Markers from '../../components/markers';
 import MapView, { Polygon } from 'react-native-maps';
+import { red } from 'react-native-redash';
 
 const feedListItem = props => {
 
@@ -30,7 +31,7 @@ const feedListItem = props => {
                                     color={Colors.secondary}
                                     size={15}
                                 />
-                                <Text style={globalStyles.bodyText}> Datum hier</Text>
+                                <Text style={globalStyles.bodyText}> xx-xx-xx</Text>
                             </View>
                         </View>
                         <View >
@@ -60,21 +61,21 @@ const feedListItem = props => {
                                 />
                             </View>
                             <View style={{flexDirection: 'column'}}>
-                                <View style={styles.textAllignStats}><Text style={globalStyles.bodyText}>afstand</Text></View>
-                                <View style={styles.textAllignStats}><Text style={globalStyles.bodyText}>x</Text></View>
+                                <View style={styles.textAllignStats}><Text style={globalStyles.bodyText}>Afstand</Text></View>
+                                <View style={styles.textAllignStats}><Text style={globalStyles.bodyText}>-</Text></View>
                             </View>
                             <View style={styles.seperatorIcons}></View>
                             <View>
                                 <Icon
                                     type='ionicon'
-                                    name='ios-walk'
+                                    name='ios-bicycle'
                                     color={Colors.secondary}
                                     size={30}
                                 />
                             </View>
                             <View style={{flexDirection: 'column'}}>
-                                <View style={styles.textAllignStats}><Text style={globalStyles.bodyText}>tempo</Text></View>
-                                <View style={styles.textAllignStats}><Text style={globalStyles.bodyText}>x</Text></View>
+                                <View style={styles.textAllignStats}><Text style={globalStyles.bodyText}>Tempo</Text></View>
+                                <View style={styles.textAllignStats}><Text style={globalStyles.bodyText}>-</Text></View>
                             </View>
                             <View style={styles.seperatorIcons}></View>
                             <View>
@@ -86,8 +87,8 @@ const feedListItem = props => {
                                 />
                             </View>
                             <View style={{flexDirection: 'column'}}>
-                                <View style={styles.textAllignStats}><Text style={globalStyles.bodyText}>tijd</Text></View>
-                                <View style={styles.textAllignStats}><Text style={globalStyles.bodyText}>x</Text></View>
+                                <View style={styles.textAllignStats}><Text style={globalStyles.bodyText}>Tijd</Text></View>
+                                <View style={styles.textAllignStats}><Text style={globalStyles.bodyText}>-</Text></View>
                             </View>
                             <View style={styles.seperatorIcons}></View>
                             <View>
@@ -104,8 +105,11 @@ const feedListItem = props => {
                             </View>
                     </View>
                     <View style={styles.kaart}>
-                        <MapView>
-                        </MapView>
+                        {/* <Text>test</Text> */}
+                        <Image 
+                            style={styles.image} 
+                            source={require('../../assets/route.png')}
+                        />
                     </View>
                         <TouchableOpacity onPress={() => console.log('TODO: Link button')}>
                             <View style={styles.interact}>
@@ -120,6 +124,12 @@ const feedListItem = props => {
 }
 
     const styles = StyleSheet.create({
+        image: {
+            flex: 1,
+            position: 'absolute',
+            transform: [{ scale: 0.30}],
+            top: -275
+        },
         seperatorIcons: {
             width: 1.5,
             marginTop: '1%',
@@ -148,7 +158,8 @@ const feedListItem = props => {
             alignItems: 'flex-start',
         },
         profiel: {
-            flexDirection: 'row'
+            flexDirection: 'row',
+            marginTop: '3%'
         },
         sessieNaam: {
             marginBottom: '2%',
@@ -159,17 +170,21 @@ const feedListItem = props => {
             justifyContent: 'space-evenly'
         },
         kaart: {
+            backgroundColor: 'red',
             height: 200,
-            justifyContent: 'center',
-            alignItems: 'center',
             borderColor: Colors.primary,
             borderWidth: 2,
             borderRadius: 5,
-            marginTop: '1%',
-            marginBottom: '2%'
+            position: 'relative',
+            marginTop: '2%',
+            marginBottom: '2%',
+            overflow: 'hidden',
+            alignItems: 'center',
+            justifyContent: 'center'
         },
         interact: {
             flexDirection: "row",
+            marginBottom: '5%'
         },
         feedContainer: {
             backgroundColor: 'white',
@@ -182,13 +197,11 @@ const feedListItem = props => {
             elevation: 6
         },
         feedItems: {
-            // backgroundColor: Colors.tertiary,
-            // margin: '3%',
             marginBottom: '1%',
             marginTop: '3%',
             marginLeft: '3%',
             marginRight: '3%',
-            padding: "1%",
+            padding: "1%"
         }
     });
 
