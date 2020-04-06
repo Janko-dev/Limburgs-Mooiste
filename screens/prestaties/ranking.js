@@ -1,41 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { globalStyles, Colors } from '../../constants';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Picker } from 'react-native';
 
+import LoadingModal from '../modals/loadingModal';
 import firebase from '../../api/firebase';
 
 import ProfilePicture from 'react-native-profile-picture';
 
-const ranking = props => {
-    const [ranks, setRanks] = useState([]);
+const ranking = () => {
     const [users, setUsers] = useState([]);
     const [userRecord, setUserRecord] = useState(null)
     const [user, setUser] = useState(firebase.getCurrentUser());
+    const [selectedValue, setSelectedValue] = useState("level");
+    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        const unsubscribe = firebase.onUsersChange(result => {
-            setUsers(() => {
-                return result.docs.map(item => {
-                    return { ...item.data(), uid: item.id }
-                }).sort((a, b) => b.level - a.level)
-            })
-            setUserRecord(users.find(item => user.uid === item.uid))
+        firebase.getUsers().then(result => {
+            let _users = result.docs.map(item => {
+                return { ...item.data(), uid: item.id }
+            }).sort((a, b) => b[selectedValue] - a[selectedValue])
+            setUsers(_users)
+            setUserRecord({ ..._users.find(item => user.uid === item.uid), rank: _users.findIndex(item => user.uid === item.uid) + 1 })
+            setIsLoading(false)
         })
-        return unsubscribe;
-    })
+    }, [])
 
-    const stageFunc = (i) => {
-        let _height = 20;
-        let combinedHeight = 0;
+    const map = function (n, start1, stop1, start2, stop2) {
+        return ((n - start1) / (stop1 - start1)) * (stop2 - start2) + start2;
+    };
 
-        for (let index = 0; index < 3; index++) {
-            if (users[index]?.level) {
-                combinedHeight += users[index].level;
-            }
-        }
+    const stageFunc = (i, criteria) => {
+        _height = map(users[i][criteria], users[2][criteria], users[0][criteria] + 5, 20, 50);
 
-        _height = _height + (combinedHeight / (i+1)) * 2;
-        
         return (
             <View style={styles.stageRow} key={i}>
                 <View style={[styles.stagePillar, { height: _height }]}>
@@ -58,17 +54,18 @@ const ranking = props => {
 
     return (
         <View style={styles.container}>
+            <LoadingModal isLoading={isLoading} />
             <View style={[styles.sectionTop, styles.shadow]}>
                 <Text style={[globalStyles.bodyText, { color: '#fff' }]}> Dag Leaderboard </Text>
             </View>
             <View style={styles.sectionBottom}>
                 <View style={styles.stage}>
-                    {users[1] ? stageFunc(1) : null}
-                    {users[0] ? stageFunc(0) : null}
-                    {users[2] ? stageFunc(2) : null}
+                    {users[1] ? stageFunc(1, selectedValue) : null}
+                    {users[0] ? stageFunc(0, selectedValue) : null}
+                    {users[2] ? stageFunc(2, selectedValue) : null}
                 </View>
                 <View style={[styles.displayRank, styles.shadow]}>
-                    <Text style={[globalStyles.bodyText, { color: '#fff' }]}> U bent Level: {userRecord?.level} </Text>
+                    <Text style={[globalStyles.bodyText, { color: '#fff' }]}> U bent gepositioneerd op plaats: {userRecord?.rank} </Text>
                 </View>
             </View>
         </View>
@@ -86,6 +83,7 @@ const styles = StyleSheet.create({
 
     sectionTop: {
         justifyContent: 'center',
+        flexDirection: 'row',
         backgroundColor: Colors.primary,
         alignItems: 'center',
         borderBottomEndRadius: 10,

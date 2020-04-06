@@ -2,12 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { globalStyles, Colors } from '../../constants';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 
+import DescriptionAchievementModal from '../modals/descriptionAchievementModal';
 import firebase from '../../api/firebase';
 
 import { colors, Icon } from 'react-native-elements';
 
 const achievements = props => {
-    const [open, setOpen] = useState(false);
+    const [isVisible, setIsVisible] = useState(false);
+    const [selectedItem, setSelectedItem] = useState();
+
     const [category, setCategory] = useState('Snelheid');
 
     const [badgesMap, setBadgesMap] = useState([]);
@@ -39,8 +42,13 @@ const achievements = props => {
         })
     }, [])
 
+    const closeHandler = () => {
+        setIsVisible(false);
+    }
+
     return (
         <View style={styles.container}>
+            <DescriptionAchievementModal isVisible={isVisible} onClose={closeHandler} item={selectedItem}></DescriptionAchievementModal>
             <View style={styles.sectionHead}>
                 {
                     categoryMap.map(
@@ -49,16 +57,20 @@ const achievements = props => {
                                 return (
                                     <TouchableOpacity key={item.id}
                                         style={styles.sectionHeadButtonSelect}
-                                        onPress={() => { setCategory(item.Naam) }}>
-                                        <Text style={[globalStyles.bodyText, {fontSize:13}]}>{item.naam}</Text>
+                                        onPress={() => {
+                                            setCategory(item.Naam);
+                                        }}>
+                                        <Text style={[globalStyles.bodyText, { fontSize: 13 }]}>{item.naam}</Text>
                                     </TouchableOpacity>
                                 )
                             } else {
                                 return (
                                     <TouchableOpacity key={item.id}
                                         style={styles.sectionHeadButton}
-                                        onPress={() => { setCategory(item.naam) }}>
-                                        <Text style={[globalStyles.bodyText, {fontSize:13}]}>{item.naam}</Text>
+                                        onPress={() => {
+                                            setCategory(item.naam);
+                                        }}>
+                                        <Text style={[globalStyles.bodyText, { fontSize: 13 }]}>{item.naam}</Text>
                                     </TouchableOpacity>
                                 )
                             }
@@ -74,11 +86,11 @@ const achievements = props => {
                                 return (
                                     <View key={_badge.id}>
                                         <TouchableOpacity key={_badge.id} style={styles.badge}
-                                            onPress={() => setOpen(!open)} >
+                                            onPress={() => {
+                                                setIsVisible(true);
+                                                setSelectedItem(_badge);
+                                            }}>
                                             <Text> {_badge.naam} ✔ </Text>
-                                            <Icon name='chevron-down'
-                                                type='evilicon'
-                                                color='#517fa4' />
                                         </TouchableOpacity>
                                     </View>
                                 )
@@ -86,11 +98,11 @@ const achievements = props => {
                                 return (
                                     <View key={_badge.id}>
                                         <TouchableOpacity key={_badge.id} style={styles.badge}
-                                            onPress={() => setOpen(!open)} >
+                                            onPress={() => {
+                                                setIsVisible(true);
+                                                setSelectedItem(_badge);
+                                            }}>
                                             <Text> {_badge.naam} </Text>
-                                            <Icon name='chevron-down'
-                                                type='evilicon'
-                                                color='#517fa4' />
                                         </TouchableOpacity>
                                     </View>
                                 )
@@ -99,7 +111,7 @@ const achievements = props => {
                     })
                 }
             </ScrollView>
-        </View>
+        </View >
     )
 }
 
