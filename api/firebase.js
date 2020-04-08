@@ -134,13 +134,6 @@ export default {
         return firebase.database().ref().once("value", callback);
     },
 
-    // setMaxExp: (maxExp, previousMaxExp, uid) => {
-    //     return firebase.firestore().collection("users").doc(uid).update({
-    //         maxExp,
-    //         previousMaxExp
-    //     })
-    // },
-
     setProgression: (exp, maxExp, level, uid) => {
         return firebase.firestore().collection("users").doc(uid).update({
             exp,
@@ -154,4 +147,8 @@ export default {
             exp
         })
     },
+
+    updatePreviousTrainingSession: (uid, previousTrainingSessions) => {
+        return firebase.firestore().collection("users").doc(uid).update({previousTrainingSessions})
+    }
 }

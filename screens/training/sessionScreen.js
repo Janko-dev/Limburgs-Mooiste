@@ -65,11 +65,32 @@ const SessionScreen = ({ navigation, route }) => {
         setPolygon(() => Utils.getPolygonFromRoute(geoData[routeID]))
         setIsGeoModalVisible(true)
     }
-    // console.log(isGeoModalVisible)
+
+    const closeHandler = (started, waypoints, startTime, stopTime, isCompleted) => {
+        setIsGeoModalVisible(false)
+        if (started) {
+            userRecord.previousTrainingSessions.push({
+                isCompleted,
+                startTime,
+                stopTime,
+                currentSession: userRecord.activeSchedule.currentSession,
+                currentWeek: userRecord.activeSchedule.currentWeek,
+                scheduleId: userRecord.activeSchedule.id,
+            })
+            firebase.updatePreviousTrainingSession(user.uid, userRecord.previousTrainingSessions)
+
+            waypoints.forEach(point => {
+                userRecord.exp += 5;
+            })
+            firebase.setExp(userRecord.exp, user.uid)
+            //isCompleted, startTime, stopTime, currentSession, currentWeek, scheduleId
+        }
+
+    }
 
     return (
         <View style={[globalStyles.container]}>
-            <GeoTrainingModal visible={isGeoModalVisible} onClose={() => setIsGeoModalVisible(false)} isPreview={true} polygon={polygon} markers={markers} />
+            <GeoTrainingModal visible={isGeoModalVisible} onClose={closeHandler} isPreview={false} polygon={polygon} markers={markers} />
             <Modal isVisible={descriptionModal} useNativeDriver={true}
                 swipeDirection={['down']}
                 onSwipeComplete={() => setDescriptionModal(false)}

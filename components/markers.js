@@ -12,6 +12,7 @@ const Markers = ({ markers, onPress }) => {
             }}
             identifier={index.toString()}
             onPress={() => onPress(marker)}
+            pinColor={index == 0 ? 'red' : index == markers.length - 1 ? 'green': 'blue'}
         >
         </Marker>
     ))
