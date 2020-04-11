@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView, ScrollView, TextInput, TouchableOpacity, Image, Linking, Alert } from 'react-native';
-import { globalStyles, Colors } from '../../constants';
+import { globalStyles, Colors, SCREEN_HEIGHT } from '../../constants';
 import SendWhatsApp from '../../api/whatsapp';
 import {Avatar} from 'react-native-elements';
 
@@ -9,18 +9,18 @@ const CoachCard = ({coach}) => {
         <View style={styles.coachContainer}>
             <View style={styles.profileContainer}>
                 <Avatar source={{uri: coach?.photo}} size="large" rounded ></Avatar>
-            <Text style={styles.headerText}>{coach?.name}</Text>
-            <Text style={styles.subHeaderText}>{coach?.expertise}</Text>
+              <Text style={styles.headerText}>{coach?.name}</Text>
+              <Text style={styles.subHeaderText}>{coach?.expertise}</Text>
             </View>     
             <View style={styles.textContainer}>
-            <View style={styles.quoteContainer}>
+              <View style={styles.quoteContainer}>
                 <Text style={styles.normalText}>"{coach?.quote}"</Text>
-            </View>
-            <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button} onPress={() => SendWhatsApp(coach?.phonenumber)}>
-                <Text style={styles.buttonText}>Stuur bericht</Text>
+              </View>
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity style={styles.button} onPress={() => SendWhatsApp(coach?.phonenumber)}>
+                  <Text style={styles.buttonText}>Stuur bericht</Text>
                 </TouchableOpacity>
-            </View>
+              </View>
             </View>
         </View>
     )
@@ -31,7 +31,8 @@ const styles = StyleSheet.create({
     headerText: {
       fontWeight: '700',
       fontFamily: 'Arial Rounded MT Bold',
-      marginTop: 10
+      fontSize: SCREEN_HEIGHT * 0.016,
+      marginTop: '10%'
     },
   
     subHeaderText: {
@@ -40,7 +41,7 @@ const styles = StyleSheet.create({
   
     buttonText: {
       color: Colors.primary,
-      fontSize: 12,
+      fontSize: SCREEN_HEIGHT * 0.014,
     },
   
     buttonContainer: {
@@ -48,8 +49,8 @@ const styles = StyleSheet.create({
       justifyContent: 'flex-end',
       width: '100%',
       height: '20%',
-      paddingRight: 15,
-      paddingBottom: 15,
+      paddingRight: '5%',
+      paddingBottom: '10%',
     },
   
     quoteContainer: {
@@ -57,25 +58,27 @@ const styles = StyleSheet.create({
       justifyContent: 'flex-start',
       width: '100%',
       height: '80%',
-      paddingTop: 20,
-      paddingRight: 20,
+      paddingTop: '5%',
+      paddingRight: '5%',
     },
   
     button: {
-      height: 35,
+      height: SCREEN_HEIGHT * 0.04,
       alignItems: 'center',
       justifyContent: 'center',
       backgroundColor: 'white',
       borderColor: Colors.primary,
-      borderWidth: 1,
-      borderRadius: 5,
-      padding: 10
+      borderWidth: SCREEN_HEIGHT * 0.001,
+      borderRadius: SCREEN_HEIGHT * 0.005,
+      padding: SCREEN_HEIGHT * 0.01
     },
   
     normalText: {
       fontWeight: '100',
       fontStyle: 'italic',
       color: Colors.secondary,
+      fontSize: SCREEN_HEIGHT * 0.015,
+
     },
   
   
@@ -85,7 +88,8 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       flexDirection: 'row',
       borderBottomColor: 'lightgray',
-      borderBottomWidth: 0.25
+      borderBottomWidth: SCREEN_HEIGHT * 0.0005,
+      
     },
   
     profileContainer: {
