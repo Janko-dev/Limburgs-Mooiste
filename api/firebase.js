@@ -120,6 +120,16 @@ export default {
         })
     },
 
+    //TODO: api beschrijving
+    incrementCurrentScheduleSession: (uid, activeSchedule) => {
+        return firebase.firestore().collection("users").doc(uid).update({
+            activeSchedule: {
+                ...activeSchedule,
+                currentSession: activeSchedule.currentSession + 1,
+            }
+        })
+    },
+
     deleteActiveSchedule: (uid) => {
         return firebase.firestore().collection("users").doc(uid).update({
             activeSchedule: null
@@ -148,6 +158,7 @@ export default {
         })
     },
 
+    //TODO: api beschrijving
     updatePreviousTrainingSession: (uid, previousTrainingSessions) => {
         return firebase.firestore().collection("users").doc(uid).update({previousTrainingSessions})
     }

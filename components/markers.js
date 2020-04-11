@@ -11,7 +11,7 @@ const Markers = ({ markers, onPress }) => {
                 longitude: marker.geometry.coordinates['0']
             }}
             identifier={index.toString()}
-            onPress={() => onPress(marker)}
+            onPress={() => onPress(marker, index)}
             pinColor={index == 0 ? 'red' : index == markers.length - 1 ? 'green': 'blue'}
         >
         </Marker>

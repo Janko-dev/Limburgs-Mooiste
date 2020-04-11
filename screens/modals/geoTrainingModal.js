@@ -5,7 +5,7 @@ import { globalStyles, Colors, SCREEN_WIDTH } from '../../constants';
 import Markers from '../../components/markers';
 import WaypointChecklist from '../../components/waypointChecklist';
 
-const GeoTrainingModal = ({ visible, onClose, markers, polygon, isPreview }) => {
+const GeoTrainingModal = ({ visible, onClose, markers, polygon, isPreview, routeId }) => {
 
     const [map, setMap] = useState(null);
 
@@ -76,7 +76,7 @@ const GeoTrainingModal = ({ visible, onClose, markers, polygon, isPreview }) => 
     const cleanUp = (completed) => {
         setIsStarted(false)
         setWaypointChecklist([])
-        onClose(isStarted, waypointChecklist, startTime, new Date(), completed);
+        onClose(isStarted, waypointChecklist, startTime, new Date(), completed, routeId, markers.length);
     }
 
     const startHandler = () => {
@@ -103,10 +103,8 @@ const GeoTrainingModal = ({ visible, onClose, markers, polygon, isPreview }) => 
     }
 
     const calcTimer = () => {
-        if (timer) {
-            timer.setSeconds(timer.getSeconds() + 1)
-        }
-        return timer ? `${timer.getHours()}:${timer.getMinutes()}` : null
+        let millis = Math.abs(startTime - new Date()); 
+        return `${Math.floor(millis / 1000 / 60) < 10 ? '0' + Math.floor(millis / 1000 / 60) : Math.floor(millis / 1000 / 60)}:${Math.floor(millis / 1000) % 60 < 10 ? '0' + (Math.floor(millis / 1000) % 60) : Math.floor(millis / 1000) % 60}`
     }
 
     const translateDialogComponents = {
@@ -160,8 +158,8 @@ const GeoTrainingModal = ({ visible, onClose, markers, polygon, isPreview }) => 
                     }}
                 >
                     <Polygon coordinates={polygon} strokeWidth={2} strokeColor={'red'} />
-                    <Markers markers={markers} onPress={marker => {
-                        setTitle(marker.properties.name)
+                    <Markers markers={markers} onPress={(marker, index) => {
+                        setTitle(`Waypoint ${index+1}: ${marker.properties.name}`)
                         setDescription(marker.properties.description)
                         setMarkerDialog(true)
                         Animated.timing(animatedValue, {
