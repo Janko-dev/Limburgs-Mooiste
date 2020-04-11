@@ -22,7 +22,7 @@ const ranking = props => {
             setUserRecord(users.find(item => user.uid === item.uid))
         })
         return unsubscribe;
-    }, [])
+    })
 
     const stageFunc = (i) => {
         let _height = 20;

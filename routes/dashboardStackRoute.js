@@ -3,11 +3,16 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import DashboardScreen from '../screens/dashboard/dashboardScreen'
 import { StyleSheet, Image, TouchableOpacity } from 'react-native';
+
 import { Colors } from '../constants';
 import ProgressionBar from '../components/progressionBar';
 import ChatBotModal from '../screens/modals/chatBotModal';
 
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import ChatBotModal from '../screens/modals/chatBotModal';
+
 const Stack = createStackNavigator();
+
 
 export default () => {
 
@@ -16,7 +21,6 @@ export default () => {
     const chatBotModalHandler = () => {
         setVisible(!visible);
     }
-
     return (
         <Stack.Navigator
             screenOptions={{
