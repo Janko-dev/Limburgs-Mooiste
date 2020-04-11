@@ -4,7 +4,7 @@ import { globalStyles, Colors } from '../../constants';
 
 const LoadingModal = ({isLoading}) => {
     return (
-        <Modal visible={isLoading} animationType='fade' transparent={true}>
+        <Modal visible={isLoading} animationType='fade' transparent={false}>
             <View style={[globalStyles.container]}>
                 <ActivityIndicator size="large" color={Colors.secondary} />
             </View>

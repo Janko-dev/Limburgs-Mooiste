@@ -1,10 +1,12 @@
-import React, { useState} from 'react';
+import React, {useState} from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import DashboardScreen from '../screens/dashboard/dashboardScreen'
-import { StyleSheet, Image } from 'react-native';
+import { StyleSheet, Image, TouchableOpacity } from 'react-native';
+
 import { Colors } from '../constants';
 import ProgressionBar from '../components/progressionBar';
+import ChatBotModal from '../screens/modals/chatBotModal';
 
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import ChatBotModal from '../screens/modals/chatBotModal';
@@ -17,9 +19,8 @@ export default () => {
     const [visible, setVisible] = useState(false);
 
     const chatBotModalHandler = () => {
-    setVisible(!visible);
+        setVisible(!visible);
     }
-    
     return (
         <Stack.Navigator
             screenOptions={{
@@ -28,7 +29,7 @@ export default () => {
                 headerRight: () => <ProgressionBar/>,
                 headerLeft: () => <TouchableOpacity onPress={chatBotModalHandler} >
                 <ChatBotModal visible={visible} onClose={chatBotModalHandler}></ChatBotModal>
-                <Image style={{ margin: 20, height: 30, width: 30, tintColor: Colors.primary}} source={require('../assets/chatbotButton.png')}/>
+                <Image style={{ margin: 20, height: 30, width: 30, tintColor: Colors.secondary}} source={require('../assets/chatbotButton.png')}/>
             </TouchableOpacity>
             }}
         >

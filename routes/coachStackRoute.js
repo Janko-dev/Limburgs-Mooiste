@@ -30,7 +30,7 @@ export default () => {
                 headerRight: () => <ProgressionBar />,
                 headerLeft: () => <TouchableOpacity onPress={chatBotModalHandler} >
                     <ChatBotModal visible={visible} onClose={chatBotModalHandler}></ChatBotModal>
-                    <Image style={{ margin: 20, height: 30, width: 30, tintColor: Colors.primary}} source={require('../assets/chatbotButton.png')}/>
+                    <Image style={{ margin: 20, height: 30, width: 30, tintColor: Colors.secondary}} source={require('../assets/chatbotButton.png')}/>
                 </TouchableOpacity>
 
             }}

@@ -62,7 +62,8 @@ export default {
                 level: 1,
                 activeSchedule: null,
                 achievements: [],
-                previousTrainingSessions: []
+                previousTrainingSessions: [],
+                currentTitle: 'Driewieler'
             })
     },
 
@@ -92,6 +93,10 @@ export default {
 
     getAchievements: () => {
         return firebase.firestore().collection("achievements").get();
+    },
+
+    getUserAchievements: (ids) => {
+        return firebase.firestore().collection('achievements').where(firebase.firestore.FieldPath.documentId(), 'in', ids).get()
     },
 
     getSchedule: (id) => {
@@ -154,4 +159,16 @@ export default {
             exp
         })
     },
+
+    setTitle: (currentTitle, uid) => {
+        return firebase.firestore().collection("users").doc(uid).update({
+            currentTitle
+        })
+    },
+
+    setShares: (totalShares, uid) => {
+        return firebase.firestore().collection("users").doc(uid).update({
+            totalShares
+        })
+    }
 }
