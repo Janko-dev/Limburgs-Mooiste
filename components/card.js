@@ -4,8 +4,6 @@ import { Colors, globalStyles } from '../constants'
 
 const CardBoxContainer = ({ onPress, title, description, length }) => {
 
-
-
     return (
         <TouchableOpacity onPress={onPress} style={styles.container}>
             <Text style={[globalStyles.headerText, styles.headText]}> {title} </Text>
