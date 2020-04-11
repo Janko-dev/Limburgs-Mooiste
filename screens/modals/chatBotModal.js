@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Modal, StyleSheet, View, TouchableOpacity, Text } from 'react-native';
-import { globalStyles, Colors } from '../../constants';
+import { globalStyles, Colors, SCREEN_HEIGHT } from '../../constants';
 import ChatBot from 'react-native-chatbot-expo';
 import firebase from '../../api/firebase';
 import ProgressionBar from '../../components/progressionBar';
@@ -19,7 +19,7 @@ const ChatBotModal = ({ visible, onClose }) => {
             return unsubscribe;
         }
 
-      }, [userRecord])
+      }, [])
 
       const steps = [
         {
@@ -182,17 +182,17 @@ const ChatBotModal = ({ visible, onClose }) => {
     return (
         <Modal animationType='slide' visible={visible}  >
                 <ChatBot headerComponent={
-                            <View style={{ flexDirection: 'row', height: 80}}>
-                            <View style={{flex: '2',  justifyContent: 'flex-end'}}>
-                                <TouchableOpacity onPress={onClose} style={{marginLeft: 10, marginBottom: 10, }} >
-                                    <Text style={{color: Colors.primary, fontSize: 16}}>Sluiten</Text>
+                        <View style={{ flexDirection: 'row', height: SCREEN_HEIGHT * 0.09, borderBottomColor: 'lightgray', borderBottomWidth: 0.5}}>
+                            <View style={{flex: 1,  justifyContent: 'flex-end'}}>
+                                <TouchableOpacity onPress={onClose} style={{marginLeft: '10%', marginBottom: '5%' }} >
+                                    <Text style={{color: Colors.primary, fontSize: SCREEN_HEIGHT * 0.019}}>Sluiten</Text>
                                 </TouchableOpacity>
                             </View>
-                            <View style={{flex: '2', justifyContent: 'flex-end', alignItems: 'flex-start'}}>
-                                <Text style={{fontSize: 17, fontWeight: '600', marginBottom: 10, marginLeft: 10}}>Chatbot</Text>
+                            <View style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center'}}>
+                                <Text style={{fontSize: SCREEN_HEIGHT * 0.019, fontWeight: '600', marginBottom: '5%'}}>Chatbot</Text>
             
                             </View>
-                            <View style={{flex: '1', justifyContent: 'flex-end', alignItems: 'center', paddingBottom: 10}}>
+                            <View style={{flex: 1, justifyContent: 'flex-end', alignItems: 'center', paddingBottom: '5%'}}>
                                 <ProgressionBar />
                             </View>
             
