@@ -8,9 +8,6 @@ import { Colors } from '../constants';
 import ProgressionBar from '../components/progressionBar';
 import ChatBotModal from '../screens/modals/chatBotModal';
 
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import ChatBotModal from '../screens/modals/chatBotModal';
-
 const Stack = createStackNavigator();
 
 

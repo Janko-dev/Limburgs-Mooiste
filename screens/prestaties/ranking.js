@@ -7,7 +7,6 @@ import firebase from '../../api/firebase';
 import ProfilePicture from 'react-native-profile-picture';
 
 const ranking = props => {
-    const [ranks, setRanks] = useState([]);
     const [users, setUsers] = useState([]);
     const [userRecord, setUserRecord] = useState(null)
     const [user, setUser] = useState(firebase.getCurrentUser());
@@ -22,7 +21,7 @@ const ranking = props => {
             setUserRecord(users.find(item => user.uid === item.uid))
         })
         return unsubscribe;
-    })
+    }, [])
 
     const stageFunc = (i) => {
         let _height = 20;
