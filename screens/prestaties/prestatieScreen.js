@@ -14,7 +14,6 @@ const PrestatieScreen = props => {
             <View style={styles.sectionBottom}>
                 <Achievements />
             </View>
-
         </View>
     )
 }

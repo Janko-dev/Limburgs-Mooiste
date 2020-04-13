@@ -6,10 +6,13 @@ import DescriptionAchievementModal from '../modals/descriptionAchievementModal';
 import firebase from '../../api/firebase';
 
 import { colors, Icon } from 'react-native-elements';
+import { FlatList } from 'react-native-gesture-handler';
 
 const achievements = props => {
     const [isVisible, setIsVisible] = useState(false);
     const [selectedItem, setSelectedItem] = useState();
+
+    const [refresh, setRefresh] = useState(false);
 
     const [category, setCategory] = useState('Snelheid');
 
@@ -46,6 +49,39 @@ const achievements = props => {
         setIsVisible(false);
     }
 
+    const refreshHandler = () => {
+        console.log("refreshing!");
+        setRefresh(false);
+    }
+
+    const listItem = (_badge) => {
+        if (userAchievements.includes(_badge.id)) {
+            return (
+                <View key={_badge.id}>
+                    <TouchableOpacity key={_badge.id} style={styles.badge}
+                        onPress={() => {
+                            setIsVisible(true);
+                            setSelectedItem(_badge);
+                        }}>
+                        <Text> {_badge.naam} ✔ </Text>
+                    </TouchableOpacity>
+                </View>
+            )
+        } else {
+            return (
+                <View key={_badge.id}>
+                    <TouchableOpacity key={_badge.id} style={styles.badge}
+                        onPress={() => {
+                            setIsVisible(true);
+                            setSelectedItem(_badge);
+                        }}>
+                        <Text> {_badge.naam} </Text>
+                    </TouchableOpacity>
+                </View>
+            )
+        }
+    }
+
     return (
         <View style={styles.container}>
             <DescriptionAchievementModal isVisible={isVisible} onClose={closeHandler} item={selectedItem}></DescriptionAchievementModal>
@@ -78,41 +114,13 @@ const achievements = props => {
                     )
                 }
             </View>
-            <ScrollView style={styles.sectionContent}>
-                {
-                    badgesMap.map(_badge => {
-                        if (category == _badge.type) {
-                            if (userAchievements.includes(_badge.id)) {
-                                return (
-                                    <View key={_badge.id}>
-                                        <TouchableOpacity key={_badge.id} style={styles.badge}
-                                            onPress={() => {
-                                                setIsVisible(true);
-                                                setSelectedItem(_badge);
-                                            }}>
-                                            <Text> {_badge.naam} ✔ </Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                )
-                            } else {
-                                return (
-                                    <View key={_badge.id}>
-                                        <TouchableOpacity key={_badge.id} style={styles.badge}
-                                            onPress={() => {
-                                                setIsVisible(true);
-                                                setSelectedItem(_badge);
-                                            }}>
-                                            <Text> {_badge.naam} </Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                )
-                            }
-                        }
-                    })
-                }
-            </ScrollView>
+            <FlatList data={badgesMap}
+                refreshing={refresh}
+                onRefresh={refreshHandler}
+                renderItem={({ item }) => { if (category == item.type) return listItem(item); }} 
+                />
         </View >
-    )
+    ) 
 }
 
 
