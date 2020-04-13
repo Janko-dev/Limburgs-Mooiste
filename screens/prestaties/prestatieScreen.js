@@ -3,14 +3,10 @@ import React, { useEffect, useState } from 'react';
 
 import Ranking from './ranking';
 import Achievements from './achievements';
-import LoadingModal from '../modals/loadingModal';
 
 const PrestatieScreen = props => {
     return (
         <View style={styles.container}>
-
-            {/* <LoadingModal isLoading={isLoading} /> */}
-
             <View style={styles.sectionTop}>
                 <Ranking />
             </View>
