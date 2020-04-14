@@ -38,11 +38,11 @@ const ProgressionBar = () => {
                     let _exp = doc.data().exp;
                     let maxExp = doc.data().maxExp;
                     let level = doc.data().level;
-                    let i = 1;
+                    // let i = 1;
                     while (_exp > maxExp) {
                         _exp -= maxExp;
-                        maxExp += 0.01 * maxExp * i;
-                        i++;
+                        maxExp += 0.01 * maxExp //* i;
+                        // i++;
                         level++;
                     }
                     firebase.setProgression(_exp, maxExp, level, user.uid);
@@ -83,7 +83,6 @@ const ProgressionBar = () => {
 
     const expModalHandler = () => {
         setVisibleProgression(!visibleProgression)
-        // setVisibleLevelUp(!visibleLevelUp);
     }
 
     const animationHandler = () => {

@@ -2,15 +2,20 @@ import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, Modal, TouchableOpacity, Animated, ScrollView, Alert } from 'react-native';
 import MapView, { Polygon, Marker } from 'react-native-maps';
 import { globalStyles, Colors, SCREEN_WIDTH } from '../../constants';
+import firebase from '../../api/firebase'
 import Markers from '../../components/markers';
 import WaypointChecklist from '../../components/waypointChecklist';
+import ResultScreen from '../training/resultScreen';
 
-const GeoTrainingModal = ({ visible, onClose, markers, polygon, isPreview, routeId }) => {
+const GeoTrainingModal = ({ visible, onClose, markers, polygon, isPreview, routeId, session }) => {
 
     const [map, setMap] = useState(null);
+    // const [user] = useState(firebase.getCurrentUser())
+    // const [userRecord, setUserRecord] = useState(null)
 
     const [animatedValue] = useState(new Animated.Value(0));
     const [animatedValueMoveX] = useState(new Animated.Value(0));
+    const [animatedValueResults] = useState(new Animated.Value(0));
 
     const [markerDialog, setMarkerDialog] = useState(false);
     const [description, setDescription] = useState('');
@@ -19,7 +24,7 @@ const GeoTrainingModal = ({ visible, onClose, markers, polygon, isPreview, route
     const [waypointChecklist, setWaypointChecklist] = useState([])
     const [isStarted, setIsStarted] = useState(false)
     const [startTime, setStartTime] = useState(null)
-    const [timer, setTimer] = useState(null)
+    const [resultData, setResultData] = useState(null)
 
     const [testLocation, setTestLocation] = useState({
         latitude: 50.85,
@@ -30,7 +35,6 @@ const GeoTrainingModal = ({ visible, onClose, markers, polygon, isPreview, route
 
     useEffect(() => {
         if (isStarted) {
-
             if (waypointChecklist.length == 0) {
                 checkWaypoint(0);
             } else {
@@ -76,7 +80,26 @@ const GeoTrainingModal = ({ visible, onClose, markers, polygon, isPreview, route
     const cleanUp = (completed) => {
         setIsStarted(false)
         setWaypointChecklist([])
-        onClose(isStarted, waypointChecklist, startTime, new Date(), completed, routeId, markers.length);
+        if (isStarted) {
+
+            Animated.timing(animatedValueResults, {
+                toValue: 1,
+                duration: 400,
+                useNativeDriver: true
+            }).start()
+
+            setResultData({
+                isCompleted: completed,
+                startTime,
+                stopTime: new Date(),
+                routeId,
+                waypointReached: waypointChecklist.length,
+                totalWaypoints: markers.length
+            })
+        } else {
+            onClose()
+        }
+
     }
 
     const startHandler = () => {
@@ -86,9 +109,6 @@ const GeoTrainingModal = ({ visible, onClose, markers, polygon, isPreview, route
             useNativeDriver: true
         }).start();
         setStartTime(new Date());
-        let t = new Date();
-        t.setHours(0, 0, 0, 0);
-        setTimer(t);
         setIsStarted(true);
     }
 
@@ -103,8 +123,8 @@ const GeoTrainingModal = ({ visible, onClose, markers, polygon, isPreview, route
     }
 
     const calcTimer = () => {
-        let millis = Math.abs(startTime - new Date()); 
-        return `${Math.floor(millis / 1000 / 60) < 10 ? '0' + Math.floor(millis / 1000 / 60) : Math.floor(millis / 1000 / 60)}:${Math.floor(millis / 1000) % 60 < 10 ? '0' + (Math.floor(millis / 1000) % 60) : Math.floor(millis / 1000) % 60}`
+        let seconds = Math.abs(startTime - new Date()) / 1000;
+        return `${Math.floor(seconds / 60) < 10 ? '0' + Math.floor(seconds / 60) : Math.floor(seconds / 60)}:${Math.floor(seconds) % 60 < 10 ? '0' + (Math.floor(seconds) % 60) : Math.floor(seconds) % 60}`
     }
 
     const translateDialogComponents = {
@@ -113,6 +133,17 @@ const GeoTrainingModal = ({ visible, onClose, markers, polygon, isPreview, route
                 translateY: animatedValue.interpolate({
                     inputRange: [0, 1],
                     outputRange: ['0%', '-250%']
+                })
+            }
+        ]
+    }
+
+    const translateView = {
+        transform: [
+            {
+                translateX: animatedValueResults.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0, SCREEN_WIDTH * 2]
                 })
             }
         ]
@@ -135,16 +166,27 @@ const GeoTrainingModal = ({ visible, onClose, markers, polygon, isPreview, route
         ]
     }
 
+    const translateCloseButton = {
+        transform: [
+            {
+                translateX: animatedValueMoveX.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0, SCREEN_WIDTH]
+                })
+            }
+        ]
+    }
+
     return (
         <Modal visible={visible} animationType='slide'>
-            <View style={{ flex: 1 }}>
+            <Animated.View style={[styles.absoluteContainer, translateView]}>
                 <MapView
                     ref={map => setMap(map)}
                     style={{ flex: 1 }}
                     loadingEnabled={true}
                     showsCompass={false}
                     showsUserLocation={!isPreview}
-                    onUserLocationChange={(e) => console.log(e.nativeEvent.coordinate)}
+                    onUserLocationChange={(e) => setUserLocation(e.nativeEvent.coordinate)}
                     onMapReady={() => map.fitToElements(true)}
                     onPress={() => {
                         if (markerDialog) {
@@ -159,7 +201,7 @@ const GeoTrainingModal = ({ visible, onClose, markers, polygon, isPreview, route
                 >
                     <Polygon coordinates={polygon} strokeWidth={2} strokeColor={'red'} />
                     <Markers markers={markers} onPress={(marker, index) => {
-                        setTitle(`Waypoint ${index+1}: ${marker.properties.name}`)
+                        setTitle(`Waypoint ${index + 1}: ${marker.properties.name}`)
                         setDescription(marker.properties.description)
                         setMarkerDialog(true)
                         Animated.timing(animatedValue, {
@@ -172,9 +214,11 @@ const GeoTrainingModal = ({ visible, onClose, markers, polygon, isPreview, route
                     <Marker draggable onDrag={e => setTestLocation(e.nativeEvent.coordinate)} coordinate={testLocation} pinColor='purple' />
                 </MapView>
 
-                <TouchableOpacity style={[styles.button, styles.closeButton]} onPress={closeModalHandler}>
-                    <Text style={[globalStyles.headerText, { color: Colors.secondary }]}>Sluiten</Text>
-                </TouchableOpacity>
+                <Animated.View style={[styles.closeButton, translateCloseButton]}>
+                    <TouchableOpacity style={[styles.button]} onPress={closeModalHandler}>
+                        <Text style={[globalStyles.headerText, { color: Colors.secondary }]}>Sluiten</Text>
+                    </TouchableOpacity>
+                </Animated.View>
 
                 {!isPreview &&
                     <Animated.View style={[styles.startButton, translateButton]}>
@@ -216,7 +260,10 @@ const GeoTrainingModal = ({ visible, onClose, markers, polygon, isPreview, route
                 </Animated.View>
 
                 <WaypointChecklist positionStyle={styles.checklist} markers={markers} checked={waypointChecklist} />
-            </View>
+            </Animated.View>
+            <Animated.View style={[styles.absoluteContainer, { left: -SCREEN_WIDTH * 2 }, translateView]}>
+                <ResultScreen onClose={(data) => onClose(true, data)} session={session} data={resultData} />
+            </Animated.View>
         </Modal>
     )
 }
@@ -224,6 +271,13 @@ const GeoTrainingModal = ({ visible, onClose, markers, polygon, isPreview, route
 export default GeoTrainingModal
 
 const styles = StyleSheet.create({
+
+    absoluteContainer: {
+        height: '100%',
+        width: '100%',
+        position: 'absolute',
+    },
+
     button: {
         backgroundColor: 'white',
         flex: 1,
@@ -262,7 +316,7 @@ const styles = StyleSheet.create({
     timerContainer: {
         position: 'absolute',
         top: '5%',
-        right: '130%',
+        right: '90%',
         width: '50%',
         height: '10%',
     },
