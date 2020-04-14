@@ -182,7 +182,7 @@ const ChatBotModal = ({ visible, onClose }) => {
     return (
         <Modal animationType='slide' visible={visible}  >
                 <ChatBot headerComponent={
-                        <View style={{ flexDirection: 'row', height: SCREEN_HEIGHT * 0.09, borderBottomColor: 'lightgray', borderBottomWidth: 0.5}}>
+                        <View style={{ flexDirection: 'row', height: 80, borderBottomColor: 'lightgray', borderBottomWidth: 0.5}}>
                             <View style={{flex: 1,  justifyContent: 'flex-end'}}>
                                 <TouchableOpacity onPress={onClose} style={{marginLeft: '10%', marginBottom: '5%' }} >
                                     <Text style={{color: Colors.primary, fontSize: SCREEN_HEIGHT * 0.019}}>Sluiten</Text>

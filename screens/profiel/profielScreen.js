@@ -80,7 +80,7 @@ const ProfielScreen = props => {
             <View style={{ height: SCREEN_HEIGHT * 0.16, backgroundColor: 'white', borderColor: 'lightgray', borderWidth: 0.25 }}>
                 <View style={{ flexDirection: 'row', flex: 2, height: '100%' }} >
                     <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-                        {firebase.getCurrentUser().photoURL ? <Avatar source={{uri: firebase.getCurrentUser().photoURL}} size="large" rounded ></Avatar> : <Avatar title={firebase.getCurrentUser().email.substring(0, 2).toUpperCase()} size="large" rounded ></Avatar>}
+                        {firebase.getCurrentUser()?.photoURL ? <Avatar source={{uri: firebase.getCurrentUser().photoURL}} size="large" rounded ></Avatar> : <Avatar title={firebase.getCurrentUser().email.substring(0, 2).toUpperCase()} size="large" rounded ></Avatar>}
 
                     </View>
                     <View style={{ justifyContent: 'center', flex: 3 }}>

@@ -1,41 +1,51 @@
 import React, { useEffect, useState } from 'react';
 import { globalStyles, Colors } from '../../constants';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
 
+import LoadingModal from '../modals/loadingModal';
 import firebase from '../../api/firebase';
 
 import ProfilePicture from 'react-native-profile-picture';
 
-const ranking = props => {
-    const [ranks, setRanks] = useState([]);
+const ranking = () => {
     const [users, setUsers] = useState([]);
     const [userRecord, setUserRecord] = useState(null)
     const [user, setUser] = useState(firebase.getCurrentUser());
+    const [selectedValue, setSelectedValue] = useState("level");
+    const [refresh, setRefresh] = useState(false);
+    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        const unsubscribe = firebase.onUsersChange(result => {
-            setUsers(() => {
-                return result.docs.map(item => {
-                    return { ...item.data(), uid: item.id }
-                }).sort((a, b) => b.level - a.level)
-            })
-            setUserRecord(users.find(item => user.uid === item.uid))
-        })
-        return unsubscribe;
-    })
+        getData();
+    }, [])
 
-    const stageFunc = (i) => {
-        let _height = 20;
-        let combinedHeight = 0;
+    const getData = async () => {
+        setIsLoading(true);
+        const result = await firebase.getUsers();
 
-        for (let index = 0; index < 3; index++) {
-            if (users[index]?.level) {
-                combinedHeight += users[index].level;
-            }
-        }
+        let _users = result.docs.map(item => {
+            return { ...item.data(), uid: item.id }
+        }).sort((a, b) => b[selectedValue] - a[selectedValue]);
 
-        _height = _height + (combinedHeight / (i+1)) * 2;
-        
+        setUsers(_users);
+
+        setUserRecord({ ..._users.find(item => user.uid === item.uid), rank: _users.findIndex(item => user.uid === item.uid) + 1 });
+
+        setIsLoading(false);
+    }
+
+    const refreshHandler = () => {
+        getData();
+        setRefresh(false);
+    }
+
+    const map = function (n, start1, stop1, start2, stop2) {
+        return ((n - start1) / (stop1 - start1)) * (stop2 - start2) + start2;
+    };
+
+    const stageFunc = (i, criteria) => {
+        _height = map(users[i][criteria], users[2][criteria], users[0][criteria] + 5, 20, 100);
+
         return (
             <View style={styles.stageRow} key={i}>
                 <View style={[styles.stagePillar, { height: _height }]}>
@@ -56,19 +66,43 @@ const ranking = props => {
         )
     }
 
+    const UserRecord = (user) => {
+        let id = users.indexOf(user) + 1;
+        return (
+            <View style={styles.userDisplay} key={id}>
+                <Text style={[globalStyles.bodyText, { fontSize: 13 }]}> {id}. {user?.username} - {user?.level} </Text>
+            </View>
+        )
+    }
+
     return (
         <View style={styles.container}>
-            <View style={[styles.sectionTop, styles.shadow]}>
-                <Text style={[globalStyles.bodyText, { color: '#fff' }]}> Dag Leaderboard </Text>
-            </View>
-            <View style={styles.sectionBottom}>
-                <View style={styles.stage}>
-                    {users[1] ? stageFunc(1) : null}
-                    {users[0] ? stageFunc(0) : null}
-                    {users[2] ? stageFunc(2) : null}
+            <LoadingModal isLoading={isLoading} />
+            <View style={styles.topContainer}>
+                <View style={[styles.sectionTop, styles.shadow]}>
+                    <Text style={[globalStyles.bodyText, { color: '#fff' }]}> Dag Leaderboard </Text>
                 </View>
-                <View style={[styles.displayRank, styles.shadow]}>
-                    <Text style={[globalStyles.bodyText, { color: '#fff' }]}> U bent Level: {userRecord?.level} </Text>
+                <View style={styles.sectionBottom}>
+                    <View style={styles.stage}>
+                        {users[1] ? stageFunc(1, selectedValue) : null}
+                        {users[0] ? stageFunc(0, selectedValue) : null}
+                        {users[2] ? stageFunc(2, selectedValue) : null}
+                    </View>
+                    <View style={[styles.displayRank, styles.shadow]}>
+                        <Text style={[globalStyles.bodyText, { color: '#fff' }]}> U bent gepositioneerd op plaats: {userRecord?.rank} </Text>
+                    </View>
+                </View>
+            </View>
+            <View style={styles.bottomContainer}>
+                <View style={[styles.topSection, styles.shadow]}>
+                    <Text style={[globalStyles.bodyText, { color: '#fff' }]}> Ranking level </Text>
+                </View>
+                <View style={styles.bottomSection}>
+                    <FlatList data={users}
+                        keyExtractor={(data, index) => index.toString()}
+                        refreshing={refresh}
+                        onRefresh={refreshHandler}
+                        renderItem={({ item }) => { return UserRecord(item); }} />
                 </View>
             </View>
         </View>
@@ -77,34 +111,63 @@ const ranking = props => {
 
 
 const styles = StyleSheet.create({
+    // Container
     container: {
         backgroundColor: '#fff',
         justifyContent: 'center',
         marginHorizontal: 15,
         flex: 1,
     },
+    topContainer: {
+        borderBottomColor: Colors.primary,
+        flex: 0.8,
+    },
+    bottomContainer: {
+        flex: 1,
+    },
 
+    // Ranking top
     sectionTop: {
         justifyContent: 'center',
+        flexDirection: 'row',
         backgroundColor: Colors.primary,
         alignItems: 'center',
         borderBottomEndRadius: 10,
         borderBottomStartRadius: 10,
-        flex: 1,
+        flex: 0.2,
     },
     sectionBottom: {
-        justifyContent: 'space-between',
-        marginBottom: 10,
-        flex: 4,
+        flex: 1,
     },
 
+    // Ranking Bottom
+    topSection: {
+        justifyContent: 'center',
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderBottomEndRadius: 10,
+        backgroundColor: Colors.primary,
+        borderBottomStartRadius: 10,
+        flex: 0.2,
+        marginBottom: 5,
+    },
+    bottomSection: {
+        flex: 1,
+    },
+    userDisplay: {
+        marginBottom: 5,
+        padding: 10,
+        borderBottomWidth: 0.3,
+    },
+
+    // Display stages
     displayRank: {
         backgroundColor: Colors.primary,
         alignItems: 'center',
         padding: 10,
-        borderRadius: 10,
+        borderTopEndRadius: 10,
+        borderTopStartRadius: 10,
     },
-
     stage: {
         flexDirection: 'row',
         padding: 4,
@@ -115,7 +178,6 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
         flex: 1,
     },
-
     stagePillar: {
         backgroundColor: Colors.tertiary,
         borderTopRightRadius: 10,
@@ -129,6 +191,7 @@ const styles = StyleSheet.create({
         padding: 5,
     },
 
+    // Globals
     shadow: {
         shadowColor: '#000',
         shadowOffset: { width: 2, height: 2 },

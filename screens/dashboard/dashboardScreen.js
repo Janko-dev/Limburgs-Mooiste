@@ -111,7 +111,6 @@ const DashboardScreen = () => {
                 ItemSeparatorComponent={renderSeparator}
                 refreshing={refreshState}
                 onRefresh={handleRefresh}
-                keyExtractor={(data) => data.id.toString()}
                 renderItem={(data) => <FeedListItem title={data.item.info}/>}
             />
         </View>
