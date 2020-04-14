@@ -82,8 +82,8 @@ const ProgressionBar = () => {
     })
 
     const expModalHandler = () => {
-        // setVisibleProgression(!visibleProgression
-        setVisibleLevelUp(!visibleLevelUp);
+        setVisibleProgression(!visibleProgression)
+        // setVisibleLevelUp(!visibleLevelUp);
     }
 
     const animationHandler = () => {
