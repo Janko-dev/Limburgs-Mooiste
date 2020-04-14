@@ -35,6 +35,7 @@ const ranking = () => {
     }
 
     const refreshHandler = () => {
+        getData();
         setRefresh(false);
     }
 
@@ -43,7 +44,7 @@ const ranking = () => {
     };
 
     const stageFunc = (i, criteria) => {
-        _height = map(users[i][criteria], users[2][criteria], users[0][criteria] + 5, 20, 130);
+        _height = map(users[i][criteria], users[2][criteria], users[0][criteria] + 5, 20, 100);
 
         return (
             <View style={styles.stageRow} key={i}>
