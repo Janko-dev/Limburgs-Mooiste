@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import Modal from 'react-native-modal';
 import { Icon } from 'react-native-elements';
-import { Colors, SCREEN_HEIGHT, globalStyles } from '../../constants';
+import { Colors, globalStyles } from '../../constants';
 
 
 const DescriptionAchievementModal = ({ isVisible, onClose, item }) => {

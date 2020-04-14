@@ -43,7 +43,7 @@ const ranking = () => {
     };
 
     const stageFunc = (i, criteria) => {
-        _height = map(users[i][criteria], users[2][criteria], users[0][criteria] + 5, 20, 180);
+        _height = map(users[i][criteria], users[2][criteria], users[0][criteria] + 5, 20, 130);
 
         return (
             <View style={styles.stageRow} key={i}>
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     },
     topContainer: {
         borderBottomColor: Colors.primary,
-        flex: 1,
+        flex: 0.8,
     },
     bottomContainer: {
         flex: 1,
