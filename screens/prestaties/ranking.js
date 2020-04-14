@@ -12,18 +12,31 @@ const ranking = () => {
     const [userRecord, setUserRecord] = useState(null)
     const [user, setUser] = useState(firebase.getCurrentUser());
     const [selectedValue, setSelectedValue] = useState("level");
+    const [refresh, setRefresh] = useState(false);
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        firebase.getUsers().then(result => {
-            let _users = result.docs.map(item => {
-                return { ...item.data(), uid: item.id }
-            }).sort((a, b) => b[selectedValue] - a[selectedValue])
-            setUsers(_users)
-            setUserRecord({ ..._users.find(item => user.uid === item.uid), rank: _users.findIndex(item => user.uid === item.uid) + 1 })
-            setIsLoading(false)
-        })
+        getData();
     }, [])
+
+    const getData = async () => {
+        setIsLoading(true);
+        const result = await firebase.getUsers();
+
+        let _users = result.docs.map(item => {
+            return { ...item.data(), uid: item.id }
+        }).sort((a, b) => b[selectedValue] - a[selectedValue]);
+
+        setUsers(_users);
+
+        setUserRecord({ ..._users.find(item => user.uid === item.uid), rank: _users.findIndex(item => user.uid === item.uid) + 1 });
+
+        setIsLoading(false);
+    }
+
+    const refreshHandler = () => {
+        setRefresh(false);
+    }
 
     const map = function (n, start1, stop1, start2, stop2) {
         return ((n - start1) / (stop1 - start1)) * (stop2 - start2) + start2;
@@ -85,7 +98,9 @@ const ranking = () => {
                 </View>
                 <View style={styles.bottomSection}>
                     <FlatList data={users}
-                        keyExtractor={(data,index) => index.toString() }
+                        keyExtractor={(data, index) => index.toString()}
+                        refreshing={refresh}
+                        onRefresh={refreshHandler}
                         renderItem={({ item }) => { return UserRecord(item); }} />
                 </View>
             </View>
@@ -103,6 +118,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     topContainer: {
+        borderBottomColor: Colors.primary,
         flex: 1,
     },
     bottomContainer: {
@@ -120,7 +136,6 @@ const styles = StyleSheet.create({
         flex: 0.2,
     },
     sectionBottom: {
-        marginBottom: 2,
         flex: 1,
     },
 
@@ -128,9 +143,9 @@ const styles = StyleSheet.create({
     topSection: {
         justifyContent: 'center',
         flexDirection: 'row',
-        backgroundColor: Colors.primary,
         alignItems: 'center',
         borderBottomEndRadius: 10,
+        backgroundColor: Colors.primary,
         borderBottomStartRadius: 10,
         flex: 0.2,
         marginBottom: 5,
@@ -149,7 +164,8 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.primary,
         alignItems: 'center',
         padding: 10,
-        borderRadius: 10,
+        borderTopEndRadius: 10,
+        borderTopStartRadius: 10,
     },
     stage: {
         flexDirection: 'row',

@@ -10,14 +10,10 @@ const achievements = ({ user }) => {
     const [isVisible, setIsVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [selectedItem, setSelectedItem] = useState();
-
     const [refresh, setRefresh] = useState(false);
-
     const [category, setCategory] = useState('Snelheid');
-
     const [badgesMap, setBadgesMap] = useState([]);
     const [categoryMap, setCategoryMap] = useState([]);
-
     const [userAchievements, setUserAchievements] = useState([]);
 
     useEffect(() => {
@@ -59,28 +55,6 @@ const achievements = ({ user }) => {
         setCategoryMap(_categoryMap);
         setBadgesMap(_badgesMap);
         setIsLoading(false);
-        
-        // firebase.getAchievements().then(result => {
-        //     setBadgesMap([]);
-        //     let _categoryMap = []
-
-        //     result.docs.forEach(doc => {
-        //         let badge = doc.data();
-        //         badge.id = doc.id;
-
-        //         let _category = {};
-        //         _category.id = badge.id;
-        //         _category.naam = badge.type;
-
-        //         setBadgesMap(prevBadges => [...prevBadges, badge]);
-
-        //         if (!_categoryMap.includes(_category.naam)) {
-        //             _categoryMap.push(_category.naam);
-        //         }
-        //     })
-        //     setCategoryMap(_categoryMap);
-        // })
-        // setIsLoading(false);
     }
 
     const closeHandler = () => {
