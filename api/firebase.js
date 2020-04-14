@@ -63,7 +63,8 @@ export default {
                 level: 1,
                 activeSchedule: null,
                 achievements: [],
-                previousTrainingSessions: []
+                previousTrainingSessions: [],
+                currentTitle: 'Driewieler'
             })
     },
 
@@ -95,6 +96,10 @@ export default {
         return firebase.firestore().collection("achievements").get();
     },
 
+    getUserAchievements: (ids) => {
+        return firebase.firestore().collection('achievements').where(firebase.firestore.FieldPath.documentId(), 'in', ids).get()
+    },
+
     getSchedule: (id) => {
         return firebase.firestore().collection("trainingsSchema").doc(id).get();
     },
@@ -121,6 +126,16 @@ export default {
         })
     },
 
+    //TODO: api beschrijving
+    incrementCurrentScheduleSession: (uid, activeSchedule) => {
+        return firebase.firestore().collection("users").doc(uid).update({
+            activeSchedule: {
+                ...activeSchedule,
+                currentSession: activeSchedule.currentSession + 1,
+            }
+        })
+    },
+
     deleteActiveSchedule: (uid) => {
         return firebase.firestore().collection("users").doc(uid).update({
             activeSchedule: null
@@ -135,13 +150,6 @@ export default {
         return firebase.database().ref().once("value", callback);
     },
 
-    // setMaxExp: (maxExp, previousMaxExp, uid) => {
-    //     return firebase.firestore().collection("users").doc(uid).update({
-    //         maxExp,
-    //         previousMaxExp
-    //     })
-    // },
-
     setProgression: (exp, maxExp, level, uid) => {
         return firebase.firestore().collection("users").doc(uid).update({
             exp,
@@ -155,4 +163,21 @@ export default {
             exp
         })
     },
+  
+  //TODO: api beschrijving
+    updatePreviousTrainingSession: (uid, previousTrainingSessions) => {
+        return firebase.firestore().collection("users").doc(uid).update({previousTrainingSessions})
+    },
+  
+    setTitle: (currentTitle, uid) => {
+        return firebase.firestore().collection("users").doc(uid).update({
+            currentTitle
+        })
+    },
+
+    setShares: (totalShares, uid) => {
+        return firebase.firestore().collection("users").doc(uid).update({
+            totalShares
+        })
+    }
 }

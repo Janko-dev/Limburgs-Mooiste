@@ -20,6 +20,7 @@
     "base-64": "^0.1.0",
     "expo": "~36.0.0",
     "expo-facebook": "^8.0.0",
+    "expo-file-system": "~8.0.0",
     "firebase": "^7.10.0",
     "firebase-admin": "^8.10.0",
     "react": "~16.9.0",
@@ -35,6 +36,7 @@
     "react-native-maps": "0.26.1",
     "react-native-modal": "^11.5.6",
     "react-native-paper": "^3.6.0",
+    "react-native-picker-view": "^1.0.6",
     "react-native-profile-picture": "^1.0.0",
     "react-native-progress": "^4.0.3",
     "react-native-progress-bar-animated": "^1.0.6",
@@ -47,7 +49,9 @@
     "react-native-voice": "^0.3.0",
     "react-native-web": "~0.11.7",
     "react-simple-chatbot": "^0.6.1",
-    "styled-components": "^5.0.1"
+    "shorthash": "0.0.2",
+    "styled-components": "^5.0.1",
+    "react-native-svg": "9.13.3"
   },
   "devDependencies": {
     "babel-preset-expo": "~8.0.0",
