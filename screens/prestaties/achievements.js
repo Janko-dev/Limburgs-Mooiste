@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { globalStyles, Colors } from '../../constants';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, FlatList } from 'react-native';
 
 import DescriptionAchievementModal from '../modals/descriptionAchievementModal';
 import LoadingModal from '../modals/loadingModal';
 import firebase from '../../api/firebase';
 
-import { FlatList } from 'react-native-gesture-handler';
-
-const achievements = props => {
+const achievements = ({ user }) => {
     const [isVisible, setIsVisible] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [selectedItem, setSelectedItem] = useState();
@@ -23,105 +21,121 @@ const achievements = props => {
     const [userAchievements, setUserAchievements] = useState([]);
 
     useEffect(() => {
-        firebase.getAchievements().then(result => {
-            firebase.getUserFromDB(firebase.getCurrentUser().uid).then(request => {
-                setUserAchievements(request.data().achievements);
-            });
-
-            setBadgesMap([]);
-            setCategoryMap([]);
-
-            return result.docs.map(doc => {
-                let badge = doc.data();
-                badge.id = doc.id;
-
-                let _category = {};
-                _category.id = badge.id;
-                _category.naam = badge.type;
-
-                setBadgesMap(prevBadges => [...prevBadges, badge]);
-                setCategoryMap(prevCategory => [...prevCategory, _category]);
-                return doc.data();
+        if (user) {
+            const unsubscribe = firebase.onUserDataChange(user.uid, doc => {
+                setUserAchievements(doc.data().achievements)
             })
+            return unsubscribe
+        }
+    }, [userAchievements])
+
+    useEffect(() => {
+        getData();
+    }, [])
+
+    const getData = async () => {
+        setIsLoading(true);
+
+        const result = await firebase.getAchievements();
+
+        let _categoryMap = [];
+        let _badgesMap = [];
+
+        result.docs.forEach(doc => {
+            let badge = doc.data();
+            badge.id = doc.id;
+            
+            let _category = {};
+            _category.id = badge.id;
+            _category.naam = badge.type;
+
+            _badgesMap.push(badge);
+
+            if (!_categoryMap.includes(_category.naam)) {
+                _categoryMap.push(_category.naam);
+            }
         })
 
+        setCategoryMap(_categoryMap);
+        setBadgesMap(_badgesMap);
         setIsLoading(false);
-    }, [])
+        
+        // firebase.getAchievements().then(result => {
+        //     setBadgesMap([]);
+        //     let _categoryMap = []
+
+        //     result.docs.forEach(doc => {
+        //         let badge = doc.data();
+        //         badge.id = doc.id;
+
+        //         let _category = {};
+        //         _category.id = badge.id;
+        //         _category.naam = badge.type;
+
+        //         setBadgesMap(prevBadges => [...prevBadges, badge]);
+
+        //         if (!_categoryMap.includes(_category.naam)) {
+        //             _categoryMap.push(_category.naam);
+        //         }
+        //     })
+        //     setCategoryMap(_categoryMap);
+        // })
+        // setIsLoading(false);
+    }
 
     const closeHandler = () => {
         setIsVisible(false);
     }
 
     const refreshHandler = () => {
-        console.log("refreshing!");
+        getData();
         setRefresh(false);
     }
 
     const listItem = (_badge) => {
-        if (userAchievements.includes(_badge.id)) {
-            return (
-                <View key={_badge.id}>
-                    <TouchableOpacity key={_badge.id} style={styles.badge}
-                        onPress={() => {
-                            setIsVisible(true);
-                            setSelectedItem(_badge);
-                        }}>
-                        <Text> {_badge.naam} ✔ </Text>
-                    </TouchableOpacity>
-                </View>
-            )
-        } else {
-            return (
-                <View key={_badge.id}>
-                    <TouchableOpacity key={_badge.id} style={styles.badge}
-                        onPress={() => {
-                            setIsVisible(true);
-                            setSelectedItem(_badge);
-                        }}>
-                        <Text> {_badge.naam} </Text>
-                    </TouchableOpacity>
-                </View>
-            )
-        }
+        return (
+            <View key={_badge.id}>
+                <TouchableOpacity key={_badge.id} style={styles.badge}
+                    onPress={() => {
+                        setIsVisible(true);
+                        setSelectedItem(_badge);
+                    }}>
+                    {userAchievements.includes(_badge.id) ?
+                        <Text> {_badge.naam} ✔ </Text> :
+                        <Text> {_badge.naam} </Text>}
+
+                </TouchableOpacity>
+            </View>
+        )
     }
 
     return (
         <View style={styles.container}>
-            <LoadingModal isLoading={isLoading} />
             <DescriptionAchievementModal isVisible={isVisible} onClose={closeHandler} item={selectedItem}></DescriptionAchievementModal>
+            <LoadingModal isLoading={isLoading} />
             <View style={styles.sectionHead}>
                 {
                     categoryMap.map(
-                        item => {
-                            if (category == item.naam) {
-                                return (
-                                    <TouchableOpacity key={item.id}
-                                        style={styles.sectionHeadButtonSelect}
-                                        onPress={() => {
-                                            setCategory(item.Naam);
-                                        }}>
-                                        <Text style={[globalStyles.bodyText, { fontSize: 13 }]}>{item.naam}</Text>
-                                    </TouchableOpacity>
-                                )
-                            } else {
-                                return (
-                                    <TouchableOpacity key={item.id}
-                                        style={styles.sectionHeadButton}
-                                        onPress={() => {
-                                            setCategory(item.naam);
-                                        }}>
-                                        <Text style={[globalStyles.bodyText, { fontSize: 13 }]}>{item.naam}</Text>
-                                    </TouchableOpacity>
-                                )
-                            }
+                        (item, index) => {
+                            return (
+                                <TouchableOpacity key={index}
+                                    style={item === category ? styles.sectionHeadButtonSelect : styles.sectionHeadButton}
+                                    onPress={() => {
+                                        setCategory(item);
+                                    }}>
+                                    <Text style={[globalStyles.bodyText, { fontSize: 13 }]}>{item}</Text>
+                                </TouchableOpacity>
+                            )
                         }
                     )
                 }
             </View>
-            <FlatList data={badgesMap}
+            <FlatList
+                data={badgesMap}
                 refreshing={refresh}
                 onRefresh={refreshHandler}
-                renderItem={({ item }) => { if (category == item.type) return listItem(item); }}
+                keyExtractor={(item, index) => { index.toString() }}
+                renderItem={({ item }) => category == item.type ? listItem(item) : null}
             />
         </View >
     )

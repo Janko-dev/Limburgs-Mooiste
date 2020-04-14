@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { globalStyles, Colors } from '../../constants';
-import { View, Text, StyleSheet, Picker } from 'react-native';
+import { View, Text, StyleSheet, FlatList } from 'react-native';
 
 import LoadingModal from '../modals/loadingModal';
 import firebase from '../../api/firebase';
 
 import ProfilePicture from 'react-native-profile-picture';
-import { FlatList } from 'react-native-gesture-handler';
 
 const ranking = () => {
     const [users, setUsers] = useState([]);
@@ -86,7 +85,7 @@ const ranking = () => {
                 </View>
                 <View style={styles.bottomSection}>
                     <FlatList data={users}
-                        keyExtractor={(data) => { users.indexOf(data).toString() }}
+                        keyExtractor={(data,index) => index.toString() }
                         renderItem={({ item }) => { return UserRecord(item); }} />
                 </View>
             </View>

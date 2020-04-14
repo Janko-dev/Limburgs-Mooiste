@@ -1,6 +1,7 @@
 import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
 import { globalStyles, Colors } from '../../constants';
 import React, { useEffect, useState } from 'react';
+import firebase from '../../api/firebase'
 
 import Ranking from './ranking';
 import Achievements from './achievements';
@@ -10,28 +11,18 @@ const PrestatieScreen = props => {
     const [headers, setHeaders] = new useState([{ id: 1, name: "Ranking" }, { id: 2, name: "Achievements" }])
 
     const Content = () => {
-        if (select == "Ranking") return <Ranking />
-        if (select == "Achievements") return <Achievements />
+        if (select == "Ranking") return <Ranking user={firebase.getCurrentUser()} />
+        if (select == "Achievements") return <Achievements user={firebase.getCurrentUser()} />
     }
 
     const Header = (item) => {
-        if (item.name == select)
-            return (
-                <TouchableOpacity style={styles.sectionHeadButtonSelect}
-                    onPress={() => { setSelect(item.name) }}
-                    key={item.id}>
-                    <Text style={[globalStyles.bodyText, { fontSize: 13 }]}> {item.name} </Text>
-                </TouchableOpacity>
-            )
-        else {
-            return (
-                <TouchableOpacity style={styles.sectionHeadButton}
-                    onPress={() => { setSelect(item.name) }}
-                    key={item.id}>
-                    <Text style={[globalStyles.bodyText, { fontSize: 13 }]}> {item.name} </Text>
-                </TouchableOpacity>
-            )
-        }
+        return (
+            <TouchableOpacity style={item.name === select ? styles.sectionHeadButtonSelect : styles.sectionHeadButton}
+                onPress={() => { setSelect(item.name) }}
+                key={item.id}>
+                <Text style={[globalStyles.bodyText, { fontSize: 13 }]}> {item.name} </Text>
+            </TouchableOpacity>
+        )
     }
 
     return (
