@@ -3,13 +3,14 @@ import { globalStyles, Colors } from '../../constants';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 
 import DescriptionAchievementModal from '../modals/descriptionAchievementModal';
+import LoadingModal from '../modals/loadingModal';
 import firebase from '../../api/firebase';
 
-import { colors, Icon } from 'react-native-elements';
 import { FlatList } from 'react-native-gesture-handler';
 
 const achievements = props => {
     const [isVisible, setIsVisible] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [selectedItem, setSelectedItem] = useState();
 
     const [refresh, setRefresh] = useState(false);
@@ -43,6 +44,8 @@ const achievements = props => {
                 return doc.data();
             })
         })
+
+        setIsLoading(false);
     }, [])
 
     const closeHandler = () => {
@@ -84,6 +87,7 @@ const achievements = props => {
 
     return (
         <View style={styles.container}>
+            <LoadingModal isLoading={isLoading} />
             <DescriptionAchievementModal isVisible={isVisible} onClose={closeHandler} item={selectedItem}></DescriptionAchievementModal>
             <View style={styles.sectionHead}>
                 {
@@ -117,10 +121,10 @@ const achievements = props => {
             <FlatList data={badgesMap}
                 refreshing={refresh}
                 onRefresh={refreshHandler}
-                renderItem={({ item }) => { if (category == item.type) return listItem(item); }} 
-                />
+                renderItem={({ item }) => { if (category == item.type) return listItem(item); }}
+            />
         </View >
-    ) 
+    )
 }
 
 
@@ -134,10 +138,10 @@ const styles = StyleSheet.create({
     sectionHead: {
         flexDirection: "row",
         backgroundColor: Colors.tertiary,
-        flex: 0.20,
+        flex: 0.1,
     },
     sectionContent: {
-        backgroundColor: colors.tertiary,
+        backgroundColor: Colors.tertiary,
         flex: 1,
     },
 

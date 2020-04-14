@@ -1,19 +1,45 @@
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Text } from 'react-native';
+import { globalStyles, Colors } from '../../constants';
 import React, { useEffect, useState } from 'react';
 
 import Ranking from './ranking';
 import Achievements from './achievements';
 
 const PrestatieScreen = props => {
+    const [select, setSelect] = new useState("Ranking")
+    const [headers, setHeaders] = new useState([{ id: 1, name: "Ranking" }, { id: 2, name: "Achievements" }])
+
+    const Content = () => {
+        if (select == "Ranking") return <Ranking />
+        if (select == "Achievements") return <Achievements />
+    }
+
+    const Header = (item) => {
+        if (item.name == select)
+            return (
+                <TouchableOpacity style={styles.sectionHeadButtonSelect}
+                    onPress={() => { setSelect(item.name) }}
+                    key={item.id}>
+                    <Text style={[globalStyles.bodyText, { fontSize: 13 }]}> {item.name} </Text>
+                </TouchableOpacity>
+            )
+        else {
+            return (
+                <TouchableOpacity style={styles.sectionHeadButton}
+                    onPress={() => { setSelect(item.name) }}
+                    key={item.id}>
+                    <Text style={[globalStyles.bodyText, { fontSize: 13 }]}> {item.name} </Text>
+                </TouchableOpacity>
+            )
+        }
+    }
+
     return (
         <View style={styles.container}>
-            <View style={styles.sectionTop}>
-                <Ranking />
+            <View style={styles.sectionHead}>
+                {headers.map(item => { return Header(item) })}
             </View>
-
-            <View style={styles.sectionBottom}>
-                <Achievements />
-            </View>
+            {Content()}
         </View>
     )
 }
@@ -26,12 +52,34 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flex: 1,
     },
-    sectionTop: {
+    sectionHead: {
+        flexDirection: "row",
+        backgroundColor: Colors.tertiary,
+        borderBottomColor: "#fff",
+        borderBottomWidth: 1.5,
+        flex: 0.1,
+    },
+    sectionHeadButtonSelect: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderTopLeftRadius: 5,
+        borderTopRightRadius: 5,
+        borderBottomColor: Colors.primary,
+        borderBottomWidth: 4,
+        backgroundColor: '#fff',
+        marginTop: 8,
+        marginHorizontal: 5,
         flex: 1,
     },
-    sectionBottom: {
-        flex: 1.5,
-    }
+    sectionHeadButton: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderTopLeftRadius: 5,
+        borderTopRightRadius: 5,
+        marginTop: 8,
+        margin: 3,
+        flex: 1,
+    },
 });
 
 export default PrestatieScreen
