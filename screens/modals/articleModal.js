@@ -32,6 +32,7 @@ const ArticleModal = ({ article, visible, onClose}) => {
             // if (result.activityType.includes("Facebook")) {
                 firebase.setShares(userRecord.totalShares + 1, firebase.getCurrentUser().uid)
                 firebase.setExp(userRecord.exp + 2, firebase.getCurrentUser().uid)
+                onClose()
             // } else {
             //   // shared
             // }

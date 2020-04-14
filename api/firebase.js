@@ -40,6 +40,7 @@ export default {
         return firebase.auth().signOut();
     },
 
+    // Deprecated
     getUserFromDB: (uid) => {
         return firebase.firestore().collection("users").doc(uid).get();
     },
@@ -61,9 +62,9 @@ export default {
                 maxExp: 10,
                 level: 1,
                 activeSchedule: null,
-                achievements: [],
+                achievements: [3],
                 previousTrainingSessions: [],
-                currentTitle: 'Driewieler'
+                totalShares: 0,
             })
     },
 
