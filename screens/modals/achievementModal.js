@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
-import Modal from 'react-native-modal';
+import { StyleSheet, Text, View, TouchableOpacity, Image, Modal } from 'react-native'
+// import Modal from 'react-native-modal';
 import { Icon } from 'react-native-elements';
 import { Colors, SCREEN_HEIGHT } from '../../constants';
 import ConfettiCannon from 'react-native-confetti-cannon';
@@ -12,12 +12,16 @@ const AchievementModal = ({ isVisible, onClose, children, onModalShow }) => {
 
 
     return (
-        <Modal isVisible={isVisible} useNativeDriver={true} 
-        onModalShow={() => {
-            setShoot(true);
-            onModalShow();
-        }}>
-            <View style={{ height: '60%' }}>
+        <Modal visible={isVisible} 
+            onShow={() => {
+                setShoot(true);
+                onModalShow();
+            }}
+            animationType='slide'
+            transparent={true}
+            > 
+            {/* <View style></View>    */}
+            <View style={styles.container}>
                 <View style={styles.buttonContainer}>
                     <TouchableOpacity onPress={onClose} style={styles.button}>
                         <Icon
@@ -28,7 +32,7 @@ const AchievementModal = ({ isVisible, onClose, children, onModalShow }) => {
                         />
                     </TouchableOpacity>
                 </View>
-                <View style={{ flex: 3, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center'}}>
+                <View style={{ flex: 3, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center' }}>
                     {children}
                 </View>
 
@@ -47,10 +51,22 @@ const styles = StyleSheet.create({
         flex: 0.5,
         backgroundColor: 'white',
         flexDirection: 'row',
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-end',
+        borderRadius: 20
     },
 
     button: {
         right: '5%'
+    },
+
+    container: {
+        height: '60%', 
+        backgroundColor: 'white', 
+        marginTop: '30%',
+        borderRadius: 20,
+        shadowColor: 'black',
+        shadowOffset: {height: 2, width: 4},
+        shadowOpacity: 0.6,
+        shadowRadius: 20
     }
 })
