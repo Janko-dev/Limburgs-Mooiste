@@ -40,6 +40,7 @@ export default {
         return firebase.auth().signOut();
     },
 
+    // Deprecated
     getUserFromDB: (uid) => {
         return firebase.firestore().collection("users").doc(uid).get();
     },
