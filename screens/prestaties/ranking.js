@@ -99,7 +99,7 @@ const ranking = () => {
                 </View>
                 <View style={styles.bottomSection}>
                     <FlatList data={users}
-                        keyExtractor={(data, index) => { index.toString() }}
+                        keyExtractor={(item, index) => { index.toString() }}
                         refreshing={refresh}
                         onRefresh={refreshHandler}
                         renderItem={({ item }) => { return UserRecord(item); }} />

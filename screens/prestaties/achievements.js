@@ -11,9 +11,13 @@ const achievements = ({ user }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [selectedItem, setSelectedItem] = useState();
     const [refresh, setRefresh] = useState(false);
+    
     const [category, setCategory] = useState('Snelheid');
+
     const [badgesMap, setBadgesMap] = useState([]);
     const [categoryMap, setCategoryMap] = useState([]);
+
+    const [userRecord, setUserRecord] = useState(null)
     const [userAchievements, setUserAchievements] = useState([]);
 
     useEffect(() => {
@@ -26,11 +30,29 @@ const achievements = ({ user }) => {
     }, [userAchievements])
 
     useEffect(() => {
+        getUserData();
+
         getData();
+
+        checkAchievement();
     }, [])
+
+    const getUserData = async () => {
+        setIsLoading(true);
+        const result = await firebase.getUsers();
+
+        let _users = result.docs.map(item => {
+            return { ...item.data(), uid: item.id }
+        });
+
+        setUserRecord({ ..._users.find(item => user.uid === item.uid), rank: _users.findIndex(item => user.uid === item.uid) + 1 });
+
+        setIsLoading(false);
+    }
 
     const getData = async () => {
         setIsLoading(true);
+        checkAchievement();
 
         const result = await firebase.getAchievements();
 
@@ -66,6 +88,21 @@ const achievements = ({ user }) => {
         setRefresh(false);
     }
 
+    const checkAchievement = () => {
+        badgesMap.forEach(item => {
+            validateAchievement(item);
+        }); 
+    }
+
+    const validateAchievement = (item) => {
+        if (item.type == "Leveling") {
+            // if (userRecord.find(achievement => achievement.))
+            // console.log(userRecord);
+            // console.log(userAchievements);
+            console.log(item);
+        }
+    }
+ 
     const listItem = (_badge) => {
         return (
             <View key={_badge.id}>
