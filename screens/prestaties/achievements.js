@@ -19,9 +19,9 @@ const achievements = ({ user }) => {
     useEffect(() => {
         if (user) {
             const unsubscribe = firebase.onUserDataChange(user.uid, doc => {
-                setUserAchievements(doc.data().achievements)
+                setUserAchievements(doc.data().achievements);
             })
-            return unsubscribe
+            return unsubscribe;
         }
     }, [userAchievements])
 
@@ -40,7 +40,7 @@ const achievements = ({ user }) => {
         result.docs.forEach(doc => {
             let badge = doc.data();
             badge.id = doc.id;
-            
+
             let _category = {};
             _category.id = badge.id;
             _category.naam = badge.type;
@@ -74,6 +74,7 @@ const achievements = ({ user }) => {
                         setIsVisible(true);
                         setSelectedItem(_badge);
                     }}>
+
                     {userAchievements.includes(_badge.id) ?
                         <Text> {_badge.naam} ✔ </Text> :
                         <Text> {_badge.naam} </Text>}
@@ -104,13 +105,15 @@ const achievements = ({ user }) => {
                     )
                 }
             </View>
-            <FlatList
-                data={badgesMap}
-                refreshing={refresh}
-                onRefresh={refreshHandler}
-                keyExtractor={(item, index) => { index.toString() }}
-                renderItem={({ item }) => category == item.type ? listItem(item) : null}
-            />
+            <View style={{flex: 1}}>
+                <FlatList
+                    data={badgesMap}
+                    refreshing={refresh}
+                    onRefresh={refreshHandler}
+                    keyExtractor={(item, index) => { index.toString() }}
+                    renderItem={({ item }) => category == item.type ? listItem(item) : null}
+                />
+            </View>
         </View >
     )
 }

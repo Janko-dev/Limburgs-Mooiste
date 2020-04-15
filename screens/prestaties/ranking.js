@@ -44,12 +44,12 @@ const ranking = () => {
     };
 
     const stageFunc = (i, criteria) => {
-        _height = map(users[i][criteria], users[2][criteria], users[0][criteria] + 5, 20, 100);
+        _height = map(users[i][criteria], users[2][criteria], users[0][criteria] + 5, 20, 55);
 
         return (
             <View style={styles.stageRow} key={i}>
                 <View style={[styles.stagePillar, { height: _height }]}>
-                    <Text style={globalStyles.bodyText}> {i + 1} </Text>
+                    <Text style={globalStyles.bodyText}> {i + 1} - {users[i]?.level}</Text>
                 </View>
                 <View style={styles.profile}>
                     <ProfilePicture
@@ -99,7 +99,7 @@ const ranking = () => {
                 </View>
                 <View style={styles.bottomSection}>
                     <FlatList data={users}
-                        keyExtractor={(data, index) => index.toString()}
+                        keyExtractor={(data, index) => { index.toString() }}
                         refreshing={refresh}
                         onRefresh={refreshHandler}
                         renderItem={({ item }) => { return UserRecord(item); }} />
