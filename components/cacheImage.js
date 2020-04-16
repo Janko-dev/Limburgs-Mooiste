@@ -30,11 +30,9 @@ const CacheImage = ({uri, style}) => {
     
                 setSource(localSource);
             }).catch((error) => {
-                console.log('Err' + error)
             })
 
         }).catch((error) => {
-            console.log('Err' + error)
         });
     }, [])
 

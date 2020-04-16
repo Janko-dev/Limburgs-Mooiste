@@ -23,7 +23,6 @@ const Navigator = () => {
     const [user, setUser] = useState(firebase.getCurrentUser())
     const [loginModal, setLoginModal] = useState(false)
     const [wizardModal, setWizardModal] = useState(false)
-    // console.log(firebase.getCurrentUser())
 
     useEffect(() => {
         const unsubscribe = firebase.onAuthChange((user) => {

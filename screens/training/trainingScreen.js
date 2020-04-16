@@ -54,7 +54,6 @@ const TrainingScreen = ({ navigation }) => {
             let deadline = userRecord.activeSchedule.startDate.toDate()
             deadline.setDate(deadline.getDate() + userRecord.activeSchedule.currentWeek * 7)
 
-            // console.log(deadline - new Date())
             if (deadline - new Date() < 0) {
                 firebase.incrementCurrentScheduleWeek(user.uid, userRecord.activeSchedule);
             }

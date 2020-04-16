@@ -11,10 +11,11 @@ const motivation = ({ user }) => {
 
     useEffect(() => {
         if (user){
-            firebase.getUsers().then(result => {
+            const unsub = firebase.getUsers().then(result => {
                 let rankedUsers = result.docs.sort((a, b) => b.data().level - a.data().level)
                 setRank(() => rankedUsers.findIndex(item => user.uid === item.id) + 1)
             })
+            return () => unsub
         }
     }, []);
 
@@ -33,7 +34,7 @@ const motivation = ({ user }) => {
                     <Text style={globalStyles.bodyText} >Next Gift</Text>
                 </View>
             </View>
-            <View style={{ flex: 4, alignItems: 'center', justifyContent: 'center' }}><Text style={globalStyles.bodyText}>Next: -</Text></View>
+            <View style={{ flex: 4, alignItems: 'center', justifyContent: 'center' }}><Text style={globalStyles.bodyText}>I am Speed (▀̿Ĺ̯▀̿ ̿)</Text></View>
             <View style={styles.seperatorContainer}>
                 <View style={styles.seperator}></View>
             </View>

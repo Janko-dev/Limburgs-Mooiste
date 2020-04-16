@@ -9,7 +9,7 @@ import AchievementModal from '../modals/achievementModal';
 const feedListItem = props => {
 
     const [profilePicture, setProfilePicture] = useState();
-    const [userRecord, setUserRecord] = useState(null);
+    // const [userRecord, setUserRecord] = useState(null);
     const [imageURL, setImageURL] = useState(null);
 
     const [receivedAchievement, setReceivedAchievement] = useState(false);
@@ -22,18 +22,8 @@ const feedListItem = props => {
         })
     },[props.routeID]);
 
-    // useEffect(() => {
-    //     if (firebase.getCurrentUser()) {
-    //         const unsubscribe = firebase.onUserDataChange(firebase.getCurrentUser().uid, userDoc => {
-    //             setUserRecord(userDoc.data());
-    //         })
-
-    //         return unsubscribe;
-    //     }
-    // }, [userRecord])
-
     useEffect(() => {
-        if (userRecord != null) {
+        if (props.userRecord != null) {
             firebase.getAchievementsByType('Shares').then(data => {
                 let achievements = data.docs.map(item => {
                     return { ...item.data(), id: item.id }
@@ -42,14 +32,14 @@ const feedListItem = props => {
                 let newAchievementIDs = []
                 let achievement
                 achievements.forEach(item => {
-                    if (item.criterium == userRecord.totalShares && !userRecord.achievements.includes(item.id)) {
+                    if (item.criterium == props.userRecord.totalShares && !props.userRecord.achievements.includes(item.id)) {
                         newAchievementIDs.push(item.id)
                         achievement = item
                     }
                 })
                 if (newAchievementIDs.length > 0) {
-                    firebase.setUserAchievement(userRecord.achievements, newAchievementIDs).then(() => {
-                        firebase.setExp(userRecord.exp + achievement.beloning, firebase.getCurrentUser().uid).then(() => {
+                    firebase.setUserAchievement(props.userRecord.achievements, newAchievementIDs).then(() => {
+                        firebase.setExp(props.userRecord.exp + achievement.beloning, firebase.getCurrentUser().uid).then(() => {
                             setCurrentAchievement(achievement)
                             setReceivedAchievement(true)
                         })
@@ -58,7 +48,7 @@ const feedListItem = props => {
 
             })
         }
-    }, [userRecord?.totalShares])
+    }, [props.userRecord?.totalShares])
 
     const handleAchievementModal = () => {
         setReceivedAchievement(!receivedAchievement)
@@ -97,8 +87,8 @@ const feedListItem = props => {
                     checkedWaypoints + " van de " + totalWaypoints + " waypoints zijn behaald."
             });
             if (result.action === Share.sharedAction) {
-                firebase.setShares(userRecord.totalShares + 1, firebase.getCurrentUser().uid)
-                firebase.setExp(userRecord.exp + 2, firebase.getCurrentUser().uid)
+                firebase.setShares(props.userRecord.totalShares + 1, firebase.getCurrentUser().uid)
+                firebase.setExp(props.userRecord.exp + 2, firebase.getCurrentUser().uid)
             } else if (result.action === Share.dismissedAction) {
             }
         } catch (error) {

@@ -25,7 +25,6 @@ const SignUpForm = ({ backToAuth, onSubmit }) => {
 
     const signUpHandler = () => {
         if (password !== passwordCheck) {
-            console.log('passwords do not match')
             return;
         }
 
