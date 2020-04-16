@@ -62,7 +62,7 @@ export default {
                 maxExp: 10,
                 level: 1,
                 activeSchedule: null,
-                achievements: [3],
+                achievements: ['3'],
                 previousTrainingSessions: [],
                 totalShares: 0,
             })
