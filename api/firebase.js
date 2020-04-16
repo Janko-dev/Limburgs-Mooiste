@@ -100,6 +100,16 @@ export default {
         return firebase.firestore().collection('achievements').where(firebase.firestore.FieldPath.documentId(), 'in', ids).get()
     },
 
+    getAchievementsByType: (type) => {
+        return firebase.firestore().collection('achievements').where('type', '==', type).get()
+    },
+
+    setUserAchievement: (achievements, ids) => {
+        return firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid).update({
+            achievements: [...achievements, ...ids]
+        })
+    },
+
     getSchedule: (id) => {
         return firebase.firestore().collection("trainingsSchema").doc(id).get();
     },
@@ -179,5 +189,9 @@ export default {
         return firebase.firestore().collection("users").doc(uid).update({
             totalShares
         })
+    },
+
+    getRouteImage: (routeId) => {
+        return firebase.storage().ref().child(routeId+'.jpeg').getDownloadURL()
     }
 }

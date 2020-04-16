@@ -7,7 +7,7 @@ import Markers from '../../components/markers';
 import WaypointChecklist from '../../components/waypointChecklist';
 import ResultScreen from '../training/resultScreen';
 
-const GeoTrainingModal = ({ visible, onClose, markers, polygon, isPreview, routeId, session }) => {
+const GeoTrainingModal = ({ visible, onClose, markers, polygon, isPreview, routeId, session, userData }) => {
 
     const [map, setMap] = useState(null);
     // const [user] = useState(firebase.getCurrentUser())
@@ -262,7 +262,7 @@ const GeoTrainingModal = ({ visible, onClose, markers, polygon, isPreview, route
                 <WaypointChecklist positionStyle={styles.checklist} markers={markers} checked={waypointChecklist} />
             </Animated.View>
             <Animated.View style={[styles.absoluteContainer, { left: -SCREEN_WIDTH * 2 }, translateView]}>
-                <ResultScreen onClose={(data) => onClose(true, data)} session={session} data={resultData} />
+                <ResultScreen onClose={(data) => onClose(true, data)} userData={userData} session={session} data={resultData} />
             </Animated.View>
         </Modal>
     )
