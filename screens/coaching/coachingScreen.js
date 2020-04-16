@@ -11,8 +11,8 @@ import ArticleScreen from '../coaching/articleScreen';
 
 const CoachingScreen = props => {
 
-  const [selectedButton, setSelectedButton] = useState(0)
-  const [isLoading, setIsLoading] = useState(true)
+  const [selectedButton, setSelectedButton] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   const [coaches, setCoaches]  = useState(null);
   const [FAQ, setFAQ] = useState([]);
