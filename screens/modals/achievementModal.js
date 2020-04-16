@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View, TouchableOpacity, Image, Modal } from 'react-native'
-// import Modal from 'react-native-modal';
+import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'
+import Modal from 'react-native-modal';
 import { Icon } from 'react-native-elements';
-import { Colors, SCREEN_HEIGHT } from '../../constants';
+import { Colors, SCREEN_HEIGHT, SCREEN_WIDTH } from '../../constants';
 import ConfettiCannon from 'react-native-confetti-cannon';
 
 
@@ -20,20 +20,16 @@ const AchievementModal = ({ isVisible, onClose, children, onModalShow }) => {
             animationType='slide'
             transparent={true}
             > 
-            {/* <View style></View>    */}
-            <View style={styles.container}>
-                <View style={styles.buttonContainer}>
-                    <TouchableOpacity onPress={onClose} style={styles.button}>
-                        <Icon
-                            type='ionicon'
-                            name='ios-close-circle-outline'
-                            color={Colors.secondary}
-                            size={50}
-                        />
-                    </TouchableOpacity>
-                </View>
-                <View style={{ flex: 3, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center' }}>
+            {/* <View style={styles.container}>   */}
+            <View style={{height: SCREEN_HEIGHT * 0.4, width: SCREEN_WIDTH * 0.9, justifyContent: 'center', alignItems: 'center', backgroundColor: 'white', opacity: '100%', borderRadius: "10%"}}>
+
+                <View style={{ flex: 12, backgroundColor: 'white', justifyContent: 'center', alignItems: 'center' , borderRadius: "10%"}}>
                     {children}
+                </View>
+                <View style={{flex: 2, justifyContent: 'center', alignItems: 'center', width: '100%', }}>
+                        <TouchableOpacity activeOpacity={0.9} onPress={onClose} style={{borderBottomStartRadius: "10%", borderBottomEndRadius: "10%", width: SCREEN_WIDTH * 0.8, flex: 1, backgroundColor: Colors.tertiary, justifyContent: 'center', alignItems: 'center', borderColor: 'lightgray', borderWidth: 0.25}}>
+                            <Text style={{color: 'black', fontSize: SCREEN_HEIGHT * 0.016, fontWeight: '300'}}>Oké</Text>
+                        </TouchableOpacity>
                 </View>
 
             </View>

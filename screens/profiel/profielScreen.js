@@ -20,7 +20,7 @@ const ProfielScreen = props => {
     const [refreshing, setRefreshing] = useState(false);
     const [userRecord, setUserRecord] = useState(null);
     const [achievements, setAchievements] = useState([]);
-
+    console.log(userRecord)
       useEffect(() => {
         if (firebase.getCurrentUser()){
             const unsubscribe = firebase.onUserDataChange(firebase.getCurrentUser().uid, userDoc => {
