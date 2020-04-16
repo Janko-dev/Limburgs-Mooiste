@@ -3,19 +3,31 @@ import { View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import { Colors, globalStyles } from '../../constants';
 
 const nextTraining = props => {
+
+    const nextTrainingHanderler = () => {
+        props.navigation.navigate("Sessions", { ...props.schedule });
+    }
+
     return (
     <View style={styles.trainingContainer}>
         <View style={styles.secondChildtrainingContainer}>
+            { props.schedule != null ? 
             <View style={styles.thirdChildtrainingContainer}>
                 <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-                    <Text style={[{fontWeight: '100', fontStyle: 'italic', color: Colors.secondary, textAlign: 'center'}, globalStyles.bodyText ]}>Naam sessie{"\n"} &{"\n"} training</Text>
+                    <Text style={[{fontWeight: '100', fontStyle: 'italic', color: Colors.secondary, textAlign: 'center'}, globalStyles.bodyText ]}>
+                        Week: {props.schedule.currentWeek}{"\n"}Schema: {props.schedule.currentSession}
+                    </Text>
                 </View>
                 <View style={{flex: 1, alignItems: 'center'}}>
-                    <TouchableOpacity style={styles.button}>
+                    <TouchableOpacity style={styles.button} onPress={() => nextTrainingHanderler()}>
                         <Text style={[styles.buttonText, globalStyles.bodyText]}>Vervolg Training</Text>
                     </TouchableOpacity>
                 </View>
-            </View>
+            </View> :
+            <Text style={[{fontWeight: '100', fontStyle: 'italic', color: Colors.secondary, textAlign: 'center'}, globalStyles.bodyText ]}>Er is nog geen actief schema</Text>
+            }
+
+            
         </View>
     </View>
     )
