@@ -190,7 +190,7 @@ export default {
             totalShares
         })
     },
-    
+
     getRouteImage: (routeId) => {
         return firebase.storage().ref().child(routeId+'.jpeg').getDownloadURL()
     }

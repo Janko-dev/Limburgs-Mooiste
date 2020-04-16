@@ -90,12 +90,33 @@ const SessionScreen = ({ navigation, route }) => {
                 firebase.incrementCurrentScheduleSession(user.uid, userRecord.activeSchedule)
             }
         }
+    }
 
+    const getMedals = () => {
+        let _prevTraining = userRecord?.previousTrainingSessions;
+        let count = 0;
+ 
+        _prevTraining.forEach(item => {
+            if (item?.medal == "gold") count += 3;            
+            if (item?.medal == "silver") count += 2;
+            if (item?.medal == "bronze") count += 1;
+        })
+ 
+        return count;
     }
 
     return (
         <View style={[globalStyles.container]}>
-            <GeoTrainingModal visible={isGeoModalVisible} routeId={currentRouteId} session={schedule.sessies[userRecord?.activeSchedule.currentSession-1]} onClose={closeHandler} isPreview={false} polygon={polygon} markers={markers} />
+            <GeoTrainingModal 
+                visible={isGeoModalVisible}
+                routeId={currentRouteId} 
+                session={schedule.sessies[userRecord?.activeSchedule.currentSession-1]} 
+                onClose={closeHandler} 
+                isPreview={false} 
+                polygon={polygon} 
+                markers={markers} 
+                userData={{achievements: userRecord?.achievements, previousTrainingSessions: userRecord?.previousTrainingSessions}}
+            />
             <Modal isVisible={descriptionModal} useNativeDriver={true}
                 swipeDirection={['down']}
                 onSwipeComplete={() => setDescriptionModal(false)}

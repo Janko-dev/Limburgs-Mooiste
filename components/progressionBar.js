@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
+
 import { TouchableOpacity, Text, StyleSheet, ProgressBarAndroid, ProgressViewIOS, Platform, Animated, View, Easing, Image } from 'react-native'
-import { Colors, globalStyles, SCREEN_HEIGHT } from '../constants';
+import { Colors, globalStyles, SCREEN_HEIGHT, GROWTH } from '../constants';
 import { Icon } from 'react-native-elements';
 
 import ProgressBarAnimated from 'react-native-progress-bar-animated';
@@ -44,7 +45,7 @@ const ProgressionBar = () => {
                     // let i = 1;
                     while (_exp > maxExp) {
                         _exp -= maxExp;
-                        maxExp += 0.01 * maxExp //* i;
+                        maxExp += GROWTH * maxExp //* i;
                         // i++;
                         level++;
                     }
