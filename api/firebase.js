@@ -104,10 +104,10 @@ export default {
         return firebase.firestore().collection('achievements').where('type', '==', type).get()
     },
 
-   setUserAchievement: (achievements, ids) => {
-       return firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid).update({
-           achievements: [...achievements, ...ids]
-       })
+    setUserAchievement: (achievements, ids) => {
+        return firebase.firestore().collection('users').doc(firebase.auth().currentUser.uid).update({
+            achievements: [...achievements, ...ids]
+        })
     },
 
     getSchedule: (id) => {
