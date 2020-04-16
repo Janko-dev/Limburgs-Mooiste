@@ -6,85 +6,84 @@ import Motivation from './motivation';
 import FeedListItem from './feedListItem';
 
 import firebase from '../../api/firebase';
+import LoadingModal from '../modals/loadingModal';
 
-const DashboardScreen = () => {
+const DashboardScreen = ({ navigation }) => {
 
     const [refreshState, setRefreshState] = useState(false);
 
-    // const [users, setUsers] = useState([]);
-    // const [prevTrainSessions, setPrevTrainSessions] = useState([]);
+    const [prevTrainSessions, setPrevTrainSessions] = useState([]);
+    const [user, setUser] = useState(firebase.getCurrentUser());
+    // const [isLoading, setIsLoading] = useState(false);
+    const [userRecord, setUserRecord] = useState(null)
+    const [schedule, setSchedule] = useState(null)
 
     // useEffect(() => {
-    //     firebase.getUsers().then(result => {
-
-    //         setPrevTrainSessions([]);
-
-    //         setUsers(() => {
-    //             return result.docs.map(doc => {
-
-    //                 let _user = doc.data();
-    //                 // console.log(doc.id);
-    //                 // console.log(_user.level);
-
-    //                 let _prevSession = {
-        
-    //                     id: doc.id,
-    //                     session: 'TODO: implement trainings sessions'
-    //                 }
-
-    //                 setPrevTrainSessions(prevSessions => [...prevSessions, _prevSession])
-
-    //                 return  doc.data();
-    //             })
-    //         })
-    
+    //     const unsubscribe = firebase.onAuthChange(user => {
+    //         setUser(user)
     //     })
-    //   }, []);
+    //     return unsubscribe;
+    // }, [user])
 
-    const feedList = [
-        {
-            id: 1,
-            info: 'debug message 1',
-        },
-        {
-            id: 2,
-            info: 'debug message 1',
-        }
-        ,
-        {
-            id: 3,
-            info: 'debug message 1',
-        }
-        ,
-        {
-            id: 4,
-            info: 'debug message 1',
-        }
-    ]
+    useEffect(() => {
+        // setUser(firebase.getCurrentUser())
+        if (firebase.getCurrentUser()) {
+            const unsubscribe = firebase.onUserDataChange(firebase.getCurrentUser().uid, doc => {
+                setUserRecord(doc.data())
 
-    const handleRefresh = () =>{
+            })
+            return unsubscribe;
+        }
+    }, [userRecord])
+
+    useEffect(() => {
+        if (userRecord?.activeSchedule) {
+            firebase.getSchedule(userRecord.activeSchedule.id).then(result => {
+                setSchedule(result.data())
+            })
+            // setIsLoading(false);
+
+        }
+
+    }, [])
+
+    const getData = async () => {
+        // const user = await firebase.getCurrentUser();
+
+        // if (user) {
+        //     const unsubscribe = await firebase.onUserDataChange(user?.uid, doc => {
+        //         console.log(doc.data().previousTrainingSessions + "Hey ik ben je data");
+        //         setPrevTrainSessions(doc.data().previousTrainingSessions);
+        //     })
+
+        //     return unsubscribe;
+        // }
+    }
+
+    const handleRefresh = () => {
+        getData();
         setRefreshState(false);
     }
 
     const renderHeader = () => {
         return (
             <View style={styles.headerContainer}>
-                <View style={[{backgroundColor: Colors.secondary},styles.headerNextTraining]}>
-                    <Text style={[{color: Colors.tertiary}, globalStyles.headerText ]}>Volgende Training</Text>
+                <View style={[{ backgroundColor: Colors.secondary }, styles.headerNextTraining]}>
+                    <Text style={[{ color: Colors.tertiary }, globalStyles.headerText]}>Volgende Training</Text>
                 </View>
-                <NextTraining/>
-                <Motivation/>
+                <NextTraining schedule={userRecord?.activeSchedule} navigation={navigation} />
+                <Motivation user={firebase.getCurrentUser()} />
                 <View style={styles.feedHeader}>
                     <Text style={styles.buttonText}>Your Feed</Text>
                 </View>
                 <View style={{
-                height: 1,
-                marginLeft: '2%',
-                marginRight: "2%",
-                backgroundColor: "#CED0CE",
-                justifyContent: 'center'
-              }}
-            />
+                    height: 1,
+                    marginLeft: '2%',
+                    marginRight: "2%",
+                    backgroundColor: "#CED0CE",
+                    justifyContent: 'center'
+                }}
+                />
             </View>
         )
     }
@@ -97,25 +96,38 @@ const DashboardScreen = () => {
                 marginRight: "2%",
                 backgroundColor: "#CED0CE",
                 justifyContent: 'center'
-              }}
+            }}
             />
         )
     }
 
     return (
         <View style={styles.mainContainer}>
+            {/* <LoadingModal isLoading={isLoading} /> */}
             <FlatList
-                data={feedList}
-                keyExtractor={(data) => data.id.toString()}
+                data={userRecord?.previousTrainingSessions}
+                keyExtractor={(data, index) => index.toString()}
                 ListHeaderComponent={renderHeader}
                 ItemSeparatorComponent={renderSeparator}
                 refreshing={refreshState}
                 onRefresh={handleRefresh}
-                keyExtractor={(data) => data.id.toString()}
-                renderItem={(data) => <FeedListItem title={data.item.info}/>}
+                renderItem={(data, index) => <FeedListItem
+                    key={index}
+                    sessie={data.item.currentSession}
+                    week={data.item.currentWeek}
+                    completed={data.item.isCompleted}
+                    earnedMedal={data.item.medal}
+                    routeID={data.item.routeId}
+                    sheduleID={data.item.scheduleId}
+                    waypoints={data.item.totalWaypoints}
+                    reachedWaypoints={data.item.waypointReached}
+                    start={data.item.startTime}
+                    stop={data.item.stopTime}
+                    userRecord={userRecord}
+                />}
             />
         </View>
-        
+
     )
 }
 
@@ -127,7 +139,7 @@ const styles = StyleSheet.create({
         marginRight: "2%",
         marginTop: '2%',
         shadowColor: 'black',
-        shadowOffset: {width: 0, height: 2},
+        shadowOffset: { width: 0, height: 2 },
         shadowRadius: 6,
         shadowOpacity: 0.26,
         borderTopStartRadius: 10,
@@ -144,7 +156,7 @@ const styles = StyleSheet.create({
         marginLeft: '2%',
         marginRight: "2%",
         shadowColor: 'black',
-        shadowOffset: {width: 0, height: 2},
+        shadowOffset: { width: 0, height: 2 },
         shadowRadius: 6,
         shadowOpacity: 0.26
     },

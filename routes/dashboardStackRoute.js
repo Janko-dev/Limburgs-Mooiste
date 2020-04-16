@@ -7,9 +7,7 @@ import { StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { Colors } from '../constants';
 import ProgressionBar from '../components/progressionBar';
 import ChatBotModal from '../screens/modals/chatBotModal';
-
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import ChatBotModal from '../screens/modals/chatBotModal';
+import SessionScreen from '../screens/training/sessionScreen';
 
 const Stack = createStackNavigator();
 
@@ -33,7 +31,8 @@ export default () => {
             </TouchableOpacity>
             }}
         >
-            <Stack.Screen name="Dashboard" component={DashboardScreen} />
+            <Stack.Screen name="Dashboard"  component={DashboardScreen} />
+            <Stack.Screen name="Sessions" component={SessionScreen} />
         </Stack.Navigator>
     )
 }

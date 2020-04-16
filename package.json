@@ -21,7 +21,7 @@
     "expo": "~36.0.0",
     "expo-facebook": "^8.0.0",
     "expo-file-system": "~8.0.0",
-    "firebase": "^7.10.0",
+    "firebase": "^7.14.0",
     "firebase-admin": "^8.10.0",
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
@@ -44,14 +44,14 @@
     "react-native-redash": "^10.1.1",
     "react-native-safe-area-context": "0.6.0",
     "react-native-screens": "2.0.0-alpha.12",
+    "react-native-svg": "9.13.3",
     "react-native-tab-view": "^2.13.0",
     "react-native-video": "^4.4.5",
     "react-native-voice": "^0.3.0",
     "react-native-web": "~0.11.7",
     "react-simple-chatbot": "^0.6.1",
     "shorthash": "0.0.2",
-    "styled-components": "^5.0.1",
-    "react-native-svg": "9.13.3"
+    "styled-components": "^5.0.1"
   },
   "devDependencies": {
     "babel-preset-expo": "~8.0.0",
