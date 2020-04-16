@@ -20,9 +20,9 @@ const ProfielScreen = props => {
     const [refreshing, setRefreshing] = useState(false);
     const [userRecord, setUserRecord] = useState(null);
     const [achievements, setAchievements] = useState([]);
-    console.log(userRecord)
-      useEffect(() => {
-        if (firebase.getCurrentUser()){
+
+    useEffect(() => {
+        if (firebase.getCurrentUser()) {
             const unsubscribe = firebase.onUserDataChange(firebase.getCurrentUser().uid, userDoc => {
                 setUserRecord(userDoc.data());
             })
@@ -30,18 +30,18 @@ const ProfielScreen = props => {
             return unsubscribe;
         }
 
-      }, [])
+    }, [])
 
     const showPickerHandler = () => {
 
         firebase.getUserAchievements(userRecord?.achievements).then(result => {
 
             setAchievements(() => {
-              return result.docs.map(doc => {
-                return doc.data().naam;
-              })
+                return result.docs.map(doc => {
+                    return doc.data().naam;
+                })
             })
-          })
+        })
 
         setShowPicker(!showPicker)
     }
@@ -76,11 +76,11 @@ const ProfielScreen = props => {
             refreshControl={
                 <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }>
-            <PickerModal isVisible={showPicker} onClose={showPickerHandler} selectedData={userRecord?.currentTitle} data={achievements} onSuccess={(newTitle) => {firebase.setTitle(newTitle, firebase.getCurrentUser().uid), showPickerHandler()}}/>
+            <PickerModal isVisible={showPicker} onClose={showPickerHandler} selectedData={userRecord?.currentTitle} data={achievements} onSuccess={(newTitle) => { firebase.setTitle(newTitle, firebase.getCurrentUser().uid), showPickerHandler() }} />
             <View style={{ height: SCREEN_HEIGHT * 0.16, backgroundColor: 'white', borderColor: 'lightgray', borderWidth: 0.25 }}>
                 <View style={{ flexDirection: 'row', flex: 2, height: '100%' }} >
                     <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-                        {firebase.getCurrentUser()?.photoURL ? <Avatar source={{uri: firebase.getCurrentUser().photoURL}} size="large" rounded ></Avatar> : <Avatar title={firebase.getCurrentUser().email.substring(0, 2).toUpperCase()} size="large" rounded ></Avatar>}
+                        {firebase.getCurrentUser()?.photoURL ? <Avatar source={{ uri: firebase.getCurrentUser().photoURL }} size="large" rounded ></Avatar> : <Avatar title={firebase.getCurrentUser().email.substring(0, 2).toUpperCase()} size="large" rounded ></Avatar>}
 
                     </View>
                     <View style={{ justifyContent: 'center', flex: 3 }}>
@@ -89,17 +89,17 @@ const ProfielScreen = props => {
                         <Text style={styles.subHeaderText}>{userRecord?.skillLevel}</Text>
                     </View>
                 </View>
-                <View style={{  flex: 1,  flexDirection: 'row' }}>
+                <View style={{ flex: 1, flexDirection: 'row' }}>
                     <View style={{ flex: 2.5, paddingLeft: '5%', height: '100%', }} >
                         <Text style={styles.infoText}>Huidige titel</Text>
                         <Text style={styles.titleText}>{userRecord?.currentTitle}</Text>
                     </View>
-                    <View style={{ flex: 1, paddingRight: '5%',  height: '100%' }}>
+                    <View style={{ flex: 1, paddingRight: '5%', height: '100%' }}>
                         <TouchableOpacity style={styles.button} onPress={showPickerHandler}>
                             <Text style={styles.buttonText}>Verander titel</Text>
                         </TouchableOpacity>
                     </View>
-   
+
                 </View>
             </View>
             <View style={{ height: SCREEN_HEIGHT * 0.18, backgroundColor: 'white', borderColor: 'lightgray', borderWidth: 0.25, marginTop: SCREEN_HEIGHT * 0.05 }}>
@@ -124,12 +124,12 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.tertiary,
 
     },
-    
+
 
     buttonText: {
         color: Colors.primary,
         fontSize: SCREEN_HEIGHT * 0.014,
-      },
+    },
 
     button: {
         height: SCREEN_HEIGHT * 0.04,
@@ -140,7 +140,7 @@ const styles = StyleSheet.create({
         borderWidth: SCREEN_HEIGHT * 0.001,
         borderRadius: SCREEN_HEIGHT * 0.005,
         padding: SCREEN_HEIGHT * 0.01
-      },
+    },
 
     headerText: {
         fontWeight: '700',

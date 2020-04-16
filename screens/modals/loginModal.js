@@ -38,7 +38,6 @@ export default ({ login, isVisible })=> {
         try {
             if (email != '' && password != '') {
                 firebase.loginWithCredentials(email, password).then(res => {
-                    console.log(res)
                     if (res.user){
                         login();
                     }
