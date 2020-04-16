@@ -21,6 +21,8 @@ const ProgressionBar = () => {
     const [levelUpAnimatedValue] = useState(new Animated.Value(0));
     const [visibleProgression, setVisibleProgression] = useState(false);
     const [visibleLevelUp, setVisibleLevelUp] = useState(false);
+    const [earnedExp, setEarnedExp] = useState(0);
+
 
     const [newAchievements, setNewAchievements] = useState([])
 
@@ -40,11 +42,9 @@ const ProgressionBar = () => {
                     let _exp = doc.data().exp;
                     let maxExp = doc.data().maxExp;
                     let level = doc.data().level;
-                    // let i = 1;
                     while (_exp > maxExp) {
                         _exp -= maxExp;
-                        maxExp += GROWTH * maxExp //* i;
-                        // i++;
+                        maxExp += GROWTH * maxExp 
                         level++;
                     }
                     firebase.setProgression(_exp, maxExp, level, user.uid);
@@ -58,7 +58,7 @@ const ProgressionBar = () => {
 
                             let newAchievements = []
                             achievements.forEach(item => {
-                                if (item.criterium - 1 <= doc.data().level && !doc.data().achievements.includes(item.id)) {
+                                if (item.criterium <= level && !doc.data().achievements.includes(item.id)) {
                                     newAchievements.push(item)
                                 }
                             })
@@ -68,11 +68,11 @@ const ProgressionBar = () => {
                                 firebase.setUserAchievement(doc.data().achievements, newAchievsIds)
                             }
 
-                            if (newAchievements.length != 0) {
+                            if (newAchievements.length != 0 ) {
                                 setNewAchievements(newAchievements)
                                 let levelingExp = 0;
                                 newAchievements.forEach(item => levelingExp += item.beloning)
-                                firebase.setExp(doc.data().exp + levelingExp, firebase.getCurrentUser().uid)
+                                setEarnedExp(levelingExp)
                             }
 
                         })
@@ -113,7 +113,8 @@ const ProgressionBar = () => {
 
     const closeModalHandler = () => {
         setVisibleLevelUp(false);
-        setNewAchievements([])
+        setNewAchievements([]);
+        firebase.setExp(earnedExp, user.uid).then(() => setEarnedExp(0))
     }
 
     const animationHandler = () => {
