@@ -139,7 +139,6 @@ const achievements = ({ user }) => {
             if (item?.medal == "gold") count += 3;            
             if (item?.medal == "silver") count += 2;
             if (item?.medal == "bronze") count += 1;
-
         })
 
         return count;
