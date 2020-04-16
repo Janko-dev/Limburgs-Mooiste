@@ -81,7 +81,7 @@ const achievements = ({ user }) => {
                 _categoryMap.push(_category.naam);
             }
 
-            checkAchievement(_badgesMap);
+            // checkAchievement(_badgesMap);
         })
 
         setCategoryMap(_categoryMap);
@@ -108,14 +108,16 @@ const achievements = ({ user }) => {
     const validateAchievement = (item) => {
         if (item?.type == "Leveling") {
             if (item?.criterium <= userRecord?.level) {
-                if (!userRecord?.achievements.includes(item?.id.toString())) return item.id.toString();
+                // if (!userRecord?.achievements.includes(item?.id.toString())) 
+                return item.id.toString();
                 // User record updaten hier
             }
         }
 
         if (item?.type == "Shares") {
             if (item?.criterium <= userRecord?.totalShares) {
-                if (!userRecord?.achievements.includes(item?.id)) return item.id.toString();
+                // if (!userRecord?.achievements.includes(item?.id)) 
+                return item.id.toString();
                 // User record updaten hier
             }
         }
@@ -124,7 +126,8 @@ const achievements = ({ user }) => {
             let count = getMedals();
 
             if (item?.criterium <= count) {
-                if (!userRecord?.achievements.includes(item?.id)) return item.id.toString();
+                // if (!userRecord?.achievements.includes(item?.id)) 
+                return item.id.toString();
                 // User record updaten hier
             }
         }
