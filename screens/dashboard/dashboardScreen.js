@@ -18,46 +18,30 @@ const DashboardScreen = ({ navigation }) => {
     const [userRecord, setUserRecord] = useState(null)
     const [schedule, setSchedule] = useState(null)
 
-    // useEffect(() => {
-    //     const unsubscribe = firebase.onAuthChange(user => {
-    //         setUser(user)
-    //     })
-    //     return unsubscribe;
-    // }, [user])
-
     useEffect(() => {
-        // setUser(firebase.getCurrentUser())
-        if (firebase.getCurrentUser()) {
-            const unsubscribe = firebase.onUserDataChange(firebase.getCurrentUser().uid, doc => {
-                setUserRecord(doc.data())
-
-            })
-            return unsubscribe;
-        }
-    }, [userRecord])
-
-    useEffect(() => {
-        if (userRecord?.activeSchedule) {
-            firebase.getSchedule(userRecord.activeSchedule.id).then(result => {
-                setSchedule(result.data())
-            })
-            // setIsLoading(false);
-
-        }
-
+        getData();
     }, [])
 
+    // useEffect(() => {
+    //     if (userRecord?.activeSchedule) {
+    //         firebase.getSchedule(userRecord.activeSchedule.id).then(result => {
+    //             setSchedule(result.data())
+    //         })
+    //         // setIsLoading(false);
+    //     }
+    // }, [])
+
     const getData = async () => {
-        // const user = await firebase.getCurrentUser();
+        const user = await firebase.getCurrentUser();
 
-        // if (user) {
-        //     const unsubscribe = await firebase.onUserDataChange(user?.uid, doc => {
-        //         console.log(doc.data().previousTrainingSessions + "Hey ik ben je data");
-        //         setPrevTrainSessions(doc.data().previousTrainingSessions);
-        //     })
-
-        //     return unsubscribe;
-        // }
+        if (user) {
+            const doc = await firebase.getUserFromDB(user.uid);
+            setUserRecord(doc.data());
+            if (doc.data().activeSchedule){
+                const schedule = await firebase.getSchedule(doc.data().activeSchedule.id)
+                setSchedule(schedule.data())
+            }
+        }
     }
 
     const handleRefresh = () => {
@@ -71,7 +55,7 @@ const DashboardScreen = ({ navigation }) => {
                 <View style={[{ backgroundColor: Colors.secondary }, styles.headerNextTraining]}>
                     <Text style={[{ color: Colors.tertiary }, globalStyles.headerText]}>Volgende Training</Text>
                 </View>
-                <NextTraining schedule={userRecord?.activeSchedule} navigation={navigation} />
+                <NextTraining activeSchedule={userRecord?.activeSchedule} schedule={schedule} navigation={navigation} />
                 <Motivation user={firebase.getCurrentUser()} />
                 <View style={styles.feedHeader}>
                     <Text style={styles.buttonText}>Your Feed</Text>
@@ -104,6 +88,7 @@ const DashboardScreen = ({ navigation }) => {
     return (
         <View style={styles.mainContainer}>
             {/* <LoadingModal isLoading={isLoading} /> */}
+            {userRecord?.previousTrainingSessions && 
             <FlatList
                 data={userRecord?.previousTrainingSessions}
                 keyExtractor={(data, index) => index.toString()}
@@ -125,7 +110,7 @@ const DashboardScreen = ({ navigation }) => {
                     stop={data.item.stopTime}
                     userRecord={userRecord}
                 />}
-            />
+            />}
         </View>
 
     )

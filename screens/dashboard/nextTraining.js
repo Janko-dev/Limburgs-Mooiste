@@ -11,11 +11,11 @@ const nextTraining = props => {
     return (
     <View style={styles.trainingContainer}>
         <View style={styles.secondChildtrainingContainer}>
-            { props.schedule != null ? 
+            { props.activeSchedule != null ? 
             <View style={styles.thirdChildtrainingContainer}>
                 <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
                     <Text style={[{fontWeight: '100', fontStyle: 'italic', color: Colors.secondary, textAlign: 'center'}, globalStyles.bodyText ]}>
-                        Week: {props.schedule.currentWeek}{"\n"}Schema: {props.schedule.currentSession}
+                        Week: {props.activeSchedule.currentWeek}{"\n"}Schema: {props.activeSchedule.currentSession}
                     </Text>
                 </View>
                 <View style={{flex: 1, alignItems: 'center'}}>

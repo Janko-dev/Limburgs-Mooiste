@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react'
 
-import { TouchableOpacity, Text, StyleSheet, ProgressBarAndroid, ProgressViewIOS, Platform, Animated, View, Easing, Image } from 'react-native'
-import { Colors, globalStyles, SCREEN_HEIGHT, GROWTH } from '../constants';
-import { Icon } from 'react-native-elements';
+import { TouchableOpacity, Text, StyleSheet, ScrollView, Animated, View, Easing, Image } from 'react-native'
+import { Colors, globalStyles, GROWTH, SCREEN_HEIGHT, SCREEN_WIDTH } from '../constants';
 
 import ProgressBarAnimated from 'react-native-progress-bar-animated';
 
@@ -23,8 +22,7 @@ const ProgressionBar = () => {
     const [visibleProgression, setVisibleProgression] = useState(false);
     const [visibleLevelUp, setVisibleLevelUp] = useState(false);
 
-    const [receivedAchievement, setReceivedAchievement] = useState(false)
-    const [currentAchievement, setCurrentAchievement] = useState(null)
+    const [newAchievements, setNewAchievements] = useState([])
 
     useEffect(() => {
         const unsubscribe = firebase.onAuthChange(user => {
@@ -33,7 +31,7 @@ const ProgressionBar = () => {
 
         return unsubscribe;
 
-    }, [firebase])
+    }, [])
 
     useEffect(() => {
         if (user) {
@@ -55,31 +53,33 @@ const ProgressionBar = () => {
                         setVisibleLevelUp(true);
                         firebase.getAchievementsByType('Leveling').then(data => {
                             let achievements = data.docs.map(item => {
-                              return {...item.data(), id: item.id}
+                                return { ...item.data(), id: item.id }
                             })
-                            
-                            let newAchievementIDs = []
-                            let achievement
+
+                            let newAchievements = []
                             achievements.forEach(item => {
-                              if (item.criterium == userRecord.level && !userRecord.achievements.includes(item.id)) {
-                                  newAchievementIDs.push(item.id)
-                                  achievement = item
-                              }
+                                if (item.criterium - 1 <= doc.data().level && !doc.data().achievements.includes(item.id)) {
+                                    newAchievements.push(item)
+                                }
                             })
-                            if (newAchievementIDs.length > 0) {
-                                firebase.setUserAchievement(userRecord.achievements, newAchievementIDs).then(() => {
-                                  firebase.setExp(userRecord.exp + achievement.beloning, firebase.getCurrentUser().uid).then(() => {
-                                  setCurrentAchievement(achievement)
-                                  setReceivedAchievement(true)
-                                })
-                              })
+
+                            let newAchievsIds = newAchievements.map(item => item.id)
+                            if (newAchievsIds.some(item => !doc.data().achievements.includes(item))) {
+                                firebase.setUserAchievement(doc.data().achievements, newAchievsIds)
                             }
-                          })
+
+                            if (newAchievements.length != 0) {
+                                setNewAchievements(newAchievements)
+                                let levelingExp = 0;
+                                newAchievements.forEach(item => levelingExp += item.beloning)
+                                firebase.setExp(doc.data().exp + levelingExp, firebase.getCurrentUser().uid)
+                            }
+
+                        })
                     }
 
                     let diff = doc.data().exp - exp;
                     if (diff > 0 && exp != null) {
-                        // console.log(diff)
                         setExpDiff(Math.floor(diff));
                         Animated.sequence([
                             Animated.timing(animatedValue, {
@@ -111,6 +111,11 @@ const ProgressionBar = () => {
         setVisibleProgression(!visibleProgression)
     }
 
+    const closeModalHandler = () => {
+        setVisibleLevelUp(false);
+        setNewAchievements([])
+    }
+
     const animationHandler = () => {
         Animated.timing(levelUpAnimatedValue, {
             toValue: 1,
@@ -123,35 +128,9 @@ const ProgressionBar = () => {
     return (
         <TouchableOpacity onPress={expModalHandler} style={styles.container}>
             <ProgressionModal visible={visibleProgression} onClose={expModalHandler} exp={exp} maxExp={maxExp} progress={progress} level={level} />
-            <AchievementModal isVisible={receivedAchievement} onClose={() => handleAchievementModal()} onModalShow={() => {}} >
-              <View>
-                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', paddingTop: SCREEN_HEIGHT * 0.01}}>
-                  <Text style={{fontSize: SCREEN_HEIGHT * 0.022, color: Colors.secondary, fontWeight: '500'}}>Achievement behaald!</Text>
-                </View>
-                <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                    <Text style={{fontWeight: '600', fontSize: SCREEN_HEIGHT * 0.016}}>{currentAchievement?.naam}</Text>
-                </View>
-                <View style={{flexDirection: 'row', flex: 4, justifyContent: 'center', alignItems: 'center', width: '100%'}}>
-                    <View style={{ flex: 4, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                      <View style={{flex: 2, justifyContent: 'center', alignItems: 'center', width: '50%'}}>
-                    </View>
-                    <View style={{flex: 3, justifyContent: 'center', alignItems: 'center'}}>
-                        <Image source={{uri: currentAchievement?.badge}} style={{height: '100%', width: '100%', borderRadius: 2,}}></Image>
-                    </View>
-                    <View style={{flex: 2, justifyContent: 'center', alignItems: 'center'}}>
-                
-                    </View>
-                
-                    </View>
-                  </View>
-                  <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center'}}>
-                    <Text style={{fontWeight: '400', fontSize: SCREEN_HEIGHT * 0.014, color: Colors.tertiary}}>{currentAchievement?.beschrijving}</Text>
-                    <Text style={{fontWeight: '600', fontStyle: 'italic', color: Colors.secondary, fontSize: SCREEN_HEIGHT * 0.014}}> +{ currentAchievement?.beloning}</Text>
-                  </View>
-              </View>
-            </AchievementModal>
-            <AchievementModal isVisible={visibleLevelUp} onClose={() => setVisibleLevelUp(false)} onModalShow={animationHandler}>
+            <AchievementModal isVisible={visibleLevelUp} onClose={closeModalHandler} onModalShow={animationHandler}>
                 <Animated.View style={{
+                    marginTop: 30,
                     transform:
                         [
                             {
@@ -162,12 +141,28 @@ const ProgressionBar = () => {
                             }
                         ]
                 }}>
-                    <Text style={[globalStyles.headerText, {fontSize: 30}]}>Level {level}</Text>
+                    <Text style={[globalStyles.headerText, { fontSize: 30 }]}>Level {level}</Text>
                 </Animated.View>
 
-            </AchievementModal>      
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                {/* <Text> */}
+                <View style={styles.newAchievementContainer}>
+                    {newAchievements.length != 0 && <Text style={[globalStyles.headerText, { color: 'black' }]}>Behaalde Achievements!</Text>}
+                    {newAchievements.length != 0 && 
+                        
+                        <ScrollView horizontal={true} style={{ width: '100%', marginTop: 10 }}>
+                            {newAchievements.map((item, index) =>
+                                <View key={index.toString()} style={styles.newAchievement}>
+                                    <Image source={{ uri: item.badge }} style={{ width: '70%', height: '50%' }} />
+                                    <Text style={[globalStyles.headerText, { fontSize: 18 }]}>{item.naam}</Text>
+                                    <Text style={[globalStyles.headerText, { fontSize: 14 }]}>{item.beschrijving}</Text>
+                                    <Text style={[globalStyles.headerText, { fontSize: 14, color: Colors.secondary }]}>+{item.beloning} exp</Text>
+                                </View>
+                            )}
+                        </ScrollView>}
+
+                </View>
+
+            </AchievementModal>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Animated.Text style={[styles.animatedText, {
                     opacity: animatedValue.interpolate({
                         inputRange: [0, 0.5, 1],
@@ -185,21 +180,15 @@ const ProgressionBar = () => {
                     +{expDiff}
                 </Animated.Text>
                 <Text style={[globalStyles.headerText, styles.progressText]}>Niveau {level}</Text>
-                {/* </Text> */}
 
             </View>
             <View style={{ alignItems: "flex-end" }}>
                 <ProgressBarAnimated
                     width={100}
                     value={progress}
-                    // barEasing='cubic'
                     backgroundColor={Colors.primary}
                 />
             </View>
-
-            {/* {Platform.OS === 'ios' ?
-                <ProgressViewIOS progress={progress} style={styles.progressStyle} progressTintColor={Colors.primary} trackTintColor={Colors.tertiary}></ProgressViewIOS> :
-                <ProgressBarAndroid progress={progress} color={Colors.tertiary}></ProgressBarAndroid>} */}
         </TouchableOpacity>
     )
 }
@@ -214,24 +203,35 @@ const styles = StyleSheet.create({
         fontSize: 14,
         textAlign: 'right',
         color: Colors.primary,
-        // marginBottom: 5
     },
 
     animatedText: {
-        // position: 'absolute'
-        // textAlign: 'left'
         color: Colors.secondary,
         fontWeight: 'bold',
         bottom: -15
-    }
+    },
 
-    // progressStyle: {
-    //     transform: [
-    //         { scaleY: 2 }
-    //     ]
-    // }
+    newAchievementContainer: {
+        height: SCREEN_HEIGHT * 0.45,
+        marginVertical: '5%',
+        width: SCREEN_WIDTH * 0.8,
+        // backgroundColor: 'red'
+    },
 
-
+    newAchievement: {
+        marginTop: 5,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        height: SCREEN_HEIGHT * 0.35,
+        width: SCREEN_WIDTH * 0.6,
+        marginHorizontal: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+        shadowColor: 'black',
+        shadowOffset: {height: 1, width: 2},
+        shadowOpacity: 0.2,
+        shadowRadius: 10
+    },
 })
 
 export default ProgressionBar

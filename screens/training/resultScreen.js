@@ -87,6 +87,8 @@ const ResultScreen = ({ data, onClose, session, userData }) => {
             medal
         }
 
+        setNewAchievements([])
+
         onClose(trainingSessionData)
     }
 

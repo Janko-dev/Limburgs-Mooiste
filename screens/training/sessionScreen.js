@@ -30,7 +30,6 @@ const SessionScreen = ({ navigation, route }) => {
         if (user) {
             const unsubscribe = firebase.onUserDataChange(user.uid, userDoc => {
                 setUserRecord(userDoc.data());
-                // console.log(userDoc.data().activeSchedule.startDate)
             })
             return unsubscribe;
         }

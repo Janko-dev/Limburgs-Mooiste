@@ -116,16 +116,6 @@ const SessionInfoContainer = ({ style, session, route, onSelectTrainingsDay }) =
                     />
                 </TouchableOpacity>
             </View>
-
-
-            {/* <OptionPicker
-                title="Kies een geschikte trainingsdag voor deze route"
-                options={days}
-                containerStyle={styles.optionPickerContainer}
-                optionStyle={styles.option}
-                textStyle={{fontSize: 16}}
-                onSelect={(option) => console.log(option)}
-            /> */}
         </Animated.View>
     )
 }
