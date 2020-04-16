@@ -27,16 +27,24 @@ const achievements = ({ user }) => {
             })
             return unsubscribe;
         }
-    }, [userAchievements])
+    }, [])
 
     useEffect(() => {
         getUserData();
-
         getData();
-
-        checkAchievement();
     }, [])
 
+    // Handlers
+    const closeHandler = () => {
+        setIsVisible(false);
+    }
+
+    const refreshHandler = () => {
+        getData();
+        setRefresh(false);
+    }
+
+    // Get Requests
     const getUserData = async () => {
         setIsLoading(true);
         const result = await firebase.getUsers();
@@ -52,6 +60,7 @@ const achievements = ({ user }) => {
 
     const getData = async () => {
         setIsLoading(true);
+
         checkAchievement();
 
         const result = await firebase.getAchievements();
@@ -79,39 +88,61 @@ const achievements = ({ user }) => {
         setIsLoading(false);
     }
 
-    const closeHandler = () => {
-        setIsVisible(false);
-    }
-
-    const refreshHandler = () => {
-        getData();
-        setRefresh(false);
-    }
-
+    // Validation
     const checkAchievement = () => {
+        setIsLoading(true);
+
+        let _achievements = []
         badgesMap.forEach(item => {
-            validateAchievement(item);
+            _achievements.push(validateAchievement(item));
         });
+
+        _achievements.forEach(item => {
+            if (!userAchievements.includes(item)) setUserAchievements(prevAchievements => [...prevAchievements, item]);
+        })
+
+        setIsLoading(true);
     }
 
     const validateAchievement = (item) => {
         if (item?.type == "Leveling") {
             if (item?.criterium <= userRecord?.level) {
-                if (!userRecord?.achievements.includes(item?.id)) setUserAchievements(prevAchievements => [...prevAchievements, item]);
+                if (!userRecord?.achievements.includes(item?.id.toString())) return item.id.toString();
                 // User record updaten hier
             }
         }
 
         if (item?.type == "Shares") {
             if (item?.criterium <= userRecord?.totalShares) {
-                if (!userRecord?.achievements.includes(item?.id)) setUserAchievements(prevAchievements => [...prevAchievements, item]);
+                if (!userRecord?.achievements.includes(item?.id)) return item.id.toString();
                 // User record updaten hier
             }
         }
 
         if (item?.type == "Snelheid") {
-            // Checken medals en ophalen count daarvan in functie gold = 3, silver = 2, bronze = 1
+            let count = getMedals();
+
+            if (item?.criterium <= count) { 
+                if (!userRecord?.achievements.includes(item?.id)) return item.id.toString();
+                // User record updaten hier
+            }
         }
+
+        return null;
+    }
+
+    const getMedals = () => {
+        let _prevTraining = userRecord?.previousTrainingSessions;
+        let count = 0;
+
+        _prevTraining.forEach(item => {
+            if (item?.medal == "gold") count += 3;            
+            if (item?.medal == "silver") count += 2;
+            if (item?.medal == "bronze") count += 1;
+
+        })
+
+        return count;
     }
 
     const listItem = (_badge) => {
