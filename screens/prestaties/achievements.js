@@ -61,7 +61,6 @@ const achievements = ({ user }) => {
     const getData = async () => {
         setIsLoading(true);
 
-        checkAchievement();
 
         const result = await firebase.getAchievements();
 
@@ -81,6 +80,8 @@ const achievements = ({ user }) => {
             if (!_categoryMap.includes(_category.naam)) {
                 _categoryMap.push(_category.naam);
             }
+
+            checkAchievement(_badgesMap);
         })
 
         setCategoryMap(_categoryMap);
@@ -89,11 +90,11 @@ const achievements = ({ user }) => {
     }
 
     // Validation
-    const checkAchievement = () => {
+    const checkAchievement = (_badgesMap) => {
         setIsLoading(true);
 
         let _achievements = []
-        badgesMap.forEach(item => {
+        _badgesMap.forEach(item => {
             _achievements.push(validateAchievement(item));
         });
 
@@ -122,7 +123,7 @@ const achievements = ({ user }) => {
         if (item?.type == "Snelheid") {
             let count = getMedals();
 
-            if (item?.criterium <= count) { 
+            if (item?.criterium <= count) {
                 if (!userRecord?.achievements.includes(item?.id)) return item.id.toString();
                 // User record updaten hier
             }
@@ -135,8 +136,8 @@ const achievements = ({ user }) => {
         let _prevTraining = userRecord?.previousTrainingSessions;
         let count = 0;
 
-        _prevTraining.forEach(item => {
-            if (item?.medal == "gold") count += 3;            
+        _prevTraining?.forEach(item => {
+            if (item?.medal == "gold") count += 3;
             if (item?.medal == "silver") count += 2;
             if (item?.medal == "bronze") count += 1;
         })
@@ -184,13 +185,11 @@ const achievements = ({ user }) => {
                 }
             </View>
             <View style={{ flex: 1 }}>
-                <FlatList
-                    data={badgesMap}
+                <FlatList data={badgesMap}
                     refreshing={refresh}
                     onRefresh={refreshHandler}
-                    keyExtractor={(item, index) => { index.toString() }}
-                    renderItem={({ item }) => category == item.type ? listItem(item) : null}
-                />
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={({ item }) => category == item.type ? listItem(item) : null} />
             </View>
         </View >
     )
