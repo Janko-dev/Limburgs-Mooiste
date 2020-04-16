@@ -101,7 +101,7 @@ export default {
     },
 
     getAchievementsByType: (type) => {
-         return firebase.firestore().collection('achievements').where('type', '==', type).get()
+        return firebase.firestore().collection('achievements').where('type', '==', type).get()
     },
 
     setUserAchievement: (achievements, ids) => {
@@ -189,5 +189,9 @@ export default {
         return firebase.firestore().collection("users").doc(uid).update({
             totalShares
         })
+    },
+    
+    getRouteImage: (routeId) => {
+        return firebase.storage().ref().child(routeId+'.jpeg').getDownloadURL()
     }
 }

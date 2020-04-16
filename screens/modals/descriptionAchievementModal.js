@@ -51,11 +51,12 @@ const styles = StyleSheet.create({
 
     headerButtonContainer: {
         justifyContent: 'center',
-        alignContent: 'center'
+        alignContent: 'center',
     },
 
     buttonContainer: {
         justifyContent: 'space-between',
+        borderWidth: 2,
         flexDirection: 'row',
         width: '100%',
         flex: 1,
