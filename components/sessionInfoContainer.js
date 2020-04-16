@@ -50,7 +50,7 @@ const SessionInfoContainer = ({ style, session, route, onSelectTrainingsDay }) =
 
     return (
         <Animated.View style={[styles.session, style, animationStyles]}>
-            <GeoTrainingModal visible={isGeoModalVisible} isPreview={true} session={session} routeId={session.routeId} onClose={() => setIsGeoModalVisible(false)} polygon={polygon} markers={markers} />
+            <GeoTrainingModal visible={isGeoModalVisible} isPreview={true} userData={null} session={session} routeId={session.routeId} onClose={() => setIsGeoModalVisible(false)} polygon={polygon} markers={markers} />
 
             <Modal isVisible={isTrainingModal}
                 useNativeDriver={true}
@@ -63,7 +63,7 @@ const SessionInfoContainer = ({ style, session, route, onSelectTrainingsDay }) =
                     title="Kies een geschikte trainingsdag voor deze route"
                     // containerStyle={styles.optionPickerContainer}
                     optionStyle={{height: 50, width: 200}}
-                    textStyle={{ color: Colors.secondary }}
+                    textStyle={{ color: Colors.tertiary }}
                     onSelect={(option) => {
                         setTrainingsDay(option);
                         setIsTrainingModal(false);
@@ -97,7 +97,7 @@ const SessionInfoContainer = ({ style, session, route, onSelectTrainingsDay }) =
 
             <View style={styles.buttonGroup}>
                 <TouchableOpacity onPress={() => setIsTrainingModal(true)} style={[styles.optionPickerButton, trainingsDay ? {borderColor: Colors.success, borderWidth: 3} : Colors.tertiary]}>
-                    <Text style={[globalStyles.headerText, { color: Colors.secondary, fontSize: 15 }]}>{trainingsDay ? "Geselecteerd: " + trainingsDay : "Selecteer trainingsdag"}</Text>
+                    <Text style={[globalStyles.headerText, { color: Colors.secondary, fontSize: 15 }]}>{trainingsDay ? trainingsDay : "Trainingsdag"}</Text>
                     <Icon
                         type='ionicon'
                         name='ios-arrow-down'
@@ -206,17 +206,4 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     }
 
-    // optionPickerContainer: {
-    //     backgroundColor: Colors.secondary,
-    //     width: '60%',
-    //     flex: 6,
-    //     justifyContent: 'center'
-    // },
-
-    // option: {
-    //     // height: '14%',
-    //     // flex: 1,
-    //     borderColor: Colors.primary,
-    //     backgroundColor: Colors.tertiary
-    // }
 })

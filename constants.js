@@ -27,11 +27,7 @@ export const globalStyles = StyleSheet.create({
     },
 })
 
-export const growth = {
-    beginner: 1,
-    gevorderd: 1.2,
-    expert: 1.5
-}
+export const GROWTH = 0.05;
 
 export const SCREEN_WIDTH = Dimensions.get('screen').width;
 export const SCREEN_HEIGHT = Dimensions.get('screen').height;
