@@ -11,7 +11,7 @@ const achievements = ({ user }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [selectedItem, setSelectedItem] = useState();
     const [refresh, setRefresh] = useState(false);
-    
+
     const [category, setCategory] = useState('Snelheid');
 
     const [badgesMap, setBadgesMap] = useState([]);
@@ -91,18 +91,29 @@ const achievements = ({ user }) => {
     const checkAchievement = () => {
         badgesMap.forEach(item => {
             validateAchievement(item);
-        }); 
+        });
     }
 
     const validateAchievement = (item) => {
-        if (item.type == "Leveling") {
-            // if (userRecord.find(achievement => achievement.))
-            // console.log(userRecord);
-            // console.log(userAchievements);
-            console.log(item);
+        if (item?.type == "Leveling") {
+            if (item?.criterium <= userRecord?.level) {
+                if (!userRecord?.achievements.includes(item?.id)) setUserAchievements(prevAchievements => [...prevAchievements, item]);
+                // User record updaten hier
+            }
+        }
+
+        if (item?.type == "Shares") {
+            if (item?.criterium <= userRecord?.totalShares) {
+                if (!userRecord?.achievements.includes(item?.id)) setUserAchievements(prevAchievements => [...prevAchievements, item]);
+                // User record updaten hier
+            }
+        }
+
+        if (item?.type == "Snelheid") {
+            // Checken medals en ophalen count daarvan in functie gold = 3, silver = 2, bronze = 1
         }
     }
- 
+
     const listItem = (_badge) => {
         return (
             <View key={_badge.id}>
@@ -142,7 +153,7 @@ const achievements = ({ user }) => {
                     )
                 }
             </View>
-            <View style={{flex: 1}}>
+            <View style={{ flex: 1 }}>
                 <FlatList
                     data={badgesMap}
                     refreshing={refresh}
