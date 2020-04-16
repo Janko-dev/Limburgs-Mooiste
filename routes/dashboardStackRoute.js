@@ -9,6 +9,7 @@ import ProgressionBar from '../components/progressionBar';
 import ChatBotModal from '../screens/modals/chatBotModal';
 import SessionScreen from '../screens/training/sessionScreen';
 
+
 const Stack = createStackNavigator();
 
 

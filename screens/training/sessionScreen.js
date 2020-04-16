@@ -7,7 +7,6 @@ import { Icon } from 'react-native-elements';
 import Modal from 'react-native-modal';
 import LoadingModal from '../modals/loadingModal';
 import GeoTrainingModal from '../modals/geoTrainingModal';
-import SessionAnalyticsModal from '../modals/sessionAnaliticsModal'
 
 const SessionScreen = ({ navigation, route }) => {
 
@@ -21,8 +20,6 @@ const SessionScreen = ({ navigation, route }) => {
     const [descriptionModal, setDescriptionModal] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [isGeoModalVisible, setIsGeoModalVisible] = useState(false);
-    const [isAnalyticsModal, setIsAnalyticsModal] = useState(false);
-    const [analyticsData, setAnalyticsData] = useState(null);
 
     const [markers, setMarkers] = useState(null);
     const [polygon, setPolygon] = useState(null);
@@ -71,48 +68,19 @@ const SessionScreen = ({ navigation, route }) => {
         setIsGeoModalVisible(true)
     }
 
-    const closeHandler = (started, waypoints, startTime, stopTime, isCompleted, routeId, waypointsLength) => {
+    const closeHandler = (started, data) => {
         setIsGeoModalVisible(false)
         if (started) {
 
-            let earnedExp = userRecord.exp;
-            let medal = 'nvt';
-
-            waypoints.forEach(() => {
-                earnedExp += 5;
-            })
-
-            if (isCompleted) {
-                earnedExp += 15
-                let time = Math.abs(stopTime - startTime) / 1000 / 60 / 60
-                let criteria = schedule.sessies.find(item => routeId === item.routeID).kwaliteitsCriteria;
-                if (time < criteria.goud.tijd) {
-                    earnedExp += criteria.goud.beloning;
-                    medal = "gold"
-                } else if (time < criteria.zilver.tijd) {
-                    earnedExp += criteria.zilver.beloning
-                    medal = "silver"
-                } else if (time < criteria.bronze.tijd) {
-                    earnedExp += criteria.bronze.beloning
-                    medal = "bronze"
-                }
-            }
-
-            if (earnedExp > userRecord.exp) {
-                firebase.setExp(earnedExp, user.uid)
+            if (userRecord.exp + data.earnedExp > userRecord.exp) {
+                firebase.setExp(userRecord.exp + data.earnedExp, user.uid)
             }
 
             let sessionData = {
-                isCompleted,
-                startTime,
-                stopTime,
+                ...data,
                 currentSession: userRecord.activeSchedule.currentSession,
                 currentWeek: userRecord.activeSchedule.currentWeek,
                 scheduleId: userRecord.activeSchedule.id,
-                routeId,
-                medal,
-                waypointReached: waypoints.length,
-                totalWaypoints: waypointsLength
             }
 
             userRecord.previousTrainingSessions.push(sessionData)
@@ -121,18 +89,13 @@ const SessionScreen = ({ navigation, route }) => {
             if (userRecord.activeSchedule.currentSession != schedule.sessies.length) {
                 firebase.incrementCurrentScheduleSession(user.uid, userRecord.activeSchedule)
             }
-
-            setAnalyticsData(sessionData)
-            setIsAnalyticsModal(true)
-
         }
 
     }
 
     return (
         <View style={[globalStyles.container]}>
-            <GeoTrainingModal visible={isGeoModalVisible} routeId={currentRouteId} onClose={closeHandler} isPreview={false} polygon={polygon} markers={markers} />
-            <SessionAnalyticsModal isVisible={isAnalyticsModal} data={analyticsData} onClose={() => setIsAnalyticsModal(false)} />
+            <GeoTrainingModal visible={isGeoModalVisible} routeId={currentRouteId} session={schedule.sessies[userRecord?.activeSchedule.currentSession-1]} onClose={closeHandler} isPreview={false} polygon={polygon} markers={markers} />
             <Modal isVisible={descriptionModal} useNativeDriver={true}
                 swipeDirection={['down']}
                 onSwipeComplete={() => setDescriptionModal(false)}
